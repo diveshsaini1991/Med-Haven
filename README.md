@@ -74,7 +74,7 @@ MedHaven - Care Network is a comprehensive Hospital Management System built usin
 Clone the project
 
 ```bash
-  git clone https://github.com/diveshsaini1991/MedHaven-Care_network
+  git clone https://github.com/diveshsaini1991/Med-Haven.git
 ```
 Go to the backend directory
 
