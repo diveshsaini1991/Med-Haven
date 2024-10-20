@@ -9,6 +9,7 @@ router.post("/login", login);
 router.post("/admin/addnew", isAdminAuthanticated, addNewAdmin);
 router.get("/doctors", getAllDoctors);
 router.get("/admin/me", isAdminAuthanticated, getUserDetails);
+router.get("/doctor/me", isDoctorAuthanticated, getUserDetails);
 router.get("/patient/me", isPatientAuthanticated, getUserDetails);
 router.get("/admin/logout", isAdminAuthanticated, logoutAdmin);
 router.get("/patient/logout", isPatientAuthanticated, logoutPatient);
