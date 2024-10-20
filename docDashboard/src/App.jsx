@@ -11,8 +11,7 @@ import Sidebar from "./components/Sidebar";
 import "./App.css";
 
 const App = () => {
-  const { isAuthenticated, setIsAuthenticated, admin, setAdmin } =
-    useContext(Context);
+  const { isAuthenticated, setIsAuthenticated, admin, setAdmin } = useContext(Context);
 
   useEffect(() => {
     const fetchUser = async () => {

@@ -15,7 +15,7 @@ config({ path: './config/config.env' });
 
 app.use(
     cors({
-        origin: [process.env.FRONTEND_URL, process.env.DASHBOAD_URL],
+        origin: [process.env.FRONTEND_URL, process.env.DASHBOAD_URL,process.env.DOC_DASHBOAD_URL],
         methods: ["GET", "POST", "PUT", "DELETE"],
         credentials: true
     })
@@ -30,6 +30,9 @@ app.use(
     })
 )
 
+app.get("/ping",(req,res)=>{
+    res.end("PONG");
+})
 app.use("/api/v1/message", messageRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/appointment", appointmentRouter);
