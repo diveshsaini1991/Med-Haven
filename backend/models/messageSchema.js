@@ -23,6 +23,26 @@ const messageSchema = new mongoose.Schema({
         minLength: [10, "Number Must Contain Exact 10 Digits!"],
         maxLength: [10, "Number Must Contain Exact 10 Digits!"]
     },
+    to:{
+        type:String,
+        enum: ["Admin", "Doctor"],
+        default: "Admin",
+        required:true,
+    },
+    department: {
+        type: String
+    },
+    doctor: {
+        firstName: {
+          type: String
+        },
+        lastName: {
+          type: String
+        },
+    },
+    doctorId: {
+        type: mongoose.Schema.ObjectId
+    },
     message: {
         type: String,
         required: true,

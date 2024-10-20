@@ -11,7 +11,7 @@ export const postAppointment = catchAsyncErrors(async (req, res, next) => {
   const isConflict = await User.find({
     firstName: doctor_firstName,
     lastName: doctor_lastName,
-    role: "Doctor",
+    role: "Doctor", 
     doctorDepartment: department,
   });
   if (isConflict.length === 0) {
@@ -43,6 +43,16 @@ export const getAllAppointments = catchAsyncErrors(async (req, res, next) => {
     appointments,
   });
 });
+
+export const getMyAppointments = catchAsyncErrors(async (req,res,next)=>{
+  const id = req.user._id;
+  const appointments = await Appointment.find({ doctorId: id }).exec();
+  res.status(200).json({
+    success:true,
+    appointments
+  })
+});
+
 export const updateAppointmentStatus = catchAsyncErrors(
   async (req, res, next) => {
     const { id } = req.params;
@@ -62,6 +72,7 @@ export const updateAppointmentStatus = catchAsyncErrors(
     });
   }
 );
+
 export const deleteAppointment = catchAsyncErrors(async (req, res, next) => {
   const { id } = req.params;
   const appointment = await Appointment.findById(id);

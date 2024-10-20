@@ -15,9 +15,7 @@ export const patientRegister = catchAsyncErrors(async (req, res, next) => {
     }
     user = await User.create({ firstName, lastName, email, phone, password, gender, dob, aadhaar, role });
     generateToken(user, "User Registered !", 200, res);
-
 })
-
 
 export const login = catchAsyncErrors(async (req, res, next) => {
     const { email, password, confirmPassword, role } = req.body;
@@ -39,7 +37,6 @@ export const login = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("User with this role not found !", 400));
     }
     generateToken(user, "User Login Successfully !", 200, res);
-
 });
 
 export const addNewAdmin = catchAsyncErrors(async (req, res, next) => {
@@ -58,7 +55,6 @@ export const addNewAdmin = catchAsyncErrors(async (req, res, next) => {
     })
 })
 
-
 export const getAllDoctors = catchAsyncErrors(async (req, res, next) => {
     const doctors = await User.find({ role: "Doctor" });
     res.status(200).json({
@@ -67,7 +63,6 @@ export const getAllDoctors = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
-
 export const getUserDetails = catchAsyncErrors(async (req, res, next) => {
     const user = req.user;
     res.status(200).json({
@@ -75,7 +70,6 @@ export const getUserDetails = catchAsyncErrors(async (req, res, next) => {
         user
     });
 });
-
 
 export const logoutAdmin = catchAsyncErrors(async (req, res, next) => {
     res.status(200).cookie("adminToken", "", {
@@ -87,8 +81,6 @@ export const logoutAdmin = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
-
-
 export const logoutPatient = catchAsyncErrors(async (req, res, next) => {
     res.status(200).cookie("patientToken", "", {
         httpOnly: true,
@@ -96,6 +88,16 @@ export const logoutPatient = catchAsyncErrors(async (req, res, next) => {
     }).json({
         success: true,
         message: "Patient Log Out Successfully !"
+    });
+});
+
+export const logoutDoctor = catchAsyncErrors(async (req, res, next) => {
+    res.status(200).cookie("doctorToken", "", {
+        httpOnly: true,
+        expires: new Date(Date.now())
+    }).json({
+        success: true,
+        message: "Doctor Log Out Successfully !"
     });
 });
 
