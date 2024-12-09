@@ -15,7 +15,7 @@ const Sidebar = () => {
 
   const handleLogout = async () => {
     await axios
-      .get("http://localhost:4000/api/v1/user/doctor/logout", {
+      .get("https://med-haven.onrender.com/api/v1/user/doctor/logout", {
         withCredentials: true,
       })
       .then((res) => {

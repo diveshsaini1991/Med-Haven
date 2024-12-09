@@ -27,7 +27,7 @@ const MessageForm = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       const { data } = await axios.get(
-        "http://localhost:4000/api/v1/user/doctors",
+        "https://med-haven.onrender.com/api/v1/user/doctors",
         { withCredentials: true }
       );
       setDoctors(data.doctors);
@@ -40,7 +40,7 @@ const MessageForm = () => {
     try {
         await axios
         .post(
-          "http://localhost:4000/api/v1/message/send",
+          "https://med-haven.onrender.com/api/v1/message/send",
           { firstName, lastName, email, phone, message,to,department,doctor_firstName,doctor_lastName },
           {
             withCredentials: true,
