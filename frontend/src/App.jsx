@@ -23,6 +23,7 @@ const App = () => {
           "https://med-haven.onrender.com/api/v1/user/patient/me",
           {
             withCredentials: true,
+            
           }
         );
         setIsAuthenticated(true);
