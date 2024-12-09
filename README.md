@@ -163,7 +163,12 @@ CLOUDINARY_API_KEY = YOUR_CLOUDINARY_API_KEY
 
 ## Demo
 
-link - updating soon ...
+frontend link - https://med-haven-frontend.vercel.app
+
+docter dashBoard link - https://med-haven-doc-dashboad.vercel.app
+
+admin dashBoard link - https://med-haven-admin-dashboard.vercel.app
+
 
 
 # Contributing to the MedHaven 🤝
