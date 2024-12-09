@@ -166,8 +166,12 @@ CLOUDINARY_API_KEY = YOUR_CLOUDINARY_API_KEY
 frontend link - https://med-haven-frontend.vercel.app
 
 docter dashBoard link - https://med-haven-doc-dashboad.vercel.app
+email to use as docter - meera@gmail.com
+password - 123456
 
 admin dashBoard link - https://med-haven-admin-dashboard.vercel.app
+email to use as admin - admin@gmail.com
+password - 123456
 
 
 
