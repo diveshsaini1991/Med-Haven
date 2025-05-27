@@ -1,6 +1,10 @@
+
 # MedHaven - Care Network 🏥️
 
 MedHaven - It is a comprehensive Hospital Management System built using the MERN (MongoDB, Express, React, Node.js) stack. The system is designed to manage hospital operations, including patient registration, appointment scheduling, medical records, and Listing Doctors.
+
+
+
 
 
 ## Features
@@ -31,7 +35,11 @@ MedHaven - It is a comprehensive Hospital Management System built using the MERN
 **CORS:** Enabled for cross-origin resource sharing
 
 **Testing:**  APIs tested using Postman
-## API Endpoints
+
+**Containerization:** Docker & Docker Compose
+
+
+## API Endpoints 
 
 
 #### User 
