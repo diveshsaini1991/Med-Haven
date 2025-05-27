@@ -10,8 +10,9 @@ const Navbar = () => {
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
 
   const handleLogout = async () => {
+    const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
     await axios
-      .get("https://med-haven.onrender.com/api/v1/user/patient/logout", {
+      .get(`${VITE_BACKEND_URL}/api/v1/user/patient/logout`, {
         withCredentials: true,
       })
       .then((res) => {

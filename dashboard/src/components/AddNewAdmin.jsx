@@ -17,13 +17,14 @@ const AddNewAdmin = () => {
   const [password, setPassword] = useState("");
 
   const navigateTo = useNavigate();
+  const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   const handleAddNewAdmin = async (e) => {
     e.preventDefault();
     try {
       await axios
         .post(
-          "https://med-haven.onrender.com/api/v1/user/admin/addnew",
+          `${VITE_BACKEND_URL}/api/v1/user/admin/addnew`,
           { firstName, lastName, email, phone, aadhaar, dob, gender, password },
           {
             withCredentials: true,

@@ -1,0 +1,27 @@
+{
+  "name": "med-haven",
+  "version": "2.0.2",
+  "scripts": {
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:dashboard": "cd dashboard && npm run dev",
+    "dev:docDashboard": "cd docDashboard && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:dashboard\" \"npm run dev:docDashboard\" \"npm run dev:backend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diveshsaini1991/Med-Haven.git"
+  },
+  "keywords": [
+    "med-haven"
+  ],
+  "author": "diveshsaini1991",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/diveshsaini1991/Med-Haven/issues"
+  },
+  "homepage": "https://github.com/diveshsaini1991/Med-Haven#readme",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

@@ -21,6 +21,8 @@ const AddNewDoctor = () => {
 
   const navigateTo = useNavigate();
 
+  const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
   const departmentsArray = [
     "Pediatrics",
     "Orthopedics",
@@ -58,7 +60,7 @@ const AddNewDoctor = () => {
       formData.append("doctorDepartment", doctorDepartment);
       formData.append("docAvatar", docAvatar);
       await axios
-        .post("https://med-haven.onrender.com/api/v1/user/doctor/addnew", formData, {
+        .post(`${VITE_BACKEND_URL}/api/v1/user/doctor/addnew`, formData, {
           withCredentials: true,
           headers: { "Content-Type": "multipart/form-data" },
         })

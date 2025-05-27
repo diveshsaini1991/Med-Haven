@@ -1,13 +1,12 @@
 export const generateToken = (user, message, statusCode, res) => {
     const token = user.generateJsonWebToken();
     const cookieName = user.role === "Admin" ? "adminToken" : (user.role === "Doctor" ? "doctorToken" : "patientToken");
-
     res.status(statusCode).cookie(cookieName, token, {
         expires: new Date(Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000), 
         httpOnly: true,  
-        secure: process.env.NODE_ENV === "production",  
+        secure: true,  
         sameSite: 'None',  
-        domain: 'med-haven.onrender.com',  
+        domain: process.env.BACKEND_DOMAIN,  
     })
     .json({
         success: true,

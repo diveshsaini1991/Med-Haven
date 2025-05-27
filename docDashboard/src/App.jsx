@@ -12,12 +12,13 @@ import "./App.css";
 
 const App = () => {
   const { isAuthenticated, setIsAuthenticated, admin, setAdmin } = useContext(Context);
+  const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await axios.get(
-          "https://med-haven.onrender.com/api/v1/user/doctor/me",
+          `${VITE_BACKEND_URL}/api/v1/user/doctor/me`,
           {
             withCredentials: true,
           }

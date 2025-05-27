@@ -15,10 +15,11 @@ const Sidebar = () => {
   const [show, setShow] = useState(false);
 
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
+  const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   const handleLogout = async () => {
     await axios
-      .get("https://med-haven.onrender.com/api/v1/user/admin/logout", {
+      .get(`${VITE_BACKEND_URL}/api/v1/user/admin/logout`, {
         withCredentials: true,
       })
       .then((res) => {

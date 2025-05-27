@@ -25,22 +25,23 @@ const MessageForm = () => {
   ];
   const [doctors, setDoctors] = useState([]);
   useEffect(() => {
+    const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
     const fetchDoctors = async () => {
       const { data } = await axios.get(
-        "https://med-haven.onrender.com/api/v1/user/doctors",
+        `${VITE_BACKEND_URL}/api/v1/user/doctors`,
         { withCredentials: true }
       );
       setDoctors(data.doctors);
-      console.log(data.doctors);
     };
     fetchDoctors();
   }, []);
   const handleMessage = async (e) => {
     e.preventDefault();
     try {
+      const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
         await axios
         .post(
-          "https://med-haven.onrender.com/api/v1/message/send",
+          `${VITE_BACKEND_URL}/api/v1/message/send`,
           { firstName, lastName, email, phone, message,to,department,doctor_firstName,doctor_lastName },
           {
             withCredentials: true,

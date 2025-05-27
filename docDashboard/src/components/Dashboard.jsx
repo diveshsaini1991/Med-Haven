@@ -9,12 +9,13 @@ import { AiFillCloseCircle } from "react-icons/ai";
 const Dashboard = () => {
   const [appointments, setAppointments] = useState([]);
   const [doctors, setDoctors] = useState([]);
+  const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
         const { data } = await axios.get(
-          "https://med-haven.onrender.com/api/v1/appointment/get",
+          `${VITE_BACKEND_URL}/api/v1/appointment/get`,
           { withCredentials: true }
         );
         setAppointments(data.appointments);
@@ -28,7 +29,7 @@ const Dashboard = () => {
   const handleUpdateStatus = async (appointmentId, status) => {
     try {
       const { data } = await axios.put(
-        `https://med-haven.onrender.com/api/v1/appointment/doctor/update/${appointmentId}`,
+        `${VITE_BACKEND_URL}/api/v1/appointment/doctor/update/${appointmentId}`,
         { status },
         { withCredentials: true }
       );

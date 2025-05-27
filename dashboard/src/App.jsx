@@ -20,8 +20,9 @@ const App = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
         const response = await axios.get(
-          "https://med-haven.onrender.com/api/v1/user/admin/me",
+          `${VITE_BACKEND_URL}/api/v1/user/admin/me`,
           {
             withCredentials: true,
           }

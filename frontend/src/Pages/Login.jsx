@@ -16,9 +16,11 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
+      
+      const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
       await axios
         .post(
-          "https://med-haven.onrender.com/api/v1/user/login",
+          `${VITE_BACKEND_URL}/api/v1/user/login`,
           { email, password, confirmPassword, role: "Patient" },
           {
             withCredentials: true,

@@ -34,7 +34,7 @@ const AppointmentForm = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       const { data } = await axios.get(
-        "https://med-haven.onrender.com/api/v1/user/doctors",
+        `${process.env.BACKEND_URL}/api/v1/user/doctors`,
         { withCredentials: true }
       );
       setDoctors(data.doctors);
@@ -45,9 +45,10 @@ const AppointmentForm = () => {
   const handleAppointment = async (e) => {
     e.preventDefault();
     try {
+      const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
       const hasVisitedBool = Boolean(hasVisited);
       const { data } = await axios.post(
-        "https://med-haven.onrender.com/api/v1/appointment/post",
+        `${VITE_BACKEND_URL}/api/v1/appointment/post`,
         {
           firstName,
           lastName,

@@ -7,11 +7,13 @@ import { Navigate } from "react-router-dom";
 const Messages = () => {
   const [messages, setMessages] = useState([]);
   const { isAuthenticated } = useContext(Context);
+  const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
   useEffect(() => {
     const fetchMessages = async () => {
       try {
         const { data } = await axios.get(
-          "https://med-haven.onrender.com/api/v1/message/getall",
+          `${VITE_BACKEND_URL}/api/v1/message/getall`,
           { withCredentials: true }
         );
         setMessages(data.messages);

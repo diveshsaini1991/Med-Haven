@@ -21,9 +21,10 @@ const Register = () => {
   const handleRegistration = async (e) => {
     e.preventDefault();
     try {
+      const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
       await axios
         .post(
-          "https://med-haven.onrender.com/api/v1/user/patient/register",
+          `${VITE_BACKEND_URL}/api/v1/user/patient/register`,
           { firstName, lastName, email, phone, aadhaar, dob, gender, password,role:"Patient" },
           {
             withCredentials: true,

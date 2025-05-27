@@ -1,10 +1,6 @@
-
 # MedHaven - Care Network 🏥️
 
-MedHaven - Care Network is a comprehensive Hospital Management System built using the MERN (MongoDB, Express, React, Node.js) stack. The system is designed to manage hospital operations, including patient registration, appointment scheduling, medical records, and Listing Doctors.
-
-
-
+MedHaven - It is a comprehensive Hospital Management System built using the MERN (MongoDB, Express, React, Node.js) stack. The system is designed to manage hospital operations, including patient registration, appointment scheduling, medical records, and Listing Doctors.
 
 
 ## Features
@@ -69,7 +65,66 @@ MedHaven - Care Network is a comprehensive Hospital Management System built usin
 
 
 
-## Run Locally
+## 📦 Dockerized Setup
+
+MedHaven is fully containerized using Docker and Docker Compose, enabling consistent development and deployment environments.
+
+### 🐳 Prerequisites
+
+- [Docker](https://www.docker.com/products/docker-desktop) installed
+- [Docker Compose](https://docs.docker.com/compose/) installed
+
+---
+
+### 🔧 Running the Project with Docker
+
+**Clone the repository:**
+
+```bash
+git clone https://github.com/diveshsaini1991/Med-Haven.git
+cd Med-Haven
+```
+
+**Start all services using Docker Compose:**
+
+```bash
+docker-compose up --build
+```
+This command builds and runs:
+
+- MongoDB
+- Backend API (Node.js + Express)
+- Frontend (React)
+- Admin Dashboard
+- Doctor Dashboard
+
+**🌐 Access Locally**
+
+| Service          | URL                                            |
+| ---------------- | ---------------------------------------------- |
+| Frontend (User)  | [http://localhost:5173](http://localhost:5173) |
+| Admin Dashboard  | [http://localhost:5174](http://localhost:5174) |
+| Doctor Dashboard | [http://localhost:5175](http://localhost:5175) |
+| Backend API      | [http://localhost:4000](http://localhost:4000) |
+| MongoDB          | Runs on port `27017`                           |
+
+**⚙️ Environments & Configuration**
+
+- Each service has its own Docker image.
+
+- Environment variables for the backend are defined inside docker-compose.yml .
+
+- Volumes are used to persist MongoDB data and sync local code for development.
+
+
+**🛑 Stopping All Services**
+
+```bash
+docker-compose down
+```
+
+
+## Run Locally without docker
 
 Clone the project
 
@@ -88,7 +143,7 @@ Install dependencies
   npm install
 ```
 
-create **.env file** in a folder named "config" following next section
+create **config.env file** in a folder named "config" using **```config.env.example```**
 
 Start the server
 
@@ -131,33 +186,6 @@ Start the server
 
 ```bash
   npm run dev
-```
-
-
-## Environment Variables
-
-create **.env** file in **backend** directory only
-
-```dotenv
-PORT = 4000
-
-MONGO_URI = YOUR_MONGO_URL
-
-FRONTEND_URL = http://localhost:5173
-
-DASHBOAD_URL = http://localhost:5174
-
-JWT_SECRET_KEY = YOUR_JWT_SECRET_KEY
-
-JWT_EXPIRES = 7d
-
-COOKIE_EXPIRE = 7
-
-CLOUDINARY_CLOUD_NAME = YOUR_CLOUDINARY_CLOUD_NAME
-
-CLOUDINARY_API_SECRET = YOUR_CLOUDINARY_API_SECRET
-
-CLOUDINARY_API_KEY = YOUR_CLOUDINARY_API_KEY
 ```
 
 

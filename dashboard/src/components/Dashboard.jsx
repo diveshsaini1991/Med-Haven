@@ -9,12 +9,13 @@ import { AiFillCloseCircle } from "react-icons/ai";
 const Dashboard = () => {
   const [appointments, setAppointments] = useState([]);
   const [doctors, setDoctors] = useState([]);
+  const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
         const { data } = await axios.get(
-          "https://med-haven.onrender.com/api/v1/user/doctors",
+          `${VITE_BACKEND_URL}/api/v1/user/doctors`,
           { withCredentials: true }
         );
         setDoctors(data.doctors);
@@ -25,10 +26,10 @@ const Dashboard = () => {
     const fetchAppointments = async () => {
       try {
         const { data } = await axios.get(
-          "https://med-haven.onrender.com/api/v1/appointment/getall",
+          `${VITE_BACKEND_URL}/api/v1/appointment/getall`,
           { withCredentials: true }
         );
-        setAppointments(data.appointments);
+        setAppointments(data?.appointments);
       } catch (error) {
         setAppointments([]);
       }
@@ -40,7 +41,7 @@ const Dashboard = () => {
   const handleUpdateStatus = async (appointmentId, status) => {
     try {
       const { data } = await axios.put(
-        `https://med-haven.onrender.com/api/v1/appointment/update/${appointmentId}`,
+        `${VITE_BACKEND_URL}/api/v1/appointment/update/${appointmentId}`,
         { status },
         { withCredentials: true }
       );
@@ -85,11 +86,11 @@ const Dashboard = () => {
           </div>
           <div className="secondBox">
             <p>Total Appointments</p>
-            <h3>{appointments.length}</h3>
+            <h3>{appointments?.length}</h3>
           </div>
           <div className="thirdBox">
             <p>Registered Doctors</p>
-            <h3>{doctors.length}</h3>
+            <h3>{doctors?.length}</h3>
           </div>
         </div>
         <div className="banner">

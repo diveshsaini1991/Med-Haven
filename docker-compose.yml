@@ -1,0 +1,75 @@
+services:
+  mongodb:
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=diveshsaini1991
+      - MONGO_INITDB_ROOT_PASSWORD=Saini123
+
+  backend:
+    build:
+      context: ./backend
+    image: diveshsaini1991/medhaven-backend:latest
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mongodb
+    environment:
+      - MONGODB_URI=mongodb://diveshsaini1991:Saini123@mongodb:27017/medhaven?authSource=admin
+      - PORT=4000
+      - NODE_ENV=development
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  frontend:
+    build:
+      context: ./frontend
+    image: diveshsaini1991/medhaven-frontend:latest
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:4000
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+  dashboard:
+    build:
+      context: ./dashboard
+    image: diveshsaini1991/medhaven-dashboard:latest
+    ports:
+      - "5174:5174"
+    depends_on:
+      - backend
+    volumes:
+      - ./dashboard:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:4000
+
+  doc-dashboard:
+    build:
+      context: ./docDashboard
+    image: diveshsaini1991/medhaven-doc-dashboard:latest
+    ports:
+      - "5175:5175"
+    depends_on:
+      - backend
+    volumes:
+      - ./docDashboard:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:4000
+
+volumes:
+  mongodb_data: 

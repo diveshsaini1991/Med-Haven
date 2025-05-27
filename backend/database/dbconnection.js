@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 
 export const dbConnection = () => {
+    console.log(process.env.MONGO_URI);
     mongoose.connect(process.env.MONGO_URI, {
-        dbName: "Hospital_management_system"
+        useNewUrlParser: true,
+        useUnifiedTopology: true
     })
         .then(() => {
             console.log("Connected to database!");

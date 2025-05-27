@@ -18,3 +18,9 @@ logs/
 .vscode/
 .idea/
 .DS_Store
+
+
+.git
+.gitignore
+Dockerfile
+.dockerignore 
