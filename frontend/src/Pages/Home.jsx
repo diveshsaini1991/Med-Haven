@@ -6,8 +6,8 @@ import Departments from "../components/Departments";
 
 const Home = () => {
   return (
-    <>
-      <Hero
+    <div className="overflow-hidden">
+      <Hero 
         title={
           "Welcome to MedHaven Medical Institute | Your Trusted Healthcare Provider"
         }
@@ -16,7 +16,7 @@ const Home = () => {
       <Biography imageUrl={"/about.png"} />
       <Departments />
       <MessageForm />
-    </>
+    </div>
   );
 };
 

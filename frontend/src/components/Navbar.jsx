@@ -1,68 +1,149 @@
-import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext, useState, useRef } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Context } from "../main";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+
+const NAV_LINKS = [
+  { label: "Home", to: "/" },
+  { label: "Appointment", to: "/appointment" },
+  { label: "About Us", to: "/about" }
+];
 
 const Navbar = () => {
   const [show, setShow] = useState(false);
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
+  const navigateTo = useNavigate();
+  const location = useLocation();
+  const navbarRef = useRef();
+
+  useGSAP(
+    () => {
+      gsap.from(navbarRef.current, {
+        y: -40,
+        opacity: 0,
+        duration: 0.9,
+        ease: "power3.out"
+      });
+    },
+    { scope: navbarRef }
+  );
 
   const handleLogout = async () => {
     const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-    await axios
-      .get(`${VITE_BACKEND_URL}/api/v1/user/patient/logout`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        toast.success(res.data.message);
-        setIsAuthenticated(false);
-      })
-      .catch((err) => {
-        toast.error(err.response.data.message);
-      });
+    try {
+      const res = await axios.get(
+        `${VITE_BACKEND_URL}/api/v1/user/patient/logout`,
+        { withCredentials: true }
+      );
+      toast.success(res.data.message);
+      setIsAuthenticated(false);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Logout failed");
+    }
   };
-
-  const navigateTo = useNavigate();
 
   const goToLogin = () => {
     navigateTo("/login");
   };
 
   return (
-    <>
-      <nav className={"container"}>
-        <div className="logo">
-          <img src="/logo.png" alt="logo" className="logo-img" />
-        </div>
-        <div className={show ? "navLinks showmenu" : "navLinks"}>
-          <div className="links">
-            <Link to={"/"} onClick={() => setShow(!show)}>
-              Home
-            </Link>
-            <Link to={"/appointment"} onClick={() => setShow(!show)}>
-              Appointment
-            </Link>
-            <Link to={"/about"} onClick={() => setShow(!show)}>
-              About Us
-            </Link>
+    <nav
+      ref={navbarRef}
+      className="backdrop-blur bg-white/80 dark:bg-gray-900/80 border-b border-blue-50 dark:border-gray-800 fixed w-full z-50 shadow-lg"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between py-4">
+          <Link to="/" className="flex items-center gap-3">
+            <span className="font-bold text-blue-700 text-xl tracking-tight hidden sm:block">
+              MedHaven
+            </span>
+          </Link>
+          <div className="hidden md:flex items-center space-x-8">
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className={`font-medium px-3 py-2 rounded-md transition text-base ${
+                  location.pathname === link.to
+                    ? "text-blue-700 underline underline-offset-4"
+                    : "text-gray-700 dark:text-gray-200 hover:text-blue-700"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
+          <div className="hidden md:flex">
+            {isAuthenticated ? (
+              <button
+                onClick={handleLogout}
+                className="px-5 py-2 rounded-xl bg-blue-700 text-white hover:bg-blue-800 transition font-semibold shadow"
+              >
+                LOGOUT
+              </button>
+            ) : (
+              <button
+                onClick={goToLogin}
+                className="px-5 py-2 rounded-xl bg-cyan-500 text-white hover:bg-cyan-600 transition font-semibold shadow"
+              >
+                LOGIN
+              </button>
+            )}
+          </div>
+          {/* Hamburger */}
+          <button
+            className="md:hidden text-blue-700 dark:text-blue-300 text-3xl rounded-md focus:outline-none transition"
+            onClick={() => setShow((prev) => !prev)}
+          >
+            <GiHamburgerMenu />
+          </button>
+        </div>
+      </div>
+      {/* Mobile Drawer */}
+      {show && (
+        <div className="md:hidden bg-white dark:bg-gray-900 border-t shadow-lg px-6 py-6 space-y-5">
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              onClick={() => setShow(false)}
+              className={`block font-semibold text-lg px-2 py-2 rounded ${
+                location.pathname === link.to
+                  ? "text-blue-700 underline underline-offset-4"
+                  : "text-gray-700 dark:text-gray-200 hover:text-blue-700"
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
           {isAuthenticated ? (
-            <button className="logoutBtn btn" onClick={handleLogout}>
+            <button
+              onClick={() => {
+                handleLogout();
+                setShow(false);
+              }}
+              className="w-full px-5 py-2 rounded-xl bg-blue-700 text-white hover:bg-blue-800 transition font-semibold shadow"
+            >
               LOGOUT
             </button>
           ) : (
-            <button className="loginBtn btn" onClick={goToLogin}>
+            <button
+              onClick={() => {
+                goToLogin();
+                setShow(false);
+              }}
+              className="w-full px-5 py-2 rounded-xl bg-cyan-500 text-white hover:bg-cyan-600 transition font-semibold shadow"
+            >
               LOGIN
             </button>
           )}
         </div>
-        <div className="hamburger" onClick={() => setShow(!show)}>
-          <GiHamburgerMenu />
-        </div>
-      </nav>
-    </>
+      )}
+    </nav>
   );
 };
 
