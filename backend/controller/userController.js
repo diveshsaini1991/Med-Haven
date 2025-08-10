@@ -18,12 +18,9 @@ export const patientRegister = catchAsyncErrors(async (req, res, next) => {
 })
 
 export const login = catchAsyncErrors(async (req, res, next) => {
-    const { email, password, confirmPassword, role } = req.body;
-    if (!email || !password || !confirmPassword || !role) {
+    const { email, password, role } = req.body;
+    if (!email || !password || !role) {
         return next(new ErrorHandler("Please Provide All Details!", 400));
-    }
-    if (password !== confirmPassword) {
-        return next(new ErrorHandler("Password and Confirm Password Do not Match !", 400));
     }
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
@@ -73,8 +70,11 @@ export const getUserDetails = catchAsyncErrors(async (req, res, next) => {
 
 export const logoutAdmin = catchAsyncErrors(async (req, res, next) => {
     res.status(200).cookie("adminToken", "", {
+        expires: new Date(0), 
         httpOnly: true,
-        expires: new Date(Date.now())
+        secure: true,
+        sameSite: 'None',  
+        domain: process.env.BACKEND_DOMAIN,
     }).json({
         success: true,
         message: "Admin Log Out Successfully !"
@@ -83,8 +83,11 @@ export const logoutAdmin = catchAsyncErrors(async (req, res, next) => {
 
 export const logoutPatient = catchAsyncErrors(async (req, res, next) => {
     res.status(200).cookie("patientToken", "", {
+        expires: new Date(0), 
         httpOnly: true,
-        expires: new Date(Date.now())
+        secure: true,
+        sameSite: 'None',  
+        domain: process.env.BACKEND_DOMAIN,
     }).json({
         success: true,
         message: "Patient Log Out Successfully !"
@@ -93,8 +96,11 @@ export const logoutPatient = catchAsyncErrors(async (req, res, next) => {
 
 export const logoutDoctor = catchAsyncErrors(async (req, res, next) => {
     res.status(200).cookie("doctorToken", "", {
+        expires: new Date(0), 
         httpOnly: true,
-        expires: new Date(Date.now())
+        secure: true,
+        sameSite: 'None',  
+        domain: process.env.BACKEND_DOMAIN,
     }).json({
         success: true,
         message: "Doctor Log Out Successfully !"
