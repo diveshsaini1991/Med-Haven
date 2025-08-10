@@ -9,5 +9,5 @@ cloudinary.v2.config({
 
 
 app.listen(process.env.PORT, () => {
-    console.log(`server live at http://localhost:${process.env.PORT}`);
+    console.log(`server live`);
 });

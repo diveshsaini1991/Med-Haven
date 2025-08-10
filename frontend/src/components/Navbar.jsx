@@ -39,8 +39,8 @@ const Navbar = () => {
         `${VITE_BACKEND_URL}/api/v1/user/patient/logout`,
         { withCredentials: true }
       );
-      toast.success(res.data.message);
       setIsAuthenticated(false);
+      toast.success(res.data.message);
     } catch (err) {
       toast.error(err.response?.data?.message || "Logout failed");
     }
