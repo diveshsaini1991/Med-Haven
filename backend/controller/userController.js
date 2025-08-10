@@ -70,10 +70,11 @@ export const getUserDetails = catchAsyncErrors(async (req, res, next) => {
 
 export const logoutAdmin = catchAsyncErrors(async (req, res, next) => {
     res.status(200).cookie("adminToken", "", {
+        expires: new Date(0), 
         httpOnly: true,
-        sameSite: "None",
         secure: true,
-        expires: new Date(0)
+        sameSite: 'None',  
+        domain: process.env.BACKEND_DOMAIN,
     }).json({
         success: true,
         message: "Admin Log Out Successfully !"
@@ -82,10 +83,11 @@ export const logoutAdmin = catchAsyncErrors(async (req, res, next) => {
 
 export const logoutPatient = catchAsyncErrors(async (req, res, next) => {
     res.status(200).cookie("patientToken", "", {
+        expires: new Date(0), 
         httpOnly: true,
-        sameSite: "None",
         secure: true,
-        expires: new Date(0)
+        sameSite: 'None',  
+        domain: process.env.BACKEND_DOMAIN,
     }).json({
         success: true,
         message: "Patient Log Out Successfully !"
@@ -94,10 +96,11 @@ export const logoutPatient = catchAsyncErrors(async (req, res, next) => {
 
 export const logoutDoctor = catchAsyncErrors(async (req, res, next) => {
     res.status(200).cookie("doctorToken", "", {
+        expires: new Date(0), 
         httpOnly: true,
-        sameSite: "None",
         secure: true,
-        expires: new Date(0)
+        sameSite: 'None',  
+        domain: process.env.BACKEND_DOMAIN,
     }).json({
         success: true,
         message: "Doctor Log Out Successfully !"

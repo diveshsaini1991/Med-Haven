@@ -6,7 +6,7 @@ export const generateToken = (user, message, statusCode, res) => {
         httpOnly: true,
         secure: true,
         sameSite: 'None',  
-        domain: process.env.BACKEND_DOMAIN,  
+        domain: process.env.BACKEND_DOMAIN,
     })
     .json({
         success: true,
