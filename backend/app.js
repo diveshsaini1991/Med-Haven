@@ -1,5 +1,5 @@
+
 import express from "express";
-import { config } from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
@@ -8,10 +8,10 @@ import messageRouter from "./router/messageRouter.js";
 import { errorMiddleware } from "./middlewares/errorMiddleware.js";
 import userRouter from "./router/userRouter.js";
 import appointmentRouter from "./router/appointmentRouter.js";
+import { rateLimitMiddleware } from "./middlewares/authRateLimit.js";
 
 const app = express();
 
-config({ path: './config/config.env' });
 
 app.use(
     cors({
@@ -29,6 +29,9 @@ app.use(
         tempFileDir: "/tmp/"
     })
 )
+
+
+app.use(rateLimitMiddleware);
 
 app.get("/ping",(req,res)=>{
     res.end("PONG");

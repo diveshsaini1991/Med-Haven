@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/diveshsaini1991/hospital-management-system#readme",
   "dependencies": {
+    "@upstash/ratelimit": "^2.0.6",
+    "@upstash/redis": "^1.35.3",
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.4.0",
     "cookie-parser": "^1.4.6",
