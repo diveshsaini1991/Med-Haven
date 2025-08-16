@@ -28,8 +28,9 @@ const defaultValues = {
 const AppointmentForm = ({
   initialValues = defaultValues,
   submitText = "Get Appointment",
-  onSubmit, // Custom submit handler for edit
+  onSubmit,
   isEdit = false,
+  onCancel,
 }) => {
   const [form, setForm] = useState(initialValues);
   const [doctors, setDoctors] = useState([]);
@@ -108,7 +109,6 @@ const AppointmentForm = ({
       return;
     }
 
-    // If a custom handler is passed (edit), use it
     if (onSubmit) {
       await onSubmit(form);
       return;
@@ -262,14 +262,24 @@ const AppointmentForm = ({
             </div>
 
             {/* Submit Button */}
-            <div className="form-animate text-center">
+            <div className="form-animate text-center flex flex-col md:flex-row md:justify-center md:space-x-4">
               <button
                 type="submit"
-                className={`w-full px-8 py-3 ${isEdit ? "bg-yellow-500 hover:bg-yellow-600" : "bg-blue-600 hover:bg-blue-700"} text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition border-2 border-white`}
+                className={`w-full md:w-auto px-8 py-3 ${isEdit ? "bg-yellow-500 hover:bg-yellow-600" : "bg-blue-600 hover:bg-blue-700"} text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition border-2 border-white`}
               >
                 {submitText}
               </button>
+              {isEdit && (
+                <button
+                  type="button"
+                  className="w-full md:w-auto px-8 py-3 mt-4 md:mt-0 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition border-2 border-white"
+                  onClick={onCancel}
+                >
+                  Cancel
+                </button>
+              )}
             </div>
+
           </form>
         </div>
 

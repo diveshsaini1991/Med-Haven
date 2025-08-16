@@ -46,6 +46,10 @@ const EditAppointment = () => {
     }
   };
 
+  const handleCancel = () => {
+    navigate("/myappointments");
+  };
+
   if (loading || !appt) return <div className="text-center py-24">Loading appointment info...</div>;
 
   return (
@@ -54,6 +58,7 @@ const EditAppointment = () => {
       submitText="Update Appointment"
       onSubmit={handleUpdate}
       isEdit={true}
+      onCancel={handleCancel}
     />
   );
 };
