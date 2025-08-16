@@ -131,6 +131,9 @@ const MyAppointments = () => {
             >
               <div className="flex-1">
                   <p>
+                  <span className="font-semibold">Patient:</span> {appt.firstName} {appt.lastName}
+                  </p>
+                  <p>
                     <span className="font-semibold">Appointment Date:</span>{" "}
                     {new Date(appt.appointment_date).toLocaleDateString()}
                   </p>
