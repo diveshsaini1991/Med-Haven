@@ -31,6 +31,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.6.0",
     "nodemailer": "^7.0.5",
+    "socket.io": "^4.8.1",
     "validator": "^13.12.0"
   }
 }
