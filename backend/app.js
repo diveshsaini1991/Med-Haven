@@ -9,6 +9,7 @@ import { errorMiddleware } from "./middlewares/errorMiddleware.js";
 import userRouter from "./router/userRouter.js";
 import appointmentRouter from "./router/appointmentRouter.js";
 import { rateLimitMiddleware } from "./middlewares/authRateLimit.js";
+import chatRouter from "./router/chatRouter.js";
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.get("/ping",(req,res)=>{
 app.use("/api/v1/message", messageRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/appointment", appointmentRouter);
+app.use("/api/v1/chat", chatRouter);
 
 dbConnection();
 
