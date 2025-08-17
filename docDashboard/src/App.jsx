@@ -34,7 +34,6 @@ const AppContent = () => {
 
   return (
     <>
-      {/* Conditionally render Sidebar only if authenticated and not on /chat route */}
       {isAuthenticated && location.pathname !== "/chat" && <Sidebar />}
 
       <Routes>
@@ -42,7 +41,6 @@ const AppContent = () => {
         <Route path="/" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/messages" element={<Messages />} />
-        {/* add other routes as needed */}
       </Routes>
 
       <ToastContainer position="top-center" />

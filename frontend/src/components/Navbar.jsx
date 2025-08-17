@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import axios from "axios";
@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import { Context } from "../main";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-
 
 const Navbar = () => {
   const [show, setShow] = useState(false);
@@ -22,8 +21,8 @@ const Navbar = () => {
     { label: "Text", to: "/chat", requiresAuth: true },
     { label: "About Us", to: "/about" }
   ];
-  
-  
+
+  // Optionally, remove the filter if all authenticated routes
   const visibleLinks = NAV_LINKS.filter(
     link => !link.requiresAuth || isAuthenticated
   );
@@ -57,6 +56,14 @@ const Navbar = () => {
   const goToLogin = () => {
     navigateTo("/login");
   };
+
+  // Always auto-close mobile drawer on route change
+  useEffect(() => {
+    setShow(false);
+  }, [location]);
+
+  // Hide navbar on /chat route
+  if (location.pathname === "/chat") return null;
 
   return (
     <nav
@@ -113,7 +120,6 @@ const Navbar = () => {
         </div>
       </div>
       {/* Mobile Drawer */}
-      
       {show && (
         <div className="md:hidden bg-white dark:bg-gray-900 border-t shadow-lg px-6 py-6 space-y-5">
           {visibleLinks.map((link) => (
