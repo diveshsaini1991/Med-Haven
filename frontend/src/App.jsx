@@ -14,6 +14,8 @@ import { Context } from "./main";
 import Login from "./Pages/Login";
 import MyAppointments from "./Pages/MyAppointments";
 import EditAppointment from "./Pages/EditAppointment";
+import Chat from "./Pages/Chat";
+
 const App = () => {
   const { isAuthenticated, setIsAuthenticated, setUser } =
     useContext(Context);
@@ -42,21 +44,28 @@ const App = () => {
   return (
     <>
       <Router>
-        <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/appointment" element={<Appointment />} />
-          <Route path="/myappointments" element={<MyAppointments />} />
-          <Route path="/appointment/edit/:id" element={<EditAppointment />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/chat" element={<Chat />} />
         </Routes>
-        <Footer />
+        {window.location.pathname !== '/chat' && (
+          <>
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/appointment" element={<Appointment />} />
+              <Route path="/myappointments" element={<MyAppointments />} />
+              <Route path="/appointment/edit/:id" element={<EditAppointment />} />
+              <Route path="/about" element={<AboutUs />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+            </Routes>
+            <Footer />
+          </>
+        )}
         <ToastContainer position="top-center" />
       </Router>
     </>
-  );
+  );  
 };
 
 export default App;

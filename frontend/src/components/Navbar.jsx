@@ -19,8 +19,10 @@ const Navbar = () => {
     { label: "Home", to: "/" },
     { label: "Book Appointment", to: "/appointment" },
     { label: "My Appointments", to: "/myappointments", requiresAuth: true },
+    { label: "Text", to: "/chat", requiresAuth: true },
     { label: "About Us", to: "/about" }
   ];
+  
   
   const visibleLinks = NAV_LINKS.filter(
     link => !link.requiresAuth || isAuthenticated
