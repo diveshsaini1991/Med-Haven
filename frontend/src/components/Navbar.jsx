@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import axios from "axios";
@@ -7,18 +7,25 @@ import { Context } from "../main";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 
-const NAV_LINKS = [
-  { label: "Home", to: "/" },
-  { label: "Appointment", to: "/appointment" },
-  { label: "About Us", to: "/about" }
-];
-
 const Navbar = () => {
   const [show, setShow] = useState(false);
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
   const navigateTo = useNavigate();
   const location = useLocation();
   const navbarRef = useRef();
+
+  const NAV_LINKS = [
+    { label: "Home", to: "/" },
+    { label: "Book Appointment", to: "/appointment" },
+    { label: "My Appointments", to: "/myappointments", requiresAuth: true },
+    { label: "Text", to: "/chat", requiresAuth: true },
+    { label: "About Us", to: "/about" }
+  ];
+
+  // Optionally, remove the filter if all authenticated routes
+  const visibleLinks = NAV_LINKS.filter(
+    link => !link.requiresAuth || isAuthenticated
+  );
 
   useGSAP(
     () => {
@@ -50,6 +57,14 @@ const Navbar = () => {
     navigateTo("/login");
   };
 
+  // Always auto-close mobile drawer on route change
+  useEffect(() => {
+    setShow(false);
+  }, [location]);
+
+  // Hide navbar on /chat route
+  if (location.pathname === "/chat") return null;
+
   return (
     <nav
       ref={navbarRef}
@@ -63,7 +78,7 @@ const Navbar = () => {
             </span>
           </Link>
           <div className="hidden md:flex items-center space-x-8">
-            {NAV_LINKS.map((link) => (
+            {visibleLinks.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
@@ -77,6 +92,7 @@ const Navbar = () => {
               </Link>
             ))}
           </div>
+
           <div className="hidden md:flex">
             {isAuthenticated ? (
               <button
@@ -106,7 +122,7 @@ const Navbar = () => {
       {/* Mobile Drawer */}
       {show && (
         <div className="md:hidden bg-white dark:bg-gray-900 border-t shadow-lg px-6 py-6 space-y-5">
-          {NAV_LINKS.map((link) => (
+          {visibleLinks.map((link) => (
             <Link
               key={link.to}
               to={link.to}

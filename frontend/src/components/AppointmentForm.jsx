@@ -1,39 +1,50 @@
-import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
-import { toast } from "react-toastify";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-gsap.registerPlugin(ScrollTrigger);
+const departmentsArray = [
+  "Pediatrics", "Orthopedics", "Cardiology", "Neurology", "Oncology", "Radiology", "Physical Therapy", "Dermatology", "ENT"
+];
 
-const AppointmentForm = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [aadhaar, setAadhaar] = useState("");
-  const [dob, setDob] = useState("");
-  const [gender, setGender] = useState("");
-  const [appointmentDate, setAppointmentDate] = useState("");
-  const [department, setDepartment] = useState("Pediatrics");
-  const [doctorFirstName, setDoctorFirstName] = useState("");
-  const [doctorLastName, setDoctorLastName] = useState("");
-  const [address, setAddress] = useState("");
-  const [hasVisited, setHasVisited] = useState(false);
+const defaultValues = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  aadhaar: "",
+  dob: "",
+  gender: "",
+  appointment_date: "",
+  department: "Pediatrics",
+  doctor_firstName: "",
+  doctor_lastName: "",
+  address: "",
+  hasVisited: false,
+};
 
-  const departmentsArray = [
-    "Pediatrics", "Orthopedics", "Cardiology", "Neurology", "Oncology", "Radiology", "Physical Therapy", "Dermatology", "ENT"
-  ];
-
+const AppointmentForm = ({
+  initialValues = defaultValues,
+  submitText = "Get Appointment",
+  onSubmit,
+  isEdit = false,
+  onCancel,
+}) => {
+  const [form, setForm] = useState(initialValues);
   const [doctors, setDoctors] = useState([]);
   const formRef = useRef(null);
 
   useEffect(() => {
+    setForm(initialValues);
+  }, [initialValues]);
+
+  useEffect(() => {
     const fetchDoctors = async () => {
+      const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
       const { data } = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/v1/user/doctors`,
+        `${VITE_BACKEND_URL}/api/v1/user/doctors`,
         { withCredentials: true }
       );
       setDoctors(data.doctors);
@@ -44,171 +55,164 @@ const AppointmentForm = () => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(gsap.utils.toArray(".form-animate"), {
-        scrollTrigger: {
-          trigger: formRef.current,
-          start: "top 85%",
-          toggleActions: "play none none reverse"
-        },
         opacity: 0,
         y: 40,
         duration: 0.9,
         ease: "power3.out",
-        stagger: 0.12
+        stagger: 0.12,
       });
     }, formRef);
     return () => ctx.revert();
   }, []);
 
-  const handleAppointment = async (e) => {
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setForm(prev => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleDoctorChange = (e) => {
+    const [firstName, lastName] = e.target.value.split(" ");
+    setForm(prev => ({
+      ...prev,
+      doctor_firstName: firstName || "",
+      doctor_lastName: lastName || "",
+    }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-  
-    if (!dob) {
+
+    if (!form.dob) {
       toast.error("Please select your Date of Birth.");
       return;
     }
-  
-    if (!appointmentDate) {
+    if (!form.appointment_date) {
       toast.error("Please select your Appointment Date.");
       return;
     }
-  
-    const dobDate = new Date(dob);
-    const appointmentDateObj = new Date(appointmentDate);
-  
-    // DOB must not be in the future
+
+    const dobDate = new Date(form.dob);
+    const appointmentDateObj = new Date(form.appointment_date);
+
     if (dobDate > today) {
       toast.error("Date of Birth cannot be in the future.");
       return;
     }
-  
-    // Appointment date must not be in the past
     if (appointmentDateObj < today) {
       toast.error("Appointment Date cannot be in the past.");
       return;
     }
-  
+
+    if (onSubmit) {
+      await onSubmit(form);
+      return;
+    }
+
     try {
       const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-      const { data } = await axios.post(
+      await axios.post(
         `${VITE_BACKEND_URL}/api/v1/appointment/post`,
         {
-          firstName, lastName, email, phone, aadhaar,
-          dob, gender, appointment_date: appointmentDate, department,
-          doctor_firstName: doctorFirstName, doctor_lastName: doctorLastName,
-          hasVisited, address
+          ...form,
         },
         { withCredentials: true, headers: { "Content-Type": "application/json" } }
       );
-  
-      toast.success(data.message);
-  
-      // Reset fields
-      setFirstName(""); setLastName(""); setEmail(""); setPhone("");
-      setAadhaar(""); setDob(""); setGender(""); setAppointmentDate("");
-      setDepartment("Pediatrics"); setDoctorFirstName(""); setDoctorLastName("");
-      setHasVisited(false); setAddress("");
-  
+      toast.success("Appointment booked successfully!");
+
+      setForm(defaultValues);
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
-  
 
   return (
     <section className="text-white relative py-20 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-950">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        
         <div
           ref={formRef}
           className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg p-8 md:p-12"
         >
           <h2 className="form-animate text-3xl font-bold text-center text-blue-700 dark:text-blue-400 mb-10">
-            Book Your Appointment
+            {isEdit ? "Edit Appointment" : "Book Your Appointment"}
           </h2>
 
-          <form onSubmit={handleAppointment} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             {/* First/Last Name */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <input type="text" placeholder="First Name" value={firstName}
-                onChange={e => setFirstName(e.target.value)}
+              <input name="firstName" type="text" placeholder="First Name" value={form.firstName}
+                onChange={handleChange}
                 className="form-animate input-field" />
-              <input type="text" placeholder="Last Name" value={lastName}
-                onChange={e => setLastName(e.target.value)}
+              <input name="lastName" type="text" placeholder="Last Name" value={form.lastName}
+                onChange={handleChange}
                 className="form-animate input-field" />
             </div>
 
             {/* Email/Phone */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <input type="email" placeholder="Email" value={email}
-                onChange={e => setEmail(e.target.value)}
+              <input name="email" type="email" placeholder="Email" value={form.email}
+                onChange={handleChange}
                 className="form-animate input-field" />
-              <input type="number" placeholder="Mobile Number" value={phone}
-                onChange={e => setPhone(e.target.value)}
+              <input name="phone" type="number" placeholder="Mobile Number" value={form.phone}
+                onChange={handleChange}
                 className="form-animate input-field" />
             </div>
 
             {/* Aadhaar / Date of Birth */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <input
+                name="aadhaar"
                 type="number"
                 placeholder="Aadhaar"
-                value={aadhaar}
-                onChange={e => setAadhaar(e.target.value)}
+                value={form.aadhaar}
+                onChange={handleChange}
                 className="form-animate input-field"
               />
-
-            <DatePicker
-              selected={dob ? new Date(dob) : null}
-              onChange={(date) => setDob(date ? date.toISOString().split("T")[0] : "")}
-              placeholderText="Date of Birth"
-              maxDate={new Date()}
-              dateFormat="dd/MM/yyyy"
-              className="input-field form-animate"
-              showMonthDropdown
-              showYearDropdown
-              dropdownMode="select"
-            />
-
+              <DatePicker
+                selected={form.dob ? new Date(form.dob) : null}
+                onChange={date => setForm(prev => ({ ...prev, dob: date ? date.toISOString().split("T")[0] : "" }))}
+                placeholderText="Date of Birth"
+                maxDate={new Date()}
+                dateFormat="dd/MM/yyyy"
+                className="input-field form-animate"
+                showMonthDropdown showYearDropdown dropdownMode="select"
+              />
             </div>
 
             {/* Gender / Appointment Date */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <select
-                value={gender}
-                onChange={e => setGender(e.target.value)}
+                name="gender"
+                value={form.gender}
+                onChange={handleChange}
                 className="form-animate input-field select-dark"
               >
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </select>
-
               <DatePicker
-              selected={appointmentDate ? new Date(appointmentDate) : null}
-              onChange={(date) => setAppointmentDate(date ? date.toISOString().split("T")[0] : "")}
-              placeholderText="Appointment Date"
-              minDate={new Date()}
-              dateFormat="dd/MM/yyyy"
-              className="input-field form-animate"
-              showMonthDropdown
-              showYearDropdown
-              dropdownMode="select"
-            />
+                selected={form.appointment_date ? new Date(form.appointment_date) : null}
+                onChange={date => setForm(prev => ({ ...prev, appointment_date: date ? date.toISOString().split("T")[0] : "" }))}
+                placeholderText="Appointment Date"
+                minDate={new Date()}
+                dateFormat="dd/MM/yyyy"
+                className="input-field form-animate"
+                showMonthDropdown showYearDropdown dropdownMode="select"
+              />
             </div>
-
 
             {/* Department / Doctor */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <select
-                value={department}
-                onChange={(e) => {
-                  setDepartment(e.target.value);
-                  setDoctorFirstName("");
-                  setDoctorLastName("");
-                }}
+                name="department"
+                value={form.department}
+                onChange={handleChange}
                 className="form-animate input-field select-dark"
               >
                 {departmentsArray.map((depart, index) => (
@@ -216,18 +220,14 @@ const AppointmentForm = () => {
                 ))}
               </select>
               <select
-                value={`${doctorFirstName} ${doctorLastName}`}
-                onChange={(e) => {
-                  const [firstName, lastName] = e.target.value.split(" ");
-                  setDoctorFirstName(firstName);
-                  setDoctorLastName(lastName);
-                }}
+                value={`${form.doctor_firstName} ${form.doctor_lastName}`}
+                onChange={handleDoctorChange}
                 className="form-animate input-field select-dark"
-                disabled={!department}
+                disabled={!form.department}
               >
                 <option value="">Select Doctor</option>
                 {doctors
-                  .filter(doc => doc.doctorDepartment === department)
+                  .filter(doc => doc.doctorDepartment === form.department)
                   .map((doc, idx) => (
                     <option
                       value={`${doc.firstName} ${doc.lastName}`}
@@ -241,10 +241,11 @@ const AppointmentForm = () => {
 
             {/* Address */}
             <textarea
+              name="address"
               rows={5}
               placeholder="Address"
-              value={address}
-              onChange={e => setAddress(e.target.value)}
+              value={form.address}
+              onChange={handleChange}
               className="form-animate input-field resize-none w-full"
             />
 
@@ -252,40 +253,51 @@ const AppointmentForm = () => {
             <div className="form-animate flex items-center space-x-3">
               <label className="text-gray-700 dark:text-gray-200">Visited before?</label>
               <input
+                name="hasVisited"
                 type="checkbox"
-                checked={hasVisited}
-                onChange={e => setHasVisited(e.target.checked)}
+                checked={form.hasVisited}
+                onChange={handleChange}
                 className="w-5 h-5"
               />
             </div>
 
-            {/* Submit */}
-            <div className="form-animate text-center">
+            {/* Submit Button */}
+            <div className="form-animate text-center flex flex-col md:flex-row md:justify-center md:space-x-4">
               <button
                 type="submit"
-                className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition w-full border-2 border-white"
+                className={`w-full md:w-auto px-8 py-3 ${isEdit ? "bg-yellow-500 hover:bg-yellow-600" : "bg-blue-600 hover:bg-blue-700"} text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition border-2 border-white`}
               >
-                Get Appointment
+                {submitText}
               </button>
+              {isEdit && (
+                <button
+                  type="button"
+                  className="w-full md:w-auto px-8 py-3 mt-4 md:mt-0 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition border-2 border-white"
+                  onClick={onCancel}
+                >
+                  Cancel
+                </button>
+              )}
             </div>
+
           </form>
         </div>
-      </div>
 
-      <style>{`
-        .input-field {
-          padding: 10px;
-          border-radius: 10px;
-        }
-        .input-field::placeholder {
-          color: white !important;
-          opacity: 1;
-        }
-        .select-dark option {
-          background-color: #1f2937;
-          color: white;
-        }
-      `}</style>
+        <style>{`
+          .input-field {
+            padding: 10px;
+            border-radius: 10px;
+          }
+          .input-field::placeholder {
+            color: white !important;
+            opacity: 1;
+          }
+          .select-dark option {
+            background-color: #1f2937;
+            color: white;
+          }
+        `}</style>
+      </div>
     </section>
   );
 };

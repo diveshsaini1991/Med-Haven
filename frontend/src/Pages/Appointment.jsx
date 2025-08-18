@@ -9,7 +9,7 @@ const Appointment = () => {
         title={"Schedule Your Appointment | MedHaven Medical Institute"}
         imageUrl={"/signin.png"}
       />
-      <AppointmentForm/>
+      <AppointmentForm submitText="Get Appointment"/>
     </>
   );
 };

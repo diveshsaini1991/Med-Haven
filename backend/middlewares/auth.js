@@ -41,3 +41,28 @@ export const isDoctorAuthanticated = catchAsyncErrors(async (req, res, next) => 
     }
     next();
 });
+
+export const isPatientOrDoctorAuthenticated = catchAsyncErrors(async (req, res, next) => {
+    const patientToken = req.cookies.patientToken;
+    const doctorToken = req.cookies.doctorToken;
+  
+    let decoded, user;
+    if (patientToken) {
+      decoded = jwt.verify(patientToken, process.env.JWT_SECRET_KEY);
+      user = await User.findById(decoded.id);
+      if (user.role !== "Patient")
+        return next(new ErrorHandler("User not authorized for this resource!", 403));
+      req.user = user;
+      return next();
+    }
+    if (doctorToken) {
+      decoded = jwt.verify(doctorToken, process.env.JWT_SECRET_KEY);
+      user = await User.findById(decoded.id);
+      if (user.role !== "Doctor")
+        return next(new ErrorHandler("User not authorized for this resource!", 403));
+      req.user = user;
+      return next();
+    }
+    return next(new ErrorHandler("Not Authenticated!", 400));
+  });
+  

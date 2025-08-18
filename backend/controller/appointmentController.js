@@ -37,21 +37,98 @@ export const postAppointment = catchAsyncErrors(async (req, res, next) => {
 });
 
 export const getAllAppointments = catchAsyncErrors(async (req, res, next) => {
-  const appointments = await Appointment.find();
+  const appointments = await Appointment.find()
+    .sort({ appointment_date: -1 }) 
+    .exec();
   res.status(200).json({
     success: true,
-    appointments,
+    appointments
   });
 });
 
-export const getMyAppointments = catchAsyncErrors(async (req,res,next)=>{
-  const id = req.user._id;
-  const appointments = await Appointment.find({ doctorId: id }).exec();
+
+export const getMyAppointments = catchAsyncErrors(async (req, res, next) => {
+  const doctorId = req.user._id;
+  const appointments = await Appointment.find({ doctorId })
+    .sort({ appointment_date: -1 })
+    .exec();
   res.status(200).json({
-    success:true,
+    success: true,
     appointments
-  })
+  });
 });
+
+
+export const getPatientAppointments = catchAsyncErrors(async (req, res, next) => {
+  const patientId = req.user._id;
+  const appointments = await Appointment.find({ patientId })
+    .sort({ appointment_date: -1 }) 
+    .exec();
+  res.status(200).json({
+    success: true,
+    appointments
+  });
+});
+
+export const updatePatientAppointment = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+  const patientId = req.user._id;
+
+  const appointment = await Appointment.findById(id);
+  if (!appointment) {
+    return next(new ErrorHandler("Appointment not found!", 404));
+  }
+
+  // Ensure this appointment belongs to the logged-in patient
+  if (appointment.patientId.toString() !== patientId.toString()) {
+    return next(new ErrorHandler("Not authorized to update this appointment!", 403));
+  }
+
+  // Prevent patient from updating status manually by removing it from req.body
+  if ('status' in req.body) {
+    delete req.body.status;
+  }
+
+  // Validate doctor info if included, fetch doctorId accordingly
+  if (req.body.doctor_firstName && req.body.doctor_lastName && req.body.department) {
+    const doctor = await User.findOne({
+      firstName: req.body.doctor_firstName,
+      lastName: req.body.doctor_lastName,
+      role: "Doctor",
+      doctorDepartment: req.body.department,
+    });
+    if (!doctor) return next(new ErrorHandler("Doctor not found", 404));
+    req.body.doctorId = doctor._id;
+    req.body.doctor = {
+      firstName: doctor.firstName,
+      lastName: doctor.lastName,
+    };
+  }
+
+  // Update appointment fields (excluding status)
+  const updatedData = {
+    ...req.body,
+    status: "Updated", // Set status to "Updated" after patient update
+  };
+
+  const updatedAppointment = await Appointment.findByIdAndUpdate(
+    id,
+    updatedData,
+    {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    }
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Appointment updated successfully!",
+    appointment: updatedAppointment,
+  });
+});
+
+
 
 export const updateAppointmentStatus = catchAsyncErrors(
   async (req, res, next) => {

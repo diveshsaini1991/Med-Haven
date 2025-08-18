@@ -1,8 +1,12 @@
+import redis from "../config/redis.js";
 import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js";
 import ErrorHandler from "../middlewares/errorMiddleware.js";
 import { User } from "../models/userSchema.js";
 import { generateToken } from "../utils/jwtToken.js";
 import cloudinary from "cloudinary";
+import transporter from "../utils/mailer.js";
+import { getOtpEmailHtml } from "../service/otpEmail.js";
+
 
 export const patientRegister = catchAsyncErrors(async (req, res, next) => {
     const { firstName, lastName, email, phone, password, gender, dob, aadhaar, role } = req.body;
@@ -13,9 +17,67 @@ export const patientRegister = catchAsyncErrors(async (req, res, next) => {
     if (user) {
         return next(new ErrorHandler("User Already Registered !", 400));
     }
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    await redis.set(`otp:${email}`, otp, { ex: 300 }); 
+    
+    await transporter.sendMail({
+        to: email,
+        subject: "Your MedHaven Registration OTP",
+        html: getOtpEmailHtml(otp, firstName) 
+      });
+
+    res.status(200).json({
+        success: true,
+        message: "OTP sent to email for verification. Please check your inbox.",
+        email 
+    });
+});
+
+export const verifyPatientOtp = catchAsyncErrors(async (req, res, next) => {
+    const { firstName, lastName, email, phone, password, gender, dob, aadhaar, role, otp } = req.body;
+    if (!email || !otp || !firstName || !lastName || !phone || !password || !gender || !dob || !aadhaar || !role) {
+        return next(new ErrorHandler("All Fields Are Required!", 400));
+    }
+    const savedOtp = await redis.get(`otp:${email}`);
+
+    if (!savedOtp || savedOtp != otp) {
+        return next(new ErrorHandler("Invalid or expired OTP!", 400));
+    }
+    let user = await User.findOne({ email });
+    if (user) {
+        return next(new ErrorHandler("User Already Registered!", 400));
+    }
     user = await User.create({ firstName, lastName, email, phone, password, gender, dob, aadhaar, role });
-    generateToken(user, "User Registered !", 200, res);
-})
+    await redis.del(`otp:${email}`);
+    generateToken(user, "User Registered!", 200, res);
+});
+
+export const resendOtp = catchAsyncErrors(async (req, res, next) => {
+    const { email } = req.body;
+    if (!email) {
+      return next(new ErrorHandler("Email is required", 400));
+    }
+  
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return next(new ErrorHandler("User already registered with this email", 400));
+    }
+  
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    await redis.set(`otp:${email}`, otp, { ex: 300 });
+  
+    await transporter.sendMail({
+        to: email,
+        subject: "Your Registration OTP - Resend",
+        html: getOtpEmailHtml(otp) 
+      });
+  
+    res.status(200).json({
+      success: true,
+      message: "OTP resent to your email. Please check your inbox.",
+    });
+  });
+
 
 export const login = catchAsyncErrors(async (req, res, next) => {
     const { email, password, role } = req.body;

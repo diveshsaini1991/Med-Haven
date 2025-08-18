@@ -21,6 +21,7 @@
     "react-multi-carousel": "^2.8.5",
     "react-router-dom": "^6.26.1",
     "react-toastify": "^10.0.5",
+    "socket.io-client": "^4.8.1",
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {
