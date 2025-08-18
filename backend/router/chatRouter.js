@@ -8,12 +8,12 @@ import {
   getUnreadChatsForUser,
   getPatientList
 } from "../controller/chatController.js";
-import { isPatientAuthanticated, isDoctorAuthanticated } from "../middlewares/auth.js";
+import { isPatientAuthanticated, isDoctorAuthanticated, isPatientOrDoctorAuthenticated } from "../middlewares/auth.js";
 
 const router = express.Router();
 
 router.post("/createRoom", isPatientAuthanticated, createChatRoom);
-router.post("/send", isPatientAuthanticated, sendChat);
+router.post("/send", isPatientOrDoctorAuthenticated, sendChat);
 router.put("/edit/:id", isPatientAuthanticated, editChat);
 router.get("/room/:chatRoomId", isPatientAuthanticated, getChatRoomMessages);
 router.put("/read/:id", isPatientAuthanticated, markChatRead);
