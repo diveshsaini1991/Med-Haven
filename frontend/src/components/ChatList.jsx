@@ -9,8 +9,14 @@ const ChatList = ({
   selectedChat,
   setSelectedChat,
   navigate,
+  isMobile,
+  isActiveView,
 }) => (
-  <div className="w-1/3 bg-white dark:bg-gray-800 flex flex-col p-4 overflow-hidden custom-scroll">
+  <div
+    className={`${
+      isMobile && isActiveView ? "w-full" : "w-1/3"
+    } bg-white dark:bg-gray-800 flex flex-col p-4 overflow-hidden custom-scroll`}
+  >
     <button
       className="mb-4 px-4 py-2 rounded bg-blue-600 text-white font-bold self-start"
       onClick={() => navigate("/")}

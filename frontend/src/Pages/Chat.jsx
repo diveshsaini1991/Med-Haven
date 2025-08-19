@@ -16,6 +16,8 @@ const socket = io(import.meta.env.VITE_BACKEND_URL, {
 const generateChatRoomId = (id1, id2) =>
   id1 < id2 ? `${id1}-${id2}` : `${id2}-${id1}`;
 
+const MOBILE_BREAKPOINT = 768;
+
 const Chat = () => {
   const { user } = useContext(Context);
   const [departments, setDepartments] = useState({});
@@ -25,12 +27,20 @@ const Chat = () => {
   const [input, setInput] = useState("");
   const [sendingDisabled, setSendingDisabled] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [mobileViewMode, setMobileViewMode] = useState("list");
 
   const navigate = useNavigate();
 
   const messagesEndRef = useRef(null);
   const lastMessageRef = useRef(null);
   const newMessageAddedRef = useRef(false);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -45,13 +55,12 @@ const Chat = () => {
           if (!byDept[dept]) byDept[dept] = [];
           byDept[dept].push({
             ...doc, 
-            id: doc._id, 
+            id: doc._id,
             name: `${doc.firstName} ${doc.lastName}`,
             avatarUrl: doc.docAvatar?.url || null,
             department: dept,
           });
         });
-        
         setDepartments(byDept);
       } catch (err) {
         toast.error("Failed to load doctors");
@@ -104,7 +113,6 @@ const Chat = () => {
     };
   }, [selectedChat, user]);
 
-  // Send message
   const handleSend = async () => {
     if (!input.trim() || !selectedChat || !user?._id || sendingDisabled) return;
 
@@ -148,43 +156,80 @@ const Chat = () => {
 
   const currentAvatarUrl = selectedChat?.avatarUrl;
 
+  const isMobile = windowWidth < MOBILE_BREAKPOINT;
+
+  const onSelectChat = (doc) => {
+    setSelectedChat(doc);
+    setShowProfile(false);
+    if (isMobile) {
+      setMobileViewMode("chat");
+    }
+  };
+
+  const onBackFromChatRoom = () => {
+    if (isMobile) {
+      setMobileViewMode("list");
+      setShowProfile(false);
+    }
+  };
+
+  const onBackFromProfile = () => {
+    setShowProfile(false);
+    if (isMobile) {
+      setMobileViewMode("chat");
+    }
+  };
+
   return (
     <div className="fixed inset-0 min-h-screen w-screen bg-gray-900 flex overflow-hidden text-white">
-      <ChatList
-        departments={departments}
-        departmentsOpen={departmentsOpen}
-        toggleDepartment={toggleDepartment}
-        selectedChat={selectedChat}
-        setSelectedChat={(doc) => {
-          setSelectedChat(doc);
-          setShowProfile(false); 
-        }}
-        navigate={navigate}
-      />
-
-      {showProfile ? (
-        <DoctorProfile
-          doctor={selectedChat}
-          onBack={() => setShowProfile(false)}
-        />
-      ) : (
-        <ChatRoom
+      {/* ChatList */}
+      {(!isMobile || mobileViewMode === "list") && (
+        <ChatList
+          departments={departments}
+          departmentsOpen={departmentsOpen}
+          toggleDepartment={toggleDepartment}
           selectedChat={selectedChat}
-          currentAvatarUrl={currentAvatarUrl}
-          messages={messages}
-          input={input}
-          setInput={setInput}
-          handleSend={handleSend}
-          sendingDisabled={sendingDisabled}
-          messagesEndRef={messagesEndRef}
-          lastMessageRef={lastMessageRef}
-          user={user}
-          newMessageAddedRef={newMessageAddedRef}
-          setShowProfile={setShowProfile} 
+          setSelectedChat={onSelectChat}
+          navigate={navigate}
+          isMobile={isMobile}
+          isActiveView={mobileViewMode === "list"}
         />
       )}
-    </div>
 
+      {/* ChatRoom or DoctorProfile */}
+      {(!isMobile || mobileViewMode !== "list") && (
+        <>
+          {showProfile ? (
+            <DoctorProfile doctor={selectedChat} onBack={onBackFromProfile} />
+          ) : (
+            <div className="flex-1 flex flex-col">
+              {isMobile && (
+                <button
+                  onClick={onBackFromChatRoom}
+                  className="mb-2 px-4 py-2 rounded bg-blue-600 text-white font-bold self-start"
+                >
+                  ← Back
+                </button>
+              )}
+              <ChatRoom
+                selectedChat={selectedChat}
+                currentAvatarUrl={currentAvatarUrl}
+                messages={messages}
+                input={input}
+                setInput={setInput}
+                handleSend={handleSend}
+                sendingDisabled={sendingDisabled}
+                messagesEndRef={messagesEndRef}
+                lastMessageRef={lastMessageRef}
+                user={user}
+                newMessageAddedRef={newMessageAddedRef}
+                setShowProfile={setShowProfile}
+              />
+            </div>
+          )}
+        </>
+      )}
+    </div>
   );
 };
 
