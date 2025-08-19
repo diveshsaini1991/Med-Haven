@@ -1,42 +1,42 @@
 
 # MedHaven - Care Network 🏥️
 
-MedHaven - It is a comprehensive Hospital Management System built using the MERN (MongoDB, Express, React, Node.js) stack. The system is designed to manage hospital operations, including patient registration, appointment scheduling, medical records, and Listing Doctors.
-
-
-
+MedHaven is a hospital management system built on the MERN stack, enabling operations like patient registration, appointment scheduling, medical records management, and real-time doctor-patient chat.
 
 
 ## Features
 
-- Patient registration and management
-- Appointment scheduling and management
-- Medical records management
-- Admin dashboard for hospital staff
-
-- **Password Hashing:** Passwords are hashed using bcrypt for secure storage in the database.
-- **JWT Token Authentication:** JSON Web Tokens (JWT) are used to authenticate users and authorize access to protected routes.
-- **Input Validation:** Input fields are validated to ensure that users enter valid data.
+- **Real-time chat** between doctors and patients with chatroom and profile views.
+- **Responsive UI** supporting both desktop and mobile devices.
+- Doctor profiles with detailed info and **interactive animations**.
+- Comprehensive appointment management: scheduling, editing, and deletion.
+- **Secure authentication** with JWT and bcrypt hashing.
+- **OTP email verification** for enhanced security.
+- **API rate limiting** for performance and reliability.
+- Fully containerized backend and frontend using Docker.
+- Automated deployment and hosting on Vercel and Render.
 
 
 
 ## Technical Details
 
-**Frontend:** React
+- **Frontend:** React, Tailwind CSS, GSAP animations
 
-**Backend:** Node.js, Express
+- **Backend:** Node.js, Express
 
-**Database:** MongoDB
+- **Database:** MongoDB
 
-**Authentication:** JSON Web Tokens (JWT)
+- **Real-time:** Socket.io
 
-**Password Hashing:** bcrypt
+- **Authentication:** JWT, bcrypt
 
-**CORS:** Enabled for cross-origin resource sharing
+- **Email Service:** Nodemailer (OTP verification)
 
-**Testing:**  APIs tested using Postman
+- **Containerization:** Docker & Docker Compose
 
-**Containerization:** Docker & Docker Compose
+- **Deployment:** Vercel, Render
+
+- **Testing:**  APIs tested using Postman
 
 
 ## API Endpoints 
@@ -45,30 +45,63 @@ MedHaven - It is a comprehensive Hospital Management System built using the MERN
 #### User 
 
 ```http
-  POST /api/v1/user/patient/register
-  POST /api/v1/user/login
-  POST /api/v1/user/admin/addnew
-  GET /api/v1/user/doctors
-  GET /api/v1/user/admin/me
-  GET /api/v1/user/patient/me
-  GET /api/v1/user/admin/logout
-  GET /api/v1/user/patient/logout
-  POST /api/v1/user/doctor/addnew
+  POST /api/v1/user/patient/register            # Patient registration
+  POST /api/v1/user/login                       # User login (all roles)
+  POST /api/v1/user/admin/addnew                # Add new admin (Admin only)
+  POST /api/v1/user/doctor/addnew                # Add new doctor (Admin only)
+  POST /api/v1/user/patient/verify-otp          # Verify OTP for patient registration
+  POST /api/v1/user/patient/resend-otp           # Resend OTP to patient
+
+  GET /api/v1/user/doctors                      # Get list of all doctors (Public)
+  GET /api/v1/user/admin/me                      # Get logged-in admin details (Admin only)
+  GET /api/v1/user/doctor/me                      # Get logged-in doctor details (Doctor only)
+  GET /api/v1/user/patient/me                     # Get logged-in patient details (Patient only)
+
+  GET /api/v1/user/admin/logout                   # Admin logout (Admin only)
+  GET /api/v1/user/doctor/logout                  # Doctor logout (Doctor only)
+  GET /api/v1/user/patient/logout                 # Patient logout (Patient only)
+
 ```
 
 #### Appointment
 
 ```http
-  POST /api/v1/appointment/post
-  GET /api/v1/appointment/getall
-  PUT /api/v1/appointment/update/:id
-  DELETE /api/v1/appointment/delete/:id
+  POST /api/v1/appointment/post                   # Create a new appointment (Patient only)
+  GET /api/v1/appointment/getall                   # Get all appointments (Admin only)
+  GET /api/v1/appointment/get                      # Get appointments of logged-in doctor (Doctor only)
+
+  PUT /api/v1/appointment/update/:id               # Update appointment status (Admin only)
+  DELETE /api/v1/appointment/delete/:id            # Delete appointment (Admin only)
+
+  PUT /api/v1/appointment/doctor/update/:id        # Update appointment status (Doctor only)
+  DELETE /api/v1/appointment/doctor/delete/:id     # Delete appointment (Doctor only)
+
+  GET /api/v1/appointment/myappointments            # Get appointments of logged-in patient (Patient only)
+  PUT /api/v1/appointment/patient/update/:id        # Update patient appointment details (Patient only)
+
 ```
+#### Chat
+```http
+  POST /api/v1/chat/createRoom                      # Create a chat room (Patient only)
+  POST /api/v1/chat/send                            # Send a message (Patient or Doctor)
+  PUT /api/v1/chat/edit/:id                         # Edit a chat message (Patient only)
+
+  GET /api/v1/chat/room/:chatRoomId                 # Get messages by chat room (Patient only)
+  PUT /api/v1/chat/read/:id                          # Mark chat message as read (Patient only)
+  GET /api/v1/chat/unread/:userId                    # Get unread chat count/messages (Patient only)
+
+  GET /api/v1/chat/patientlist                       # Get patient list for doctor (Doctor only)
+
+
+```
+
 #### Message
 
 ```http
-  GET /api/v1/message/getall/send
-  POST /api/v1/message/send
+  POST /api/v1/message/send                         # Send a message (no auth specified)
+  GET /api/v1/message/getall/send                   # Get all messages sent (Admin only)
+  GET /api/v1/message/get                           # Get messages of logged-in doctor (Doctor only)
+
 ```
 
 

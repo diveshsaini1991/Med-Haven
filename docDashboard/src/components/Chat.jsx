@@ -1,9 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef, useLayoutEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { Context } from "../main";
 import { toast } from "react-toastify";
+import gsap from "gsap";
 
 const socket = io(import.meta.env.VITE_BACKEND_URL, {
   transports: ["websocket"],
@@ -11,24 +12,35 @@ const socket = io(import.meta.env.VITE_BACKEND_URL, {
 });
 
 const Chat = () => {
-  const { admin } = useContext(Context); // doctor info here
+  const { admin } = useContext(Context); 
   const [patientList, setPatientList] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [sendingDisabled, setSendingDisabled] = useState(false);
   const navigate = useNavigate();
+  const messagesEndRef = useRef(null);
+  const lastMessageRef = useRef(null);
+  const newMessageAddedRef = useRef(false);
 
-  // Composite chatRoomId string (doctor-patient)
   const generateChatRoomId = (id1, id2) => (id1 < id2 ? `${id1}-${id2}` : `${id2}-${id1}`);
 
-  // Fetch patients who messaged this doctor
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const animateMessage = (el) => {
+    if (!el || !newMessageAddedRef.current) return;
+    gsap.fromTo(el, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" });
+    newMessageAddedRef.current = false;
+  };
+
   useEffect(() => {
     const fetchPatientList = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/v1/chat/patientlist`,
-          { withCredentials: true }
-        );
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/chat/patientlist`, {
+          withCredentials: true,
+        });
         setPatientList(response.data.patients || []);
       } catch (err) {
         toast.error("Failed to load patients");
@@ -39,13 +51,11 @@ const Chat = () => {
     if (admin?._id) fetchPatientList();
   }, [admin]);
 
-  // Fetch messages & join room when patient selected
   useEffect(() => {
     setMessages([]);
     if (!selectedPatient || !admin?._id) return;
 
     const chatRoomId = generateChatRoomId(admin._id, selectedPatient.id);
-
     socket.emit("joinChatRoom", { chatRoomId });
 
     const fetchMessages = async () => {
@@ -55,11 +65,11 @@ const Chat = () => {
           { withCredentials: true }
         );
         setMessages(response.data.chats || []);
+        setTimeout(() => scrollToBottom(), 100);
       } catch {
         setMessages([]);
       }
     };
-
     fetchMessages();
 
     return () => {
@@ -67,24 +77,37 @@ const Chat = () => {
     };
   }, [selectedPatient, admin]);
 
-  // Listen for realtime incoming messages
   useEffect(() => {
     const onReceiveChat = (msg) => {
       if (!selectedPatient || !admin?._id) return;
       const currentRoomId = generateChatRoomId(admin._id, selectedPatient.id);
       if (msg.chatRoomId === currentRoomId) {
+        newMessageAddedRef.current = true;
         setMessages((prev) => [...prev, msg]);
       }
     };
     socket.on("receiveChat", onReceiveChat);
+
     return () => {
       socket.off("receiveChat", onReceiveChat);
     };
   }, [selectedPatient, admin]);
 
-  // Send message
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  useLayoutEffect(() => {
+    animateMessage(lastMessageRef.current);
+  }, [messages]);
+
   const handleSend = async () => {
-    if (!input.trim() || !selectedPatient || !admin?._id) return;
+    if (!input.trim() || !selectedPatient || !admin?._id || sendingDisabled) return;
+
+    setSendingDisabled(true);
+    setTimeout(() => {
+      setSendingDisabled(false);
+    }, 1000);
 
     const chatRoomId = generateChatRoomId(admin._id, selectedPatient.id);
 
@@ -110,12 +133,14 @@ const Chat = () => {
       console.error("Failed to save message", err);
     }
 
+    newMessageAddedRef.current = false;
     setMessages((prev) => [...prev, message]);
     setInput("");
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-900 flex flex-col overflow-hidden">
+    <div className="fixed inset-0 bg-gray-900 flex flex-col overflow-hidden text-white" style={{ height: "100vh" }}>
+      {/* Navbar showing current chat user */}
       <div className="flex items-center p-4 bg-gray-800 text-white">
         <button
           className="mr-4 p-2 rounded bg-blue-600 hover:bg-blue-700"
@@ -123,17 +148,26 @@ const Chat = () => {
         >
           ← Back
         </button>
-        <h1 className="text-xl font-semibold">Doctor Chat</h1>
+        <h1 className="text-xl font-semibold">
+          {selectedPatient ? (
+            <>
+              Chat with{' '}
+              <span className="font-bold text-blue-400">{selectedPatient.name}</span>
+            </>
+          ) : (
+            "Doctor Chat"
+          )}
+        </h1>
+
+
       </div>
 
       <div className="flex flex-1 overflow-hidden">
         {/* Left: Patients list */}
-        <div className="w-1/3 bg-white dark:bg-gray-800 p-4 flex flex-col overflow-hidden">
+        <div className="w-1/3 bg-white dark:bg-gray-800 p-4 flex flex-col overflow-hidden custom-scroll">
           <h2 className="font-bold text-lg mb-2 text-blue-700 dark:text-blue-400">Patients</h2>
-          <ul className="flex-1 overflow-y-auto pr-2">
-            {patientList.length === 0 && (
-              <li className="text-gray-500">No patients have messaged yet</li>
-            )}
+          <ul className="flex-1 overflow-y-auto pr-2 custom-scroll">
+            {patientList.length === 0 && <li className="text-gray-500">No patients have messaged yet</li>}
             {patientList.map((patient) => (
               <li
                 key={patient.id}
@@ -151,19 +185,16 @@ const Chat = () => {
         </div>
 
         {/* Right: chat messages */}
-        <div className="flex-1 flex flex-col bg-gray-100 dark:bg-gray-950 p-4 overflow-hidden">
+        <div className="flex-1 flex flex-col bg-gray-100 dark:bg-gray-950 p-4 overflow-hidden custom-scroll">
           {selectedPatient ? (
             <>
-              <div className="flex-1 overflow-y-auto mb-4 pr-2">
-                {messages.length === 0 && (
-                  <div className="text-gray-500 text-center mt-8">No messages yet</div>
-                )}
+              <div className="flex-1 overflow-y-auto mb-4 pr-2 custom-scroll">
+                {messages.length === 0 && <div className="text-gray-500 text-center mt-8">No messages yet</div>}
                 {messages.map((msg, idx) => (
                   <div
                     key={idx}
-                    className={`mb-2 flex ${
-                      msg.senderId === admin._id ? "justify-end" : "justify-start"
-                    }`}
+                    className={`mb-2 flex ${msg.senderId === admin._id ? "justify-end" : "justify-start"}`}
+                    ref={idx === messages.length - 1 ? lastMessageRef : null}
                   >
                     <div
                       className={`px-4 py-2 rounded-lg max-w-xs ${
@@ -176,6 +207,7 @@ const Chat = () => {
                     </div>
                   </div>
                 ))}
+                <div ref={messagesEndRef} />
               </div>
               <div className="flex pb-2">
                 <input
@@ -187,19 +219,21 @@ const Chat = () => {
                   onKeyDown={(e) => {
                     if (e.key === "Enter") handleSend();
                   }}
+                  disabled={sendingDisabled}
                 />
                 <button
                   onClick={handleSend}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-r-lg font-semibold"
+                  className={`px-4 py-2 rounded-r-lg font-semibold text-white ${
+                    sendingDisabled ? "bg-blue-300 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+                  }`}
+                  disabled={sendingDisabled}
                 >
                   Send
                 </button>
               </div>
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center text-gray-500">
-              Select a patient to start
-            </div>
+            <div className="flex-1 flex items-center justify-center text-gray-500">Select a patient to start</div>
           )}
         </div>
       </div>
