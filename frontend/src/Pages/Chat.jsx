@@ -181,7 +181,7 @@ const Chat = () => {
   };
 
   return (
-    <div className="fixed inset-0 min-h-screen w-screen bg-gray-900 flex overflow-hidden text-white">
+    <div className="fixed inset-0 min-h-screen w-screen bg-gray-900 flex text-white">
       {/* ChatList */}
       {(!isMobile || mobileViewMode === "list") && (
         <ChatList

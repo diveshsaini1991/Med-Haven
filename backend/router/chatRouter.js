@@ -8,16 +8,16 @@ import {
   getUnreadChatsForUser,
   getPatientList
 } from "../controller/chatController.js";
-import { isPatientAuthanticated, isDoctorAuthanticated, isPatientOrDoctorAuthenticated } from "../middlewares/auth.js";
+import { isPatientOrDoctorAuthenticated } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.post("/createRoom", isPatientAuthanticated, createChatRoom);
+router.post("/createRoom", isPatientOrDoctorAuthenticated, createChatRoom);
 router.post("/send", isPatientOrDoctorAuthenticated, sendChat);
-router.put("/edit/:id", isPatientAuthanticated, editChat);
-router.get("/room/:chatRoomId", isPatientAuthanticated, getChatRoomMessages);
-router.put("/read/:id", isPatientAuthanticated, markChatRead);
-router.get("/unread/:userId", isPatientAuthanticated, getUnreadChatsForUser);
-router.get("/patientlist", isDoctorAuthanticated, getPatientList);
+router.put("/edit/:id", isPatientOrDoctorAuthenticated, editChat);
+router.get("/room/:chatRoomId", isPatientOrDoctorAuthenticated, getChatRoomMessages);
+router.put("/read/:id", isPatientOrDoctorAuthenticated, markChatRead);
+router.get("/unread/:userId", isPatientOrDoctorAuthenticated, getUnreadChatsForUser);
+router.get("/patientlist", isPatientOrDoctorAuthenticated, getPatientList);
 
 export default router;
