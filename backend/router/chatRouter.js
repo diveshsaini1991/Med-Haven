@@ -6,7 +6,8 @@ import {
   getChatRoomMessages,
   markChatRead,
   getUnreadChatsForUser,
-  getPatientList
+  getPatientList,
+  uploadChatImage
 } from "../controller/chatController.js";
 import { isPatientOrDoctorAuthenticated } from "../middlewares/auth.js";
 
@@ -19,5 +20,6 @@ router.get("/room/:chatRoomId", isPatientOrDoctorAuthenticated, getChatRoomMessa
 router.put("/read/:id", isPatientOrDoctorAuthenticated, markChatRead);
 router.get("/unread/:userId", isPatientOrDoctorAuthenticated, getUnreadChatsForUser);
 router.get("/patientlist", isPatientOrDoctorAuthenticated, getPatientList);
+router.post("/uploadImage", isPatientOrDoctorAuthenticated, uploadChatImage);
 
 export default router;

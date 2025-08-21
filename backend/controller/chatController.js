@@ -1,6 +1,7 @@
 import { Chat } from "../models/chatSchema.js";
 import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js";
 import { User } from "../models/userSchema.js";
+import cloudinary from "cloudinary";
 
 export const createChatRoom = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({ success: true, message: "Handled by socket or message creation." });
@@ -107,4 +108,32 @@ export const getUnreadChatsForUser = catchAsyncErrors(async (req, res, next) => 
     readBy: { $ne: req.params.userId }
   });
   res.json({ success: true, chats });
+});
+
+
+export const uploadChatImage = catchAsyncErrors(async (req, res, next) => {
+  if (!req.files || !req.files.image) {
+    return res.status(400).json({ success: false, message: "No image file uploaded." });
+  }
+
+  const imageFile = req.files.image;
+
+  const allowedFormats = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+  if (!allowedFormats.includes(imageFile.mimetype)) {
+    return res.status(400).json({ success: false, message: "File format not supported." });
+  }
+
+  if (imageFile.size > 5 * 1024 * 1024) {
+    return res.status(400).json({ success: false, message: "File size exceeds limit of 5MB." });
+  }
+
+  const result = await cloudinary.v2.uploader.upload(imageFile.tempFilePath, {
+    folder: "medhaven_chat_images",
+  });
+
+  if (!result || result.error) {
+    return res.status(500).json({ success: false, message: "Failed to upload image to Cloudinary." });
+  }
+
+  res.status(201).json({ success: true, imageUrl: result.secure_url });
 });
