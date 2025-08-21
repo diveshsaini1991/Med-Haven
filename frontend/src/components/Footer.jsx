@@ -46,7 +46,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-gray-700 dark:text-gray-200 mb-8">
           <div className="footer-section flex flex-col items-start">
-            <img src="/logo.png" alt="MedHaven Logo" className="h-12 w-auto mb-3 rounded-lg shadow-sm" />
+            <img src="/logo.png" alt="MedHaven Logo" className="h-12 object-contain mb-3 rounded-lg shadow-sm " />
             <span className="text-xl font-bold text-blue-600 dark:text-blue-400 tracking-tight">MedHaven</span>
             <span className="mt-2 text-sm text-gray-500 dark:text-gray-400">
               Modern Hospital Management

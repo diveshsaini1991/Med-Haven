@@ -12,6 +12,11 @@ const MyAppointments = () => {
   const navigate = useNavigate();
 
   const cardsContainerRef = useRef(null);
+
+  useEffect(()=>{
+    document.title = "MedHaven - My Appointments"
+  },[]);
+
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login");

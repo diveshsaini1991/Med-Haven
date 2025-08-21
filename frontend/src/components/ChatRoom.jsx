@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { getLowResCloudinaryUrl } from "../utils/cloudinaryHelpers";
 
@@ -14,8 +14,10 @@ const ChatRoom = ({
   lastMessageRef,
   user,
   newMessageAddedRef,
-  setShowProfile, 
+  setShowProfile,
 }) => {
+  const containerRef = useRef(null);
+
   useLayoutEffect(() => {
     if (lastMessageRef.current && newMessageAddedRef.current) {
       gsap.fromTo(
@@ -32,7 +34,11 @@ const ChatRoom = ({
   }, [messages, messagesEndRef]);
 
   return (
-    <div className="flex-1 flex flex-col bg-gray-100 dark:bg-gray-950 p-4 overflow-hidden custom-scroll">
+    <div
+      ref={containerRef}
+      className="flex-1 flex flex-col bg-gray-100 dark:bg-gray-950 p-4 overflow-hidden"
+      style={{ paddingBottom: "60px"}}
+    >
       {selectedChat ? (
         <>
           {/* Chat Header */}
@@ -63,7 +69,9 @@ const ChatRoom = ({
             {messages.map((msg, idx) => (
               <div
                 key={idx}
-                className={`mb-2 flex ${msg.senderId === user._id ? "justify-end" : "justify-start"}`}
+                className={`mb-2 flex ${
+                  msg.senderId === user._id ? "justify-end" : "justify-start"
+                }`}
                 ref={idx === messages.length - 1 ? lastMessageRef : null}
               >
                 <div
@@ -79,13 +87,13 @@ const ChatRoom = ({
             ))}
             <div ref={messagesEndRef} />
           </div>
-          {/* Input */}
-          <div className="flex pb-2">
+
+          <div className="fixed bottom-0 right-0 flex bg-gray-100 dark:bg-gray-950 p-2 shadow-inner z-50 w-full md:w-2/3">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="flex-1 px-4 py-2 rounded-l-lg border bg-white dark:bg-gray-800 text-black dark:text-white"
+              className="flex-1 px-4 py-2 rounded-l-lg border bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
               placeholder="Type your message"
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleSend();

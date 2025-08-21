@@ -36,6 +36,10 @@ const Chat = () => {
   const lastMessageRef = useRef(null);
   const newMessageAddedRef = useRef(false);
 
+  useEffect(()=>{
+    document.title = "MedHaven - Chat With Us"
+  },[]);
+
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
@@ -181,7 +185,7 @@ const Chat = () => {
   };
 
   return (
-    <div className="fixed inset-0 min-h-screen w-screen bg-gray-900 flex overflow-hidden text-white">
+    <div className="fixed inset-0 min-h-screen w-screen bg-gray-900 flex text-white">
       {/* ChatList */}
       {(!isMobile || mobileViewMode === "list") && (
         <ChatList

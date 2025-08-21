@@ -28,6 +28,10 @@ const Register = () => {
   const navigateTo = useNavigate();
   const formRef = useRef(null);
 
+  useEffect(()=>{
+    document.title = "MedHaven - Register New User"
+  },[]);
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(gsap.utils.toArray(".register-animate"), {
@@ -245,7 +249,7 @@ const Register = () => {
                 className=" input-field w-full px-4 py-3 text-gray-900 dark:text-white rounded-lg  bg-white dark:bg-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-white outline-none transition placeholder-gray-500 dark:placeholder-gray-300"
                 showMonthDropdown
                 showYearDropdown
-                dropdownMode="scroll"
+                dropdownMode="select"
               />
             </div>
           </div>
