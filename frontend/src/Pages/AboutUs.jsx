@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Hero from "../components/Hero";
 import Biography from "../components/Biography";
 const AboutUs = () => {
+  useEffect(()=>{
+    document.title = "MedHaven - About Us"
+  },[]);
   return (
     <>
       <Hero

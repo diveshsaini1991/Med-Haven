@@ -12,6 +12,10 @@ const EditAppointment = () => {
   const [appt, setAppt] = useState(null);
   const navigate = useNavigate();
 
+  useEffect(()=>{
+    document.title = "MedHaven - Edit Appointment"
+  },[]);
+
   useEffect(() => {
     if (!isAuthenticated) navigate("/login");
     const fetch = async () => {

@@ -17,6 +17,9 @@ const Login = () => {
   const navigateTo = useNavigate();
   const formRef = useRef(null);
 
+  useEffect(()=>{
+    document.title = "MedHaven - Login"
+  },[]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
