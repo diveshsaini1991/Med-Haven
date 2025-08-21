@@ -36,6 +36,10 @@ const Chat = () => {
   const lastMessageRef = useRef(null);
   const newMessageAddedRef = useRef(false);
 
+  useEffect(()=>{
+    document.title = "MedHaven - Chat With Us"
+  },[]);
+
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);

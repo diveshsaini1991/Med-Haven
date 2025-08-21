@@ -1,10 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Hero from "../components/Hero";
 import Biography from "../components/Biography";
 import MessageForm from "../components/MessageForm";
 import Departments from "../components/Departments";
 
 const Home = () => {
+
+  useEffect(()=>{
+    document.title = "MedHaven - Care Network"
+  },[]);
+
   return (
     <div className="overflow-hidden">
       <Hero 
