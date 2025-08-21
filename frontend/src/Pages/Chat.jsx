@@ -156,7 +156,6 @@ const Chat = () => {
     }
   };
 
-  // Upload all selected files sequentially with await
   const handleMultipleImageUpload = async (files) => {
     for (const file of Array.from(files)) {
       await handleImageUpload(file);

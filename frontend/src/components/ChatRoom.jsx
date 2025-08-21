@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { HiOutlinePhotograph } from "react-icons/hi";
 import { getLowResCloudinaryUrl } from "../utils/cloudinaryHelpers";
@@ -21,6 +21,11 @@ const ChatRoom = ({
   setUploadedImageUrls,
   handleMultipleImageUpload,
 }) => {
+  const [showImageOverlay, setShowImageOverlay] = useState(false);
+  const [overlayImageUrl, setOverlayImageUrl] = useState(null);
+  const overlayRef = useRef(null);
+  const imageRef = useRef(null);
+
   const containerRef = useRef(null);
   const hiddenFileInputRef = useRef(null);
 
@@ -49,13 +54,51 @@ const ChatRoom = ({
     const files = e.target.files;
     if (files && files.length > 0) {
       handleMultipleImageUpload(files);
-      e.target.value = null; // reset input so same file(s) can be selected again
+      e.target.value = null; 
     }
   };
 
   const removeImage = (index) => {
     setUploadedImageUrls((prev) => prev.filter((_, i) => i !== index));
   };
+
+  const openImageOverlay = (url) => {
+    setOverlayImageUrl(url);
+    setShowImageOverlay(true);
+  };
+
+  const closeOverlay = () => {
+    gsap.to(imageRef.current, {
+      scale: 0.8,
+      opacity: 0,
+      duration: 0.3,
+      ease: "power3.in",
+    });
+    gsap.to(overlayRef.current, {
+      opacity: 0,
+      duration: 0.3,
+      ease: "power1.in",
+      onComplete: () => {
+        setShowImageOverlay(false);
+        setOverlayImageUrl(null);
+      },
+    });
+  };
+
+  React.useEffect(() => {
+    if (showImageOverlay) {
+      gsap.fromTo(
+        overlayRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.3, ease: "power1.out" }
+      );
+      gsap.fromTo(
+        imageRef.current,
+        { scale: 0.8, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.4, ease: "power3.out" }
+      );
+    }
+  }, [showImageOverlay]);
 
   return (
     <div
@@ -105,14 +148,15 @@ const ChatRoom = ({
                       : "bg-gray-300 dark:bg-gray-700 text-black dark:text-white"
                   }`}
                 >
-                  {msg.text}
+                  <div>{msg.text}</div>
                   {msg.imageUrls &&
                     msg.imageUrls.map((url, i) => (
                       <img
                         key={i}
-                        src={url}
+                        src={getLowResCloudinaryUrl(url, 400, 200)}
                         alt={`chat-img-${i}`}
-                        className="mt-2 w-40 h-40 object-cover rounded"
+                        className="mt-2 w-40 h-40 object-cover rounded cursor-pointer"
+                        onClick={() => openImageOverlay(url)}
                       />
                     ))}
                 </div>
@@ -127,9 +171,10 @@ const ChatRoom = ({
               {uploadedImageUrls.map((url, idx) => (
                 <div key={idx} className="relative">
                   <img
-                    src={url}
+                    src={getLowResCloudinaryUrl(url, 200, 100)}
                     alt={`upload-preview-${idx}`}
-                    className="w-16 h-16 object-cover rounded"
+                    className="w-16 h-16 object-cover rounded cursor-pointer"
+                    onClick={() => openImageOverlay(url)}
                   />
                   <button
                     onClick={() => removeImage(idx)}
@@ -187,6 +232,33 @@ const ChatRoom = ({
               </button>
             </div>
           </div>
+
+          {/* Image Overlay */}
+          {showImageOverlay && (
+            <div
+              ref={overlayRef}
+              className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm bg-opacity-70"
+              onClick={closeOverlay}
+            >
+              {/* Close button */}
+              <button
+                onClick={closeOverlay}
+                className="fixed top-4 right-4 text-white text-4xl font-bold bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center hover:bg-opacity-75 focus:outline-none"
+                aria-label="Close image"
+              >
+                &times;
+              </button>
+
+              <div onClick={(e) => e.stopPropagation()}>
+                <img
+                  ref={imageRef}
+                  src={getLowResCloudinaryUrl(overlayImageUrl, 1500, 1500)}
+                  alt="Full screen"
+                  className="max-w-screen max-h-screen rounded-lg object-contain shadow-lg "
+                />
+              </div>
+            </div>
+          )}
         </>
       ) : (
         <div className="flex-1 flex items-center justify-center text-gray-500">
@@ -195,6 +267,7 @@ const ChatRoom = ({
       )}
     </div>
   );
+
 };
 
 export default ChatRoom;
