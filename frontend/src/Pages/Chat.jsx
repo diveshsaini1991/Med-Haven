@@ -29,6 +29,8 @@ const Chat = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [mobileViewMode, setMobileViewMode] = useState("list");
+  const [imageUploading, setImageUploading] = useState(false);
+  const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
 
   const navigate = useNavigate();
 
@@ -36,9 +38,9 @@ const Chat = () => {
   const lastMessageRef = useRef(null);
   const newMessageAddedRef = useRef(false);
 
-  useEffect(()=>{
-    document.title = "MedHaven - Chat With Us"
-  },[]);
+  useEffect(() => {
+    document.title = "MedHaven - Chat With Us";
+  }, []);
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -58,7 +60,7 @@ const Chat = () => {
           const dept = doc.doctorDepartment || "Other";
           if (!byDept[dept]) byDept[dept] = [];
           byDept[dept].push({
-            ...doc, 
+            ...doc,
             id: doc._id,
             name: `${doc.firstName} ${doc.lastName}`,
             avatarUrl: doc.docAvatar?.url || null,
@@ -117,22 +119,68 @@ const Chat = () => {
     };
   }, [selectedChat, user]);
 
+  const handleImageUpload = async (file) => {
+    if (!file) return;
+
+    const allowedFormats = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+    if (!allowedFormats.includes(file.type)) {
+      toast.error("Unsupported file format. Please upload png, jpg, jpeg, or webp.");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("File size exceeds 5MB limit.");
+      return;
+    }
+
+    setImageUploading(true);
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/chat/uploadImage`,
+        formData,
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      const imageUrl = response.data.imageUrl;
+      setUploadedImageUrls((prev) => [...prev, imageUrl]);
+      toast.success("Image uploaded");
+    } catch {
+      toast.error("Image upload failed");
+    } finally {
+      setImageUploading(false);
+    }
+  };
+
+  // Upload all selected files sequentially with await
+  const handleMultipleImageUpload = async (files) => {
+    for (const file of Array.from(files)) {
+      await handleImageUpload(file);
+    }
+  };
+
   const handleSend = async () => {
-    if (!input.trim() || !selectedChat || !user?._id || sendingDisabled) return;
+    if ((!input.trim() && uploadedImageUrls.length === 0) || !selectedChat || !user?._id || sendingDisabled)
+      return;
 
     setSendingDisabled(true);
     setTimeout(() => setSendingDisabled(false), 1000);
 
     const chatRoomId = generateChatRoomId(user._id, selectedChat.id);
+
     const message = {
       chatRoomId,
       senderId: user._id,
       receiverId: selectedChat.id,
       text: input,
+      imageUrls: uploadedImageUrls,
+      fileUrls: [],
       sentAt: Date.now(),
       isBot: false,
-      imageUrls: [],
-      fileUrls: [],
     };
 
     socket.emit("sendChat", { chatRoomId, message });
@@ -149,6 +197,7 @@ const Chat = () => {
     newMessageAddedRef.current = true;
     setMessages((prev) => [...prev, message]);
     setInput("");
+    setUploadedImageUrls([]);
   };
 
   const toggleDepartment = (dept) => {
@@ -215,6 +264,7 @@ const Chat = () => {
                   ← Back
                 </button>
               )}
+
               <ChatRoom
                 selectedChat={selectedChat}
                 currentAvatarUrl={currentAvatarUrl}
@@ -228,6 +278,10 @@ const Chat = () => {
                 user={user}
                 newMessageAddedRef={newMessageAddedRef}
                 setShowProfile={setShowProfile}
+                imageUploading={imageUploading}
+                uploadedImageUrls={uploadedImageUrls}
+                setUploadedImageUrls={setUploadedImageUrls}
+                handleMultipleImageUpload={handleMultipleImageUpload}
               />
             </div>
           )}

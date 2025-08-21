@@ -1,5 +1,6 @@
-import React, { useLayoutEffect, useEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
+import { HiOutlinePhotograph } from "react-icons/hi";
 import { getLowResCloudinaryUrl } from "../utils/cloudinaryHelpers";
 
 const ChatRoom = ({
@@ -15,8 +16,13 @@ const ChatRoom = ({
   user,
   newMessageAddedRef,
   setShowProfile,
+  imageUploading,
+  uploadedImageUrls,
+  setUploadedImageUrls,
+  handleMultipleImageUpload,
 }) => {
   const containerRef = useRef(null);
+  const hiddenFileInputRef = useRef(null);
 
   useLayoutEffect(() => {
     if (lastMessageRef.current && newMessageAddedRef.current) {
@@ -33,11 +39,29 @@ const ChatRoom = ({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, messagesEndRef]);
 
+  const onImageIconClick = () => {
+    if (hiddenFileInputRef.current) {
+      hiddenFileInputRef.current.click();
+    }
+  };
+
+  const onFileChange = (e) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      handleMultipleImageUpload(files);
+      e.target.value = null; // reset input so same file(s) can be selected again
+    }
+  };
+
+  const removeImage = (index) => {
+    setUploadedImageUrls((prev) => prev.filter((_, i) => i !== index));
+  };
+
   return (
     <div
       ref={containerRef}
       className="flex-1 flex flex-col bg-gray-100 dark:bg-gray-950 p-4 overflow-hidden"
-      style={{ paddingBottom: "60px"}}
+      style={{ paddingBottom: "50px" }}
     >
       {selectedChat ? (
         <>
@@ -82,33 +106,86 @@ const ChatRoom = ({
                   }`}
                 >
                   {msg.text}
+                  {msg.imageUrls &&
+                    msg.imageUrls.map((url, i) => (
+                      <img
+                        key={i}
+                        src={url}
+                        alt={`chat-img-${i}`}
+                        className="mt-2 w-40 h-40 object-cover rounded"
+                      />
+                    ))}
                 </div>
               </div>
             ))}
             <div ref={messagesEndRef} />
           </div>
 
-          <div className="fixed bottom-0 right-0 flex bg-gray-100 dark:bg-gray-950 p-2 shadow-inner z-50 w-full md:w-2/3">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              className="flex-1 px-4 py-2 rounded-l-lg border bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
-              placeholder="Type your message"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleSend();
-              }}
-              disabled={sendingDisabled}
-            />
-            <button
-              onClick={handleSend}
-              disabled={sendingDisabled}
-              className={`px-4 py-2 rounded-r-lg font-semibold text-white ${
-                sendingDisabled ? "bg-blue-300 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
-              }`}
-            >
-              Send
-            </button>
+          {/* Uploaded images preview above input controls */}
+          {uploadedImageUrls.length > 0 && (
+            <div className="flex space-x-2 overflow-x-auto p-2 bg-gray-200 dark:bg-gray-800 rounded-t-lg mb-2">
+              {uploadedImageUrls.map((url, idx) => (
+                <div key={idx} className="relative">
+                  <img
+                    src={url}
+                    alt={`upload-preview-${idx}`}
+                    className="w-16 h-16 object-cover rounded"
+                  />
+                  <button
+                    onClick={() => removeImage(idx)}
+                    type="button"
+                    className="absolute top-0 right-0 bg-black bg-opacity-60 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
+                    aria-label="Remove image"
+                  >
+                    &times;
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Hidden file input */}
+          <input
+            type="file"
+            multiple
+            accept="image/png,image/jpeg,image/jpg,image/webp"
+            ref={hiddenFileInputRef}
+            onChange={onFileChange}
+            className="hidden"
+            disabled={imageUploading || sendingDisabled}
+          />
+
+          {/* Input controls fixed at bottom */}
+          <div className="fixed bottom-0 right-0 bg-gray-100 dark:bg-gray-950 w-full md:w-2/3 p-2 shadow-inner z-40 rounded-t-lg">
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                className="flex-1 px-4 py-2 rounded-l-lg border bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+                placeholder="Type your message"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSend();
+                }}
+                disabled={sendingDisabled}
+              />
+              <button
+                onClick={onImageIconClick}
+                className="p-2 rounded-r-lg bg-blue-600 hover:bg-blue-700 text-white"
+                title="Upload Image"
+              >
+                <HiOutlinePhotograph size={24} />
+              </button>
+              <button
+                onClick={handleSend}
+                disabled={sendingDisabled}
+                className={`px-4 py-2 rounded-r-lg font-semibold text-white ${
+                  sendingDisabled ? "bg-blue-300 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+                }`}
+              >
+                Send
+              </button>
+            </div>
           </div>
         </>
       ) : (
