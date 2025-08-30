@@ -20,19 +20,19 @@ Be respectful, helpful, and collaborative. This is a beginner-friendly project.
 - **Clone** your fork locally:
 
 ```bash
-    git clone https://github.com/[Your-Username]/Med-Haven.git
-    cd Med-Haven
+git clone https://github.com/[Your-Username]/Med-Haven.git
+cd Med-Haven
 ```
 Go to the backend directory
 
 ```bash
-  cd backend
+cd backend
 ```
 
 Install dependencies
 
 ```bash
-  npm install
+npm install
 ```
 
 create **config.env file** in a folder named "config" using **```config.env.example```**
@@ -40,13 +40,13 @@ create **config.env file** in a folder named "config" using **```config.env.exam
 Go to the frontend directory
 
 ```bash
-  cd ../frontend
+cd ../frontend
 ```
 
 Install dependencies
 
 ```bash
-  npm install
+npm install
 ```
 
 create **.env file** using **```.env.example```**
@@ -54,13 +54,13 @@ create **.env file** using **```.env.example```**
 Go to the Dashboard directory
 
 ```bash
-  cd ../dashboard
+cd ../dashboard
 ```
 
 Install dependencies
 
 ```bash
-  npm install
+npm install
 ```
 
 create **.env file** using **```.env.example```**
@@ -68,13 +68,13 @@ create **.env file** using **```.env.example```**
 Go to the Doc-Dashboard directory
 
 ```bash
-  cd ../docDashboard
+cd ../docDashboard
 ```
 
 Install dependencies
 
 ```bash
-  npm install
+npm install
 ```
 
 create **.env file** using **```.env.example```**
@@ -82,19 +82,19 @@ create **.env file** using **```.env.example```**
 Go to the Root directory
 
 ```bash
-  cd ..
+cd ..
 ```
 
 Install dependencies
 
 ```bash
-  npm install
+npm install
 ```
 
 Run the project
 
 ```bash
-  npm run dev
+npm run dev
 ```
 
 ### 2️⃣ Working on Issues
