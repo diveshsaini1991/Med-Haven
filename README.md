@@ -1,8 +1,57 @@
+<div align="center">
 
-# MedHaven - Care Network 🏥️
+# MED-HAVEN
+
+Transforming Healthcare, Empowering Lives Daily
+
+![last commit](https://img.shields.io/badge/last_commit-august-blue)
+![javascript](https://img.shields.io/badge/javascript-93.7%25-yellow)
+![languages](https://img.shields.io/badge/languages-3-blue)
+
+_Built with the tools and technologies:_
+
+![Express](https://img.shields.io/badge/Express-black?logo=express&logoColor=white&style=flat)
+![JSON](https://img.shields.io/badge/JSON-black?logo=json&logoColor=white&style=flat)
+![Markdown](https://img.shields.io/badge/Markdown-black?logo=markdown&logoColor=white&style=flat)
+![Socket.io](https://img.shields.io/badge/Socket.io-black?logo=socketdotio&logoColor=white&style=flat)
+![npm](https://img.shields.io/badge/npm-red?logo=npm&logoColor=white&style=flat)
+![Mongoose](https://img.shields.io/badge/Mongoose-red?logo=mongoose&logoColor=white&style=flat)
+![.ENV](https://img.shields.io/badge/.ENV-yellow?logo=dotenv&logoColor=black&style=flat)
+![JavaScript](https://img.shields.io/badge/JavaScript-yellow?logo=javascript&logoColor=black&style=flat)
+![MongoDB](https://img.shields.io/badge/MongoDB-green?logo=mongodb&logoColor=white&style=flat)
+![React](https://img.shields.io/badge/React-blue?logo=react&logoColor=white&style=flat)
+![Docker](https://img.shields.io/badge/Docker-blue?logo=docker&logoColor=white&style=flat)
+![Cloudinary](https://img.shields.io/badge/Cloudinary-blueviolet?logo=cloudinary&logoColor=white&style=flat)
+![Vite](https://img.shields.io/badge/Vite-blueviolet?logo=vite&logoColor=white&style=flat)
+![ESLint](https://img.shields.io/badge/ESLint-blueviolet?logo=eslint&logoColor=white&style=flat)
+![Axios](https://img.shields.io/badge/Axios-blueviolet?logo=axios&logoColor=white&style=flat)
+
+</div>
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Getting Started](#getting-started)
+- [Features](#features)
+- [Technical Details](#technical-details)
+- [API Endpoints](#api-endpoints)
+- [Dockerized Setup](#dockerized-setup)
+- [Run Locally without Docker](#run-locally-without-docker)
+- [Demo](#demo)
+- [Contributing](#contributing-to-the-medhaven)
+- [Thank You](#thank-you)
+
+---
+
+## Overview
 
 MedHaven is a hospital management system built on the MERN stack, enabling operations like patient registration, appointment scheduling, medical records management, and real-time doctor-patient chat.
 
+## Getting Started
+
+To get started, clone the repo and follow the instructions for either Dockerized deployment or local setup below.
 
 ## Features
 
@@ -16,31 +65,19 @@ MedHaven is a hospital management system built on the MERN stack, enabling opera
 - Fully containerized backend and frontend using Docker.
 - Automated deployment and hosting on Vercel and Render.
 
-
-
 ## Technical Details
 
 - **Frontend:** React, Tailwind CSS, GSAP animations
-
 - **Backend:** Node.js, Express
-
 - **Database:** MongoDB
-
 - **Real-time:** Socket.io
-
 - **Authentication:** JWT, bcrypt
-
 - **Email Service:** Nodemailer (OTP verification)
-
 - **Containerization:** Docker & Docker Compose
-
 - **Deployment:** Vercel, Render
-
-- **Testing:**  APIs tested using Postman
-
+- **Testing:** APIs tested using Postman
 
 ## API Endpoints 
-
 
 #### User 
 
@@ -106,20 +143,21 @@ MedHaven is a hospital management system built on the MERN stack, enabling opera
 
 
 
-## 📦 Dockerized Setup
+
+## Dockerized Setup
 
 MedHaven is fully containerized using Docker and Docker Compose, enabling consistent development and deployment environments.
 
-### 🐳 Prerequisites
-
-- [Docker](https://www.docker.com/products/docker-desktop) installed
-- [Docker Compose](https://docs.docker.com/compose/) installed
+### Prerequisites
+- Docker installed
+- Docker Compose installed
 
 ---
 
-### 🔧 Running the Project with Docker
+### Running the Project with Docker
 
 **Clone the repository:**
+
 
 ```bash
 git clone https://github.com/diveshsaini1991/Med-Haven.git
@@ -250,9 +288,12 @@ password - 123456
 
 
 
-# Contributing to the MedHaven 🤝
+## Contributing to the MedHaven 
 
-We welcome and appreciate contributions from the community to enhance and improve the MedHaven . Whether you're a developer, designer, tester, or someone with valuable feedback, your input is valuable.
-## Thank You!❤️
+We welcome and appreciate contributions from the community to enhance and improve MedHaven. Whether you're a developer, designer, tester, or someone with valuable feedback, your input is valuable.
 
-Thank you for considering contributing to the MedHaven. Your efforts help make this project better for everyone. If you have any questions or need assistance, feel free to reach out through the issue tracker or discussions. Happy coding🤩!
+---
+
+## Thank You
+
+Thank you for considering contributing to MedHaven. Your efforts help make this project better for everyone. If you have any questions or need assistance, feel free to reach out through the issue tracker or discussions. Happy coding!
