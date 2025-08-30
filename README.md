@@ -40,8 +40,10 @@ _Built with the tools and technologies:_
 - [Dockerized Setup](#dockerized-setup)
 - [Run Locally without Docker](#run-locally-without-docker)
 - [Demo](#demo)
-- [Contributing](#contributing-to-the-medhaven)
-- [Thank You](#thank-you)
+- [Contributing](#contributing)
+- [Code of Conduct](#code-of-conduct)
+- [License](#license)
+
 
 ---
 
@@ -306,12 +308,22 @@ password - 123456
 
 
 
-## Contributing to the MedHaven 
+## Contributing
 
-We welcome and appreciate contributions from the community to enhance and improve MedHaven. Whether you're a developer, designer, tester, or someone with valuable feedback, your input is valuable.
+Please read our [Contributing Guidelines](CONTRIBUTING.md) to get started with contributing to MedHaven.
+
 
 ---
 
-## Thank You
+## Code of Conduct
 
-Thank you for considering contributing to MedHaven. Your efforts help make this project better for everyone. If you have any questions or need assistance, feel free to reach out through the issue tracker or discussions. Happy coding!
+This project follows a [Code of Conduct](CODE_OF_CONDUCT.md) to maintain a welcoming and inclusive community.
+
+---
+
+## License
+
+MedHaven is licensed under the [MIT License](LICENSE). See the LICENSE file for details.
+
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg) ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)
+
