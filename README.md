@@ -209,6 +209,7 @@ Clone the project
 
 ```bash
   git clone https://github.com/diveshsaini1991/Med-Haven.git
+  cd Med-Haven
 ```
 Go to the backend directory
 
@@ -224,16 +225,10 @@ Install dependencies
 
 create **config.env file** in a folder named "config" using **```config.env.example```**
 
-Start the server
+Go to the frontend directory
 
 ```bash
-  npm run dev
-```
-
-Go to the frontend directory using Other Terminal
-
-```bash
-  cd ./frontend
+  cd ../frontend
 ```
 
 Install dependencies
@@ -242,17 +237,12 @@ Install dependencies
   npm install
 ```
 
-Start the server
+create **.env file** using **```.env.example```**
+
+Go to the Dashboard directory
 
 ```bash
-  npm run dev
-```
-
-
-Go to the Dashboard directory using Other Terminal
-
-```bash
-  cd ./dashboard
+  cd ../dashboard
 ```
 
 Install dependencies
@@ -261,7 +251,35 @@ Install dependencies
   npm install
 ```
 
-Start the server
+create **.env file** using **```.env.example```**
+
+Go to the Doc-Dashboard directory
+
+```bash
+  cd ../docDashboard
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+create **.env file** using **```.env.example```**
+
+Go to the Root directory
+
+```bash
+  cd ..
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Run the project
 
 ```bash
   npm run dev
