@@ -211,6 +211,7 @@ const MessageForm = () => {
       <style>{`
         .input-field {
           padding: 10px;
+          width: 100%;
           }
         .input-field::placeholder {
           color: white !important;
