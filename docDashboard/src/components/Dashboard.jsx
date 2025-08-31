@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Context } from "../main";
-import { Navigate } from "react-router-dom";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { GoCheckCircleFill } from "react-icons/go";
-import { AiFillCloseCircle } from "react-icons/ai";
+import React, { useContext, useEffect, useState } from 'react';
+import { Context } from '../main';
+import { Navigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { GoCheckCircleFill } from 'react-icons/go';
+import { AiFillCloseCircle } from 'react-icons/ai';
 
 const Dashboard = () => {
   const [appointments, setAppointments] = useState([]);
@@ -13,9 +13,12 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const { data } = await axios.get(`${VITE_BACKEND_URL}/api/v1/appointment/get`, {
-          withCredentials: true,
-        });
+        const { data } = await axios.get(
+          `${VITE_BACKEND_URL}/api/v1/appointment/get`,
+          {
+            withCredentials: true,
+          }
+        );
         setAppointments(data.appointments);
       } catch (error) {
         setAppointments([]);
@@ -33,7 +36,9 @@ const Dashboard = () => {
       );
       setAppointments((prevAppointments) =>
         prevAppointments.map((appointment) =>
-          appointment._id === appointmentId ? { ...appointment, status } : appointment
+          appointment._id === appointmentId
+            ? { ...appointment, status }
+            : appointment
         )
       );
       toast.success(data.message);
@@ -44,7 +49,7 @@ const Dashboard = () => {
 
   const { isAuthenticated, admin } = useContext(Context);
   if (!isAuthenticated) {
-    return <Navigate to={"/login"} />;
+    return <Navigate to={'/login'} />;
   }
 
   return (
@@ -75,14 +80,18 @@ const Dashboard = () => {
         {/* Second Box */}
         <div className="flex-1 rounded-2xl p-5 flex flex-col justify-center gap-3 bg-[#3939d9f2] text-white">
           <p className="text-2xl font-semibold">Total Appointments</p>
-          <h3 className="text-4xl font-bold tracking-wider">{appointments.length}</h3>
+          <h3 className="text-4xl font-bold tracking-wider">
+            {appointments.length}
+          </h3>
         </div>
         {/* You can add third box here if needed */}
       </div>
 
       {/* Appointments table */}
       <div className="bg-white rounded-2xl p-10 h-[65vh] overflow-auto">
-        <h5 className="text-2xl tracking-widest mb-5 text-gray-900">Appointments</h5>
+        <h5 className="text-2xl tracking-widest mb-5 text-gray-900">
+          Appointments
+        </h5>
         <table className="w-full text-gray-900 text-lg">
           <thead className="border-b">
             <tr>
@@ -99,20 +108,24 @@ const Dashboard = () => {
               appointments.map((appointment) => (
                 <tr key={appointment._id} className="border-b last:border-none">
                   <td className="py-3">{`${appointment.firstName} ${appointment.lastName}`}</td>
-                  <td className="py-3">{appointment.appointment_date.substring(0, 16)}</td>
+                  <td className="py-3">
+                    {appointment.appointment_date.substring(0, 16)}
+                  </td>
                   <td className="py-3">{appointment.gender}</td>
                   <td className="py-3">{appointment.email}</td>
                   <td className="py-3 text-center">
                     <select
                       className={`text-lg font-semibold rounded px-3 py-1 ${
-                        appointment.status === "Pending"
-                          ? "text-yellow-500"
-                          : appointment.status === "Accepted"
-                          ? "text-green-600"
-                          : "text-red-600"
+                        appointment.status === 'Pending'
+                          ? 'text-yellow-500'
+                          : appointment.status === 'Accepted'
+                            ? 'text-green-600'
+                            : 'text-red-600'
                       } focus:outline-none`}
                       value={appointment.status}
-                      onChange={(e) => handleUpdateStatus(appointment._id, e.target.value)}
+                      onChange={(e) =>
+                        handleUpdateStatus(appointment._id, e.target.value)
+                      }
                     >
                       <option value="Pending" className="text-yellow-500">
                         Pending
@@ -127,9 +140,15 @@ const Dashboard = () => {
                   </td>
                   <td className="py-3 text-center">
                     {appointment.hasVisited === true ? (
-                      <GoCheckCircleFill className="text-green-600 mx-auto" size={20} />
+                      <GoCheckCircleFill
+                        className="text-green-600 mx-auto"
+                        size={20}
+                      />
                     ) : (
-                      <AiFillCloseCircle className="text-red-600 mx-auto" size={20} />
+                      <AiFillCloseCircle
+                        className="text-red-600 mx-auto"
+                        size={20}
+                      />
                     )}
                   </td>
                 </tr>

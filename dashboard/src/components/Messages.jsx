@@ -1,8 +1,8 @@
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { Context } from "../main";
-import { Navigate } from "react-router-dom";
+import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { Context } from '../main';
+import { Navigate } from 'react-router-dom';
 
 const Messages = () => {
   const [messages, setMessages] = useState([]);
@@ -25,7 +25,7 @@ const Messages = () => {
   }, []);
 
   if (!isAuthenticated) {
-    return <Navigate to={"/login"} />;
+    return <Navigate to={'/login'} />;
   }
 
   return (

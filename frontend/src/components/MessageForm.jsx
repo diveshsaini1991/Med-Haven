@@ -1,26 +1,33 @@
-import axios from "axios";
-import React, { useEffect, useState, useRef } from "react";
-import { toast } from "react-toastify";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import axios from 'axios';
+import React, { useEffect, useState, useRef } from 'react';
+import { toast } from 'react-toastify';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const MessageForm = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [message, setMessage] = useState("");
-  const [to, setTo] = useState("Doctor");
-  const [department, setDepartment] = useState("");
-  const [doctor_firstName, setDoctorFirstName] = useState("");
-  const [doctor_lastName, setDoctorLastName] = useState("");
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [message, setMessage] = useState('');
+  const [to, setTo] = useState('Doctor');
+  const [department, setDepartment] = useState('');
+  const [doctor_firstName, setDoctorFirstName] = useState('');
+  const [doctor_lastName, setDoctorLastName] = useState('');
   const [doctors, setDoctors] = useState([]);
 
   const departmentsArray = [
-    "Pediatrics", "Orthopedics", "Cardiology", "Neurology",
-    "Oncology", "Radiology", "Physical Therapy", "Dermatology", "ENT"
+    'Pediatrics',
+    'Orthopedics',
+    'Cardiology',
+    'Neurology',
+    'Oncology',
+    'Radiology',
+    'Physical Therapy',
+    'Dermatology',
+    'ENT',
   ];
 
   const formRef = useRef(null);
@@ -35,17 +42,17 @@ const MessageForm = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(gsap.utils.toArray(".form-animate"), {
+      gsap.from(gsap.utils.toArray('.form-animate'), {
         scrollTrigger: {
           trigger: formRef.current,
-          start: "top 85%",
-          toggleActions: "play none none reverse"
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
         },
         opacity: 0,
         y: 50,
         duration: 0.8,
-        ease: "power3.out",
-        stagger: 0.13
+        ease: 'power3.out',
+        stagger: 0.13,
       });
     }, formRef);
     return () => ctx.revert();
@@ -57,28 +64,40 @@ const MessageForm = () => {
       const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
       const { data } = await axios.post(
         `${VITE_BACKEND_URL}/api/v1/message/send`,
-        { firstName, lastName, email, phone, message, to, department, doctor_firstName, doctor_lastName },
-        { withCredentials: true, headers: { "Content-Type": "application/json" } }
+        {
+          firstName,
+          lastName,
+          email,
+          phone,
+          message,
+          to,
+          department,
+          doctor_firstName,
+          doctor_lastName,
+        },
+        {
+          withCredentials: true,
+          headers: { 'Content-Type': 'application/json' },
+        }
       );
       toast.success(data.message);
-      setFirstName("");
-      setLastName("");
-      setEmail("");
-      setPhone("");
-      setMessage("");
-      setTo("Doctor");
-      setDoctorFirstName("");
-      setDoctorLastName("");
-      setDepartment("");
+      setFirstName('');
+      setLastName('');
+      setEmail('');
+      setPhone('');
+      setMessage('');
+      setTo('Doctor');
+      setDoctorFirstName('');
+      setDoctorLastName('');
+      setDepartment('');
     } catch (error) {
-      toast.error(error.response?.data?.message || "Message send failed");
+      toast.error(error.response?.data?.message || 'Message send failed');
     }
   };
 
   return (
     <section className="text-white relative py-20 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-950">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        
         <div
           ref={formRef}
           className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg p-8 md:p-12"
@@ -131,10 +150,10 @@ const MessageForm = () => {
                 onChange={(e) => {
                   const val = e.target.value;
                   setTo(val);
-                  if (val === "Admin") {
-                    setDoctorFirstName("");
-                    setDoctorLastName("");
-                    setDepartment("");
+                  if (val === 'Admin') {
+                    setDoctorFirstName('');
+                    setDoctorLastName('');
+                    setDepartment('');
                   }
                 }}
                 className="form-animate input-field select-dark"
@@ -145,28 +164,30 @@ const MessageForm = () => {
             </div>
 
             {/* Department & Doctor */}
-            {to === "Doctor" && (
+            {to === 'Doctor' && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <select
                   value={department}
                   onChange={(e) => {
                     setDepartment(e.target.value);
-                    setDoctorFirstName("");
-                    setDoctorLastName("");
+                    setDoctorFirstName('');
+                    setDoctorLastName('');
                   }}
                   className="form-animate input-field select-dark"
                 >
                   <option value="">Select Department</option>
                   {departmentsArray.map((depart, index) => (
-                    <option value={depart} key={index}>{depart}</option>
+                    <option value={depart} key={index}>
+                      {depart}
+                    </option>
                   ))}
                 </select>
                 <select
                   value={`${doctor_firstName} ${doctor_lastName}`.trim()}
                   onChange={(e) => {
-                    const [firstName, lastName] = e.target.value.split(" ");
+                    const [firstName, lastName] = e.target.value.split(' ');
                     setDoctorFirstName(firstName);
-                    setDoctorLastName(lastName || "");
+                    setDoctorLastName(lastName || '');
                   }}
                   className="form-animate input-field select-dark"
                   disabled={!department}

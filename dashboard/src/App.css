@@ -1,10 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   overflow-x: hidden;
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 body {
   background: #3939d9f2;
@@ -41,10 +41,10 @@ body {
     width: 100%;
   }
 }
-.logo{
-  width:30%;
+.logo {
+  width: 30%;
 }
-.form-title{
+.form-title {
   font-size: 1.75rem;
   color: #111;
   margin-bottom: 30px;
@@ -251,15 +251,15 @@ body {
   width: 100%;
   font-weight: 600;
 }
-.dashboard table td svg{
+.dashboard table td svg {
   display: flex;
   margin: 0 auto;
 }
-.dashboard table td .green{
+.dashboard table td .green {
   font-size: 20px;
   color: #16a34a;
 }
-.dashboard table td .red{
+.dashboard table td .red {
   font-size: 20px;
   color: #dc2626;
 }
@@ -567,12 +567,12 @@ body {
     height: auto;
   }
 }
-input[type="date"]:before {
+input[type='date']:before {
   content: attr(placeholder);
   color: #444;
   margin-right: 0.5em;
 }
-input[type="time"]:before {
+input[type='time']:before {
   content: attr(placeholder);
   color: #444;
   margin-right: 0.5em;

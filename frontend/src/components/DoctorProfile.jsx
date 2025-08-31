@@ -1,14 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
-import { getLowResCloudinaryUrl } from "../utils/cloudinaryHelpers";
-import gsap from "gsap";
+import React, { useEffect, useRef, useState } from 'react';
+import { getLowResCloudinaryUrl } from '../utils/cloudinaryHelpers';
+import gsap from 'gsap';
 
 const formatDate = (isoString) => {
-  if (!isoString) return "-";
+  if (!isoString) return '-';
   const date = new Date(isoString);
-  return date.toLocaleDateString("en-IN", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+  return date.toLocaleDateString('en-IN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   });
 };
 
@@ -22,7 +22,7 @@ const DoctorProfile = ({ doctor, onBack }) => {
     gsap.fromTo(
       containerRef.current,
       { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }
+      { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }
     );
   }, []);
 
@@ -31,12 +31,12 @@ const DoctorProfile = ({ doctor, onBack }) => {
       gsap.fromTo(
         overlayRef.current,
         { opacity: 0 },
-        { opacity: 1, duration: 0.3, ease: "power1.out" }
+        { opacity: 1, duration: 0.3, ease: 'power1.out' }
       );
       gsap.fromTo(
         imageRef.current,
         { scale: 0.8, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.4, ease: "power3.out" }
+        { scale: 1, opacity: 1, duration: 0.4, ease: 'power3.out' }
       );
     }
   }, [showImageOverlay]);
@@ -46,12 +46,12 @@ const DoctorProfile = ({ doctor, onBack }) => {
       scale: 0.8,
       opacity: 0,
       duration: 0.3,
-      ease: "power3.in",
+      ease: 'power3.in',
     });
     gsap.to(overlayRef.current, {
       opacity: 0,
       duration: 0.3,
-      ease: "power1.in",
+      ease: 'power1.in',
       onComplete: () => {
         setShowImageOverlay(false);
       },
@@ -104,15 +104,15 @@ const DoctorProfile = ({ doctor, onBack }) => {
           <div className="grid grid-cols-1 gap-y-2 md:grid-cols-2 md:gap-x-10">
             <div>
               <span className="font-medium">Email: </span>
-              <span>{doctor.email || "-"}</span>
+              <span>{doctor.email || '-'}</span>
             </div>
             <div>
               <span className="font-medium">Phone: </span>
-              <span>{doctor.phone || "-"}</span>
+              <span>{doctor.phone || '-'}</span>
             </div>
             <div>
               <span className="font-medium">Aadhaar: </span>
-              <span>{doctor.aadhaar || "-"}</span>
+              <span>{doctor.aadhaar || '-'}</span>
             </div>
             <div>
               <span className="font-medium">DOB: </span>
@@ -120,7 +120,7 @@ const DoctorProfile = ({ doctor, onBack }) => {
             </div>
             <div>
               <span className="font-medium">Gender: </span>
-              <span>{doctor.gender || "-"}</span>
+              <span>{doctor.gender || '-'}</span>
             </div>
           </div>
         </div>

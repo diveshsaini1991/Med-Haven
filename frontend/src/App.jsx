@@ -1,20 +1,25 @@
-import React, { useContext, useEffect } from "react";
-import "./App.css";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import Home from "./Pages/Home";
-import Appointment from "./Pages/Appointment";
-import AboutUs from "./Pages/AboutUs";
-import Register from "./Pages/Register";
-import Footer from "./components/Footer";
-import Navbar from "./components/Navbar";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
-import { Context } from "./main";
-import Login from "./Pages/Login";
-import MyAppointments from "./Pages/MyAppointments";
-import EditAppointment from "./Pages/EditAppointment";
-import Chat from "./Pages/Chat";
+import React, { useContext, useEffect } from 'react';
+import './App.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from 'react-router-dom';
+import Home from './Pages/Home';
+import Appointment from './Pages/Appointment';
+import AboutUs from './Pages/AboutUs';
+import Register from './Pages/Register';
+import Footer from './components/Footer';
+import Navbar from './components/Navbar';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+import { Context } from './main';
+import Login from './Pages/Login';
+import MyAppointments from './Pages/MyAppointments';
+import EditAppointment from './Pages/EditAppointment';
+import Chat from './Pages/Chat';
 
 const AppContent = () => {
   const { isAuthenticated, setIsAuthenticated, setUser } = useContext(Context);
@@ -40,7 +45,7 @@ const AppContent = () => {
 
   return (
     <>
-      {location.pathname !== "/chat" && <Navbar />}
+      {location.pathname !== '/chat' && <Navbar />}
 
       <Routes>
         <Route path="/chat" element={<Chat />} />
@@ -52,7 +57,7 @@ const AppContent = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
       </Routes>
-      {location.pathname !== "/chat" && <Footer />}
+      {location.pathname !== '/chat' && <Footer />}
       <ToastContainer position="top-center" />
     </>
   );

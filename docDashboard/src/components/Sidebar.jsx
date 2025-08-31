@@ -1,29 +1,29 @@
-import React, { useContext, useState, useEffect } from "react";
-import { TiHome } from "react-icons/ti";
-import { RiLogoutBoxFill } from "react-icons/ri";
-import { AiFillMessage } from "react-icons/ai";
-import { MdChatBubbleOutline } from "react-icons/md";
-import { GiHamburgerMenu } from "react-icons/gi";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { Context } from "../main";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useContext, useState, useEffect } from 'react';
+import { TiHome } from 'react-icons/ti';
+import { RiLogoutBoxFill } from 'react-icons/ri';
+import { AiFillMessage } from 'react-icons/ai';
+import { MdChatBubbleOutline } from 'react-icons/md';
+import { GiHamburgerMenu } from 'react-icons/gi';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { Context } from '../main';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const NAV_LINKS = [
   {
-    label: "Home",
+    label: 'Home',
     icon: <TiHome />,
-    to: "/",
+    to: '/',
   },
   {
-    label: "Messages",
+    label: 'Messages',
     icon: <AiFillMessage />,
-    to: "/messages",
+    to: '/messages',
   },
   {
-    label: "Chat",
+    label: 'Chat',
     icon: <MdChatBubbleOutline />,
-    to: "/chat",
+    to: '/chat',
   },
 ];
 
@@ -51,7 +51,7 @@ const Sidebar = () => {
         setIsAuthenticated(false);
       })
       .catch((err) => {
-        toast.error(err.response?.data?.message || "Logout failed");
+        toast.error(err.response?.data?.message || 'Logout failed');
       });
   };
 
@@ -64,7 +64,7 @@ const Sidebar = () => {
           fixed top-0 left-0 h-full w-30 flex flex-col justify-center items-center 
           text-white bg-transparent p-[70px_0] 
           transition-transform duration-300 
-          ${show ? "translate-x-0" : "-translate-x-full"} 
+          ${show ? 'translate-x-0' : '-translate-x-full'} 
           md:translate-x-0 md:bg-[#3939d9f2]
         `}
       >
@@ -79,7 +79,7 @@ const Sidebar = () => {
               }}
               title={link.label}
             >
-              {React.cloneElement(link.icon, { className: "w-full h-full" })}
+              {React.cloneElement(link.icon, { className: 'w-full h-full' })}
             </span>
           ))}
           <span

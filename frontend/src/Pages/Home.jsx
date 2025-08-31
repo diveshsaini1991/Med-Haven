@@ -1,24 +1,23 @@
-import React, { useContext, useEffect } from "react";
-import Hero from "../components/Hero";
-import Biography from "../components/Biography";
-import MessageForm from "../components/MessageForm";
-import Departments from "../components/Departments";
+import React, { useContext, useEffect } from 'react';
+import Hero from '../components/Hero';
+import Biography from '../components/Biography';
+import MessageForm from '../components/MessageForm';
+import Departments from '../components/Departments';
 
 const Home = () => {
-
-  useEffect(()=>{
-    document.title = "MedHaven - Care Network"
-  },[]);
+  useEffect(() => {
+    document.title = 'MedHaven - Care Network';
+  }, []);
 
   return (
     <div className="overflow-hidden">
-      <Hero 
+      <Hero
         title={
-          "Welcome to MedHaven Medical Institute | Your Trusted Healthcare Provider"
+          'Welcome to MedHaven Medical Institute | Your Trusted Healthcare Provider'
         }
-        imageUrl={"/hero.png"}
+        imageUrl={'/hero.png'}
       />
-      <Biography imageUrl={"/about.png"} />
+      <Biography imageUrl={'/about.png'} />
       <Departments />
       <MessageForm />
     </div>

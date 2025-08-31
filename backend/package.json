@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "A Hospital management system for keeping track of all apointments and dr's",
+  "description": "Medhaven's Backend",
   "main": "index.js",
   "type": "module",
   "scripts": {

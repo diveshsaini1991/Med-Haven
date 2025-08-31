@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Context } from "../main";
-import { Navigate } from "react-router-dom";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { GoCheckCircleFill } from "react-icons/go";
-import { AiFillCloseCircle } from "react-icons/ai";
+import React, { useContext, useEffect, useState } from 'react';
+import { Context } from '../main';
+import { Navigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { GoCheckCircleFill } from 'react-icons/go';
+import { AiFillCloseCircle } from 'react-icons/ai';
 
 const Dashboard = () => {
   const [appointments, setAppointments] = useState([]);
@@ -60,7 +60,7 @@ const Dashboard = () => {
 
   const { isAuthenticated, admin } = useContext(Context);
   if (!isAuthenticated) {
-    return <Navigate to={"/login"} />;
+    return <Navigate to={'/login'} />;
   }
 
   return (
@@ -72,10 +72,7 @@ const Dashboard = () => {
             <div className="content">
               <div>
                 <p>Hello ,</p>
-                <h5>
-                  {admin &&
-                    `${admin.firstName} ${admin.lastName}`}{" "}
-                </h5>
+                <h5>{admin && `${admin.firstName} ${admin.lastName}`} </h5>
               </div>
               <p>
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit.
@@ -117,11 +114,11 @@ const Dashboard = () => {
                       <td>
                         <select
                           className={
-                            appointment.status === "Pending"
-                              ? "value-pending"
-                              : appointment.status === "Accepted"
-                              ? "value-accepted"
-                              : "value-rejected"
+                            appointment.status === 'Pending'
+                              ? 'value-pending'
+                              : appointment.status === 'Accepted'
+                                ? 'value-accepted'
+                                : 'value-rejected'
                           }
                           value={appointment.status}
                           onChange={(e) =>
@@ -139,10 +136,16 @@ const Dashboard = () => {
                           </option>
                         </select>
                       </td>
-                      <td>{appointment.hasVisited === true ? <GoCheckCircleFill className="green"/> : <AiFillCloseCircle className="red"/>}</td>
+                      <td>
+                        {appointment.hasVisited === true ? (
+                          <GoCheckCircleFill className="green" />
+                        ) : (
+                          <AiFillCloseCircle className="red" />
+                        )}
+                      </td>
                     </tr>
                   ))
-                : "No Appointments Found!"}
+                : 'No Appointments Found!'}
             </tbody>
           </table>
 

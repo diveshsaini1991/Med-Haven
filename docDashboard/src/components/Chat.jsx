@@ -1,49 +1,63 @@
-import axios from "axios";
-import React, { useEffect, useState, useContext, useRef, useLayoutEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { io } from "socket.io-client";
-import { Context } from "../main";
-import { toast } from "react-toastify";
-import gsap from "gsap";
+import axios from 'axios';
+import React, {
+  useEffect,
+  useState,
+  useContext,
+  useRef,
+  useLayoutEffect,
+} from 'react';
+import { useNavigate } from 'react-router-dom';
+import { io } from 'socket.io-client';
+import { Context } from '../main';
+import { toast } from 'react-toastify';
+import gsap from 'gsap';
 
 const socket = io(import.meta.env.VITE_BACKEND_URL, {
-  transports: ["websocket"],
+  transports: ['websocket'],
   withCredentials: true,
 });
 
 const Chat = () => {
-  const { admin } = useContext(Context); 
+  const { admin } = useContext(Context);
   const [patientList, setPatientList] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const [sendingDisabled, setSendingDisabled] = useState(false);
   const navigate = useNavigate();
   const messagesEndRef = useRef(null);
   const lastMessageRef = useRef(null);
   const newMessageAddedRef = useRef(false);
 
-  const generateChatRoomId = (id1, id2) => (id1 < id2 ? `${id1}-${id2}` : `${id2}-${id1}`);
+  const generateChatRoomId = (id1, id2) =>
+    id1 < id2 ? `${id1}-${id2}` : `${id2}-${id1}`;
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const animateMessage = (el) => {
     if (!el || !newMessageAddedRef.current) return;
-    gsap.fromTo(el, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" });
+    gsap.fromTo(
+      el,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
+    );
     newMessageAddedRef.current = false;
   };
 
   useEffect(() => {
     const fetchPatientList = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/chat/patientlist`, {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/v1/chat/patientlist`,
+          {
+            withCredentials: true,
+          }
+        );
         setPatientList(response.data.patients || []);
       } catch (err) {
-        toast.error("Failed to load patients");
+        toast.error('Failed to load patients');
         setPatientList([]);
       }
     };
@@ -56,7 +70,7 @@ const Chat = () => {
     if (!selectedPatient || !admin?._id) return;
 
     const chatRoomId = generateChatRoomId(admin._id, selectedPatient.id);
-    socket.emit("joinChatRoom", { chatRoomId });
+    socket.emit('joinChatRoom', { chatRoomId });
 
     const fetchMessages = async () => {
       try {
@@ -73,7 +87,7 @@ const Chat = () => {
     fetchMessages();
 
     return () => {
-      socket.emit("leaveChatRoom", { chatRoomId });
+      socket.emit('leaveChatRoom', { chatRoomId });
     };
   }, [selectedPatient, admin]);
 
@@ -86,10 +100,10 @@ const Chat = () => {
         setMessages((prev) => [...prev, msg]);
       }
     };
-    socket.on("receiveChat", onReceiveChat);
+    socket.on('receiveChat', onReceiveChat);
 
     return () => {
-      socket.off("receiveChat", onReceiveChat);
+      socket.off('receiveChat', onReceiveChat);
     };
   }, [selectedPatient, admin]);
 
@@ -102,7 +116,8 @@ const Chat = () => {
   }, [messages]);
 
   const handleSend = async () => {
-    if (!input.trim() || !selectedPatient || !admin?._id || sendingDisabled) return;
+    if (!input.trim() || !selectedPatient || !admin?._id || sendingDisabled)
+      return;
 
     setSendingDisabled(true);
     setTimeout(() => {
@@ -122,29 +137,36 @@ const Chat = () => {
       fileUrls: [],
     };
 
-    socket.emit("sendChat", { chatRoomId, message });
+    socket.emit('sendChat', { chatRoomId, message });
 
     try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/chat/send`, message, {
-        withCredentials: true,
-      });
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/chat/send`,
+        message,
+        {
+          withCredentials: true,
+        }
+      );
     } catch (err) {
-      toast.error("Message not saved!");
-      console.error("Failed to save message", err);
+      toast.error('Message not saved!');
+      console.error('Failed to save message', err);
     }
 
     newMessageAddedRef.current = false;
     setMessages((prev) => [...prev, message]);
-    setInput("");
+    setInput('');
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-900 flex flex-col overflow-hidden text-white" style={{ height: "100vh" }}>
+    <div
+      className="fixed inset-0 bg-gray-900 flex flex-col overflow-hidden text-white"
+      style={{ height: '100vh' }}
+    >
       {/* Navbar showing current chat user */}
       <div className="flex items-center p-4 bg-gray-800 text-white">
         <button
           className="mr-4 p-2 rounded bg-blue-600 hover:bg-blue-700"
-          onClick={() => navigate("/")}
+          onClick={() => navigate('/')}
         >
           ← Back
         </button>
@@ -152,29 +174,33 @@ const Chat = () => {
           {selectedPatient ? (
             <>
               Chat with{' '}
-              <span className="font-bold text-blue-400">{selectedPatient.name}</span>
+              <span className="font-bold text-blue-400">
+                {selectedPatient.name}
+              </span>
             </>
           ) : (
-            "Doctor Chat"
+            'Doctor Chat'
           )}
         </h1>
-
-
       </div>
 
       <div className="flex flex-1 overflow-hidden">
         {/* Left: Patients list */}
         <div className="w-1/3 bg-white dark:bg-gray-800 p-4 flex flex-col overflow-hidden custom-scroll">
-          <h2 className="font-bold text-lg mb-2 text-blue-700 dark:text-blue-400">Patients</h2>
+          <h2 className="font-bold text-lg mb-2 text-blue-700 dark:text-blue-400">
+            Patients
+          </h2>
           <ul className="flex-1 overflow-y-auto pr-2 custom-scroll">
-            {patientList.length === 0 && <li className="text-gray-500">No patients have messaged yet</li>}
+            {patientList.length === 0 && (
+              <li className="text-gray-500">No patients have messaged yet</li>
+            )}
             {patientList.map((patient) => (
               <li
                 key={patient.id}
                 className={`cursor-pointer px-2 py-3 mb-2 rounded transition ${
                   selectedPatient?.id === patient.id
-                    ? "bg-blue-100 dark:bg-blue-900"
-                    : "hover:bg-gray-100 dark:hover:bg-gray-900"
+                    ? 'bg-blue-100 dark:bg-blue-900'
+                    : 'hover:bg-gray-100 dark:hover:bg-gray-900'
                 }`}
                 onClick={() => setSelectedPatient(patient)}
               >
@@ -189,18 +215,22 @@ const Chat = () => {
           {selectedPatient ? (
             <>
               <div className="flex-1 overflow-y-auto mb-4 pr-2 custom-scroll">
-                {messages.length === 0 && <div className="text-gray-500 text-center mt-8">No messages yet</div>}
+                {messages.length === 0 && (
+                  <div className="text-gray-500 text-center mt-8">
+                    No messages yet
+                  </div>
+                )}
                 {messages.map((msg, idx) => (
                   <div
                     key={idx}
-                    className={`mb-2 flex ${msg.senderId === admin._id ? "justify-end" : "justify-start"}`}
+                    className={`mb-2 flex ${msg.senderId === admin._id ? 'justify-end' : 'justify-start'}`}
                     ref={idx === messages.length - 1 ? lastMessageRef : null}
                   >
                     <div
                       className={`px-4 py-2 rounded-lg max-w-xs ${
                         msg.senderId === admin._id
-                          ? "bg-blue-600 text-white"
-                          : "bg-gray-300 dark:bg-gray-700 text-black dark:text-white"
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-300 dark:bg-gray-700 text-black dark:text-white'
                       }`}
                     >
                       {msg.text}
@@ -217,14 +247,16 @@ const Chat = () => {
                   className="flex-1 px-4 py-2 rounded-l-lg border bg-white dark:bg-gray-800 text-black dark:text-white"
                   placeholder="Type your message"
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") handleSend();
+                    if (e.key === 'Enter') handleSend();
                   }}
                   disabled={sendingDisabled}
                 />
                 <button
                   onClick={handleSend}
                   className={`px-4 py-2 rounded-r-lg font-semibold text-white ${
-                    sendingDisabled ? "bg-blue-300 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+                    sendingDisabled
+                      ? 'bg-blue-300 cursor-not-allowed'
+                      : 'bg-blue-600 hover:bg-blue-700'
                   }`}
                   disabled={sendingDisabled}
                 >
@@ -233,7 +265,9 @@ const Chat = () => {
               </div>
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center text-gray-500">Select a patient to start</div>
+            <div className="flex-1 flex items-center justify-center text-gray-500">
+              Select a patient to start
+            </div>
           )}
         </div>
       </div>

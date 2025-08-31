@@ -1,15 +1,15 @@
-import axios from "axios";
-import React, { useEffect, useState, useContext, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { io } from "socket.io-client";
-import { Context } from "../main";
-import { toast } from "react-toastify";
-import ChatList from "../components/ChatList";
-import ChatRoom from "../components/ChatRoom";
-import DoctorProfile from "../components/DoctorProfile";
+import axios from 'axios';
+import React, { useEffect, useState, useContext, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { io } from 'socket.io-client';
+import { Context } from '../main';
+import { toast } from 'react-toastify';
+import ChatList from '../components/ChatList';
+import ChatRoom from '../components/ChatRoom';
+import DoctorProfile from '../components/DoctorProfile';
 
 const socket = io(import.meta.env.VITE_BACKEND_URL, {
-  transports: ["websocket"],
+  transports: ['websocket'],
   withCredentials: true,
 });
 
@@ -24,11 +24,11 @@ const Chat = () => {
   const [departmentsOpen, setDepartmentsOpen] = useState({});
   const [selectedChat, setSelectedChat] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const [sendingDisabled, setSendingDisabled] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [mobileViewMode, setMobileViewMode] = useState("list");
+  const [mobileViewMode, setMobileViewMode] = useState('list');
   const [imageUploading, setImageUploading] = useState(false);
   const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
 
@@ -39,13 +39,13 @@ const Chat = () => {
   const newMessageAddedRef = useRef(false);
 
   useEffect(() => {
-    document.title = "MedHaven - Chat With Us";
+    document.title = 'MedHaven - Chat With Us';
   }, []);
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const Chat = () => {
         );
         const byDept = {};
         response.data.doctors.forEach((doc) => {
-          const dept = doc.doctorDepartment || "Other";
+          const dept = doc.doctorDepartment || 'Other';
           if (!byDept[dept]) byDept[dept] = [];
           byDept[dept].push({
             ...doc,
@@ -69,7 +69,7 @@ const Chat = () => {
         });
         setDepartments(byDept);
       } catch (err) {
-        toast.error("Failed to load doctors");
+        toast.error('Failed to load doctors');
         setDepartments({});
       }
     };
@@ -81,7 +81,7 @@ const Chat = () => {
     if (!selectedChat || !user?._id) return;
     const chatRoomId = generateChatRoomId(user._id, selectedChat.id);
 
-    socket.emit("joinChatRoom", { chatRoomId });
+    socket.emit('joinChatRoom', { chatRoomId });
 
     const fetchMessages = async () => {
       try {
@@ -91,7 +91,7 @@ const Chat = () => {
         );
         setMessages(response.data.chats || []);
         setTimeout(() => {
-          messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
         }, 100);
       } catch {
         setMessages([]);
@@ -100,7 +100,7 @@ const Chat = () => {
     fetchMessages();
 
     return () => {
-      socket.emit("leaveChatRoom", { chatRoomId });
+      socket.emit('leaveChatRoom', { chatRoomId });
     };
   }, [selectedChat, user]);
 
@@ -113,29 +113,36 @@ const Chat = () => {
         setMessages((prev) => [...prev, msg]);
       }
     };
-    socket.on("receiveChat", onReceiveChat);
+    socket.on('receiveChat', onReceiveChat);
     return () => {
-      socket.off("receiveChat", onReceiveChat);
+      socket.off('receiveChat', onReceiveChat);
     };
   }, [selectedChat, user]);
 
   const handleImageUpload = async (file) => {
     if (!file) return;
 
-    const allowedFormats = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+    const allowedFormats = [
+      'image/png',
+      'image/jpeg',
+      'image/jpg',
+      'image/webp',
+    ];
     if (!allowedFormats.includes(file.type)) {
-      toast.error("Unsupported file format. Please upload png, jpg, jpeg, or webp.");
+      toast.error(
+        'Unsupported file format. Please upload png, jpg, jpeg, or webp.'
+      );
       return;
     }
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("File size exceeds 5MB limit.");
+      toast.error('File size exceeds 5MB limit.');
       return;
     }
 
     setImageUploading(true);
 
     const formData = new FormData();
-    formData.append("image", file);
+    formData.append('image', file);
 
     try {
       const response = await axios.post(
@@ -143,14 +150,14 @@ const Chat = () => {
         formData,
         {
           withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { 'Content-Type': 'multipart/form-data' },
         }
       );
       const imageUrl = response.data.imageUrl;
       setUploadedImageUrls((prev) => [...prev, imageUrl]);
-      toast.success("Image uploaded");
+      toast.success('Image uploaded');
     } catch {
-      toast.error("Image upload failed");
+      toast.error('Image upload failed');
     } finally {
       setImageUploading(false);
     }
@@ -163,7 +170,12 @@ const Chat = () => {
   };
 
   const handleSend = async () => {
-    if ((!input.trim() && uploadedImageUrls.length === 0) || !selectedChat || !user?._id || sendingDisabled)
+    if (
+      (!input.trim() && uploadedImageUrls.length === 0) ||
+      !selectedChat ||
+      !user?._id ||
+      sendingDisabled
+    )
       return;
 
     setSendingDisabled(true);
@@ -182,7 +194,7 @@ const Chat = () => {
       isBot: false,
     };
 
-    socket.emit("sendChat", { chatRoomId, message });
+    socket.emit('sendChat', { chatRoomId, message });
 
     try {
       await axios.post(
@@ -191,11 +203,11 @@ const Chat = () => {
         { withCredentials: true }
       );
     } catch (err) {
-      toast.error("Message not saved!");
+      toast.error('Message not saved!');
     }
     newMessageAddedRef.current = true;
     setMessages((prev) => [...prev, message]);
-    setInput("");
+    setInput('');
     setUploadedImageUrls([]);
   };
 
@@ -214,13 +226,13 @@ const Chat = () => {
     setSelectedChat(doc);
     setShowProfile(false);
     if (isMobile) {
-      setMobileViewMode("chat");
+      setMobileViewMode('chat');
     }
   };
 
   const onBackFromChatRoom = () => {
     if (isMobile) {
-      setMobileViewMode("list");
+      setMobileViewMode('list');
       setShowProfile(false);
     }
   };
@@ -228,14 +240,14 @@ const Chat = () => {
   const onBackFromProfile = () => {
     setShowProfile(false);
     if (isMobile) {
-      setMobileViewMode("chat");
+      setMobileViewMode('chat');
     }
   };
 
   return (
     <div className="fixed inset-0 min-h-screen w-screen bg-gray-900 flex text-white">
       {/* ChatList */}
-      {(!isMobile || mobileViewMode === "list") && (
+      {(!isMobile || mobileViewMode === 'list') && (
         <ChatList
           departments={departments}
           departmentsOpen={departmentsOpen}
@@ -244,12 +256,12 @@ const Chat = () => {
           setSelectedChat={onSelectChat}
           navigate={navigate}
           isMobile={isMobile}
-          isActiveView={mobileViewMode === "list"}
+          isActiveView={mobileViewMode === 'list'}
         />
       )}
 
       {/* ChatRoom or DoctorProfile */}
-      {(!isMobile || mobileViewMode !== "list") && (
+      {(!isMobile || mobileViewMode !== 'list') && (
         <>
           {showProfile ? (
             <DoctorProfile doctor={selectedChat} onBack={onBackFromProfile} />
