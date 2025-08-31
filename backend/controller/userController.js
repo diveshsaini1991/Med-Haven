@@ -9,8 +9,8 @@ import { getOtpEmailHtml } from "../service/otpEmail.js";
 
 
 export const patientRegister = catchAsyncErrors(async (req, res, next) => {
-    const { firstName, lastName, email, phone, password, gender, dob, aadhaar, role } = req.body;
-    if (!firstName || !lastName || !email || !phone || !password || !gender || !dob || !aadhaar || !role) {
+    const { firstName, lastName, email, phone, password, gender, dob, role } = req.body;
+    if (!firstName || !lastName || !email || !phone || !password || !gender || !dob || !role) {
         return next(new ErrorHandler("All Fields Are Required !", 400));
     }
     let user = await User.findOne({ email });
@@ -34,8 +34,8 @@ export const patientRegister = catchAsyncErrors(async (req, res, next) => {
 });
 
 export const verifyPatientOtp = catchAsyncErrors(async (req, res, next) => {
-    const { firstName, lastName, email, phone, password, gender, dob, aadhaar, role, otp } = req.body;
-    if (!email || !otp || !firstName || !lastName || !phone || !password || !gender || !dob || !aadhaar || !role) {
+    const { firstName, lastName, email, phone, password, gender, dob, role, otp } = req.body;
+    if (!email || !otp || !firstName || !lastName || !phone || !password || !gender || !dob || !role) {
         return next(new ErrorHandler("All Fields Are Required!", 400));
     }
     const savedOtp = await redis.get(`otp:${email}`);
@@ -47,7 +47,7 @@ export const verifyPatientOtp = catchAsyncErrors(async (req, res, next) => {
     if (user) {
         return next(new ErrorHandler("User Already Registered!", 400));
     }
-    user = await User.create({ firstName, lastName, email, phone, password, gender, dob, aadhaar, role });
+    user = await User.create({ firstName, lastName, email, phone, password, gender, dob, role });
     await redis.del(`otp:${email}`);
     generateToken(user, "User Registered!", 200, res);
 });
@@ -99,15 +99,15 @@ export const login = catchAsyncErrors(async (req, res, next) => {
 });
 
 export const addNewAdmin = catchAsyncErrors(async (req, res, next) => {
-    const { firstName, lastName, email, phone, password, gender, dob, aadhaar } = req.body;
-    if (!firstName || !lastName || !email || !phone || !password || !gender || !dob || !aadhaar) {
+    const { firstName, lastName, email, phone, password, gender, dob } = req.body;
+    if (!firstName || !lastName || !email || !phone || !password || !gender || !dob) {
         return next(new ErrorHandler("All Fields Are Required !", 400));
     }
     const isRegistered = await User.findOne({ email });
     if (isRegistered) {
         return next(new ErrorHandler(`${isRegistered.role} with This Email Already Exists !`,));
     }
-    const admin = await User.create({ firstName, lastName, email, phone, password, gender, dob, aadhaar, role: "Admin" });
+    const admin = await User.create({ firstName, lastName, email, phone, password, gender, dob, role: "Admin" });
     res.status(200).json({
         success: true,
         message: "New Admin Registered!"

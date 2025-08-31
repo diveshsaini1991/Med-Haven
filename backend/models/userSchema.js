@@ -27,7 +27,6 @@ const userSchema = new mongoose.Schema({
     },
     aadhaar: {
         type: String,
-        required: true,
         minLength: [12, "Aadhaar Must Contain Exact 12 Digits!"],
         maxLength: [12, "Aadhaar Must Contain Exact 12 Digits!"]
     },
