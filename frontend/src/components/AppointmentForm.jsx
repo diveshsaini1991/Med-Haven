@@ -263,19 +263,19 @@ const AppointmentForm = ({
 
             {/* Submit Button */}
             <div className="form-animate text-center flex flex-col md:flex-row md:justify-center md:space-x-4">
-              <button
-                type="submit"
-                className={`w-full md:w-auto px-8 py-3 ${isEdit ? "bg-yellow-500 hover:bg-yellow-600" : "bg-blue-600 hover:bg-blue-700"} text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition border-2 border-white`}
-              >
-                {submitText}
-              </button>
+                  <button
+                    type="submit"
+                className={`px-8 py-3 ${isEdit ? "w-1/2 bg-yellow-500 hover:bg-yellow-600" : "w-full bg-blue-600 hover:bg-blue-700"} text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition border-2 border-white`}
+                  >
+                    {submitText}
+                  </button>
               {isEdit && (
-                <button
-                  type="button"
-                  className="w-full md:w-auto px-8 py-3 mt-4 md:mt-0 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition border-2 border-white"
-                  onClick={onCancel}
-                >
-                  Cancel
+                  <button
+                    type="button"
+                  className="w-1/2 px-8 py-3 mt-4 md:mt-0 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition border-2 border-white"
+                    onClick={onCancel}
+                  >
+                    Cancel
                 </button>
               )}
             </div>
