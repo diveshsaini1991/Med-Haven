@@ -199,7 +199,7 @@ const MessageForm = () => {
             <div className="text-center form-animate">
               <button
                 type="submit"
-                className=" px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition w-full"
+                className=" px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition w-full border-2 border-white"
               >
                 Send Message
               </button>
