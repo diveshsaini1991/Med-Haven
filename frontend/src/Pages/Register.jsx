@@ -287,7 +287,7 @@ const Register = () => {
               <div className="register-animate text-center">
                 <button
                   type="submit"
-                  className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition"
+                  className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition  border-2 border-white"
                 >
                   Continue
                 </button>
