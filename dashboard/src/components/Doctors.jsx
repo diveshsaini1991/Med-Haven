@@ -1,8 +1,8 @@
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { Context } from "../main";
-import { Navigate } from "react-router-dom";
+import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { Context } from '../main';
+import { Navigate } from 'react-router-dom';
 
 const Doctors = () => {
   const [doctors, setDoctors] = useState([]);
@@ -25,7 +25,7 @@ const Doctors = () => {
   }, []);
 
   if (!isAuthenticated) {
-    return <Navigate to={"/login"} />;
+    return <Navigate to={'/login'} />;
   }
   return (
     <section className="page doctors">

@@ -1,8 +1,8 @@
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { Context } from "../main";
-import { Navigate } from "react-router-dom";
+import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { Context } from '../main';
+import { Navigate } from 'react-router-dom';
 
 const Messages = () => {
   const [messages, setMessages] = useState([]);
@@ -12,20 +12,23 @@ const Messages = () => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const { data } = await axios.get(`${VITE_BACKEND_URL}/api/v1/message/get`, {
-          withCredentials: true,
-        });
+        const { data } = await axios.get(
+          `${VITE_BACKEND_URL}/api/v1/message/get`,
+          {
+            withCredentials: true,
+          }
+        );
         setMessages(data.messages);
       } catch (error) {
         console.log(error.response?.data?.message || error.message);
-        toast.error("Failed to load messages.");
+        toast.error('Failed to load messages.');
       }
     };
     fetchMessages();
   }, []);
 
   if (!isAuthenticated) {
-    return <Navigate to={"/login"} />;
+    return <Navigate to={'/login'} />;
   }
 
   return (
@@ -60,12 +63,18 @@ const Messages = () => {
               </p>
               <p>
                 <span className="font-semibold">To: </span>
-                <span>{element.to === "Admin" ? "Admin" : `Dr. ${element.doctor.firstName} ${element.doctor.lastName}`}</span>
+                <span>
+                  {element.to === 'Admin'
+                    ? 'Admin'
+                    : `Dr. ${element.doctor.firstName} ${element.doctor.lastName}`}
+                </span>
               </p>
             </div>
           ))
         ) : (
-          <h1 className="text-center text-gray-600 mt-10 text-xl">No Messages!</h1>
+          <h1 className="text-center text-gray-600 mt-10 text-xl">
+            No Messages!
+          </h1>
         )}
       </div>
     </section>

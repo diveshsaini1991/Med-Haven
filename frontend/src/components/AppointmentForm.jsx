@@ -1,33 +1,41 @@
-import React, { useEffect, useState, useRef } from "react";
-import gsap from "gsap";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import axios from "axios";
-import { toast } from "react-toastify";
+import React, { useEffect, useState, useRef } from 'react';
+import gsap from 'gsap';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const departmentsArray = [
-  "Pediatrics", "Orthopedics", "Cardiology", "Neurology", "Oncology", "Radiology", "Physical Therapy", "Dermatology", "ENT"
+  'Pediatrics',
+  'Orthopedics',
+  'Cardiology',
+  'Neurology',
+  'Oncology',
+  'Radiology',
+  'Physical Therapy',
+  'Dermatology',
+  'ENT',
 ];
 
 const defaultValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  phone: "",
-  aadhaar: "",
-  dob: "",
-  gender: "",
-  appointment_date: "",
-  department: "Pediatrics",
-  doctor_firstName: "",
-  doctor_lastName: "",
-  address: "",
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  aadhaar: '',
+  dob: '',
+  gender: '',
+  appointment_date: '',
+  department: 'Pediatrics',
+  doctor_firstName: '',
+  doctor_lastName: '',
+  address: '',
   hasVisited: false,
 };
 
 const AppointmentForm = ({
   initialValues = defaultValues,
-  submitText = "Get Appointment",
+  submitText = 'Get Appointment',
   onSubmit,
   isEdit = false,
   onCancel,
@@ -54,11 +62,11 @@ const AppointmentForm = ({
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(gsap.utils.toArray(".form-animate"), {
+      gsap.from(gsap.utils.toArray('.form-animate'), {
         opacity: 0,
         y: 40,
         duration: 0.9,
-        ease: "power3.out",
+        ease: 'power3.out',
         stagger: 0.12,
       });
     }, formRef);
@@ -67,18 +75,18 @@ const AppointmentForm = ({
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setForm(prev => ({
+    setForm((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
   const handleDoctorChange = (e) => {
-    const [firstName, lastName] = e.target.value.split(" ");
-    setForm(prev => ({
+    const [firstName, lastName] = e.target.value.split(' ');
+    setForm((prev) => ({
       ...prev,
-      doctor_firstName: firstName || "",
-      doctor_lastName: lastName || "",
+      doctor_firstName: firstName || '',
+      doctor_lastName: lastName || '',
     }));
   };
 
@@ -89,11 +97,11 @@ const AppointmentForm = ({
     today.setHours(0, 0, 0, 0);
 
     if (!form.dob) {
-      toast.error("Please select your Date of Birth.");
+      toast.error('Please select your Date of Birth.');
       return;
     }
     if (!form.appointment_date) {
-      toast.error("Please select your Appointment Date.");
+      toast.error('Please select your Appointment Date.');
       return;
     }
 
@@ -101,11 +109,11 @@ const AppointmentForm = ({
     const appointmentDateObj = new Date(form.appointment_date);
 
     if (dobDate > today) {
-      toast.error("Date of Birth cannot be in the future.");
+      toast.error('Date of Birth cannot be in the future.');
       return;
     }
     if (appointmentDateObj < today) {
-      toast.error("Appointment Date cannot be in the past.");
+      toast.error('Appointment Date cannot be in the past.');
       return;
     }
 
@@ -121,13 +129,16 @@ const AppointmentForm = ({
         {
           ...form,
         },
-        { withCredentials: true, headers: { "Content-Type": "application/json" } }
+        {
+          withCredentials: true,
+          headers: { 'Content-Type': 'application/json' },
+        }
       );
-      toast.success("Appointment booked successfully!");
+      toast.success('Appointment booked successfully!');
 
       setForm(defaultValues);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong");
+      toast.error(error.response?.data?.message || 'Something went wrong');
     }
   };
 
@@ -139,28 +150,48 @@ const AppointmentForm = ({
           className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg p-8 md:p-12"
         >
           <h2 className="form-animate text-3xl font-bold text-center text-blue-700 dark:text-blue-400 mb-10">
-            {isEdit ? "Edit Appointment" : "Book Your Appointment"}
+            {isEdit ? 'Edit Appointment' : 'Book Your Appointment'}
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* First/Last Name */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <input name="firstName" type="text" placeholder="First Name" value={form.firstName}
+              <input
+                name="firstName"
+                type="text"
+                placeholder="First Name"
+                value={form.firstName}
                 onChange={handleChange}
-                className="form-animate input-field" />
-              <input name="lastName" type="text" placeholder="Last Name" value={form.lastName}
+                className="form-animate input-field"
+              />
+              <input
+                name="lastName"
+                type="text"
+                placeholder="Last Name"
+                value={form.lastName}
                 onChange={handleChange}
-                className="form-animate input-field" />
+                className="form-animate input-field"
+              />
             </div>
 
             {/* Email/Phone */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <input name="email" type="email" placeholder="Email" value={form.email}
+              <input
+                name="email"
+                type="email"
+                placeholder="Email"
+                value={form.email}
                 onChange={handleChange}
-                className="form-animate input-field" />
-              <input name="phone" type="number" placeholder="Mobile Number" value={form.phone}
+                className="form-animate input-field"
+              />
+              <input
+                name="phone"
+                type="number"
+                placeholder="Mobile Number"
+                value={form.phone}
                 onChange={handleChange}
-                className="form-animate input-field" />
+                className="form-animate input-field"
+              />
             </div>
 
             {/* Aadhaar / Date of Birth */}
@@ -175,12 +206,19 @@ const AppointmentForm = ({
               />
               <DatePicker
                 selected={form.dob ? new Date(form.dob) : null}
-                onChange={date => setForm(prev => ({ ...prev, dob: date ? date.toISOString().split("T")[0] : "" }))}
+                onChange={(date) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    dob: date ? date.toISOString().split('T')[0] : '',
+                  }))
+                }
                 placeholderText="Date of Birth"
                 maxDate={new Date()}
                 dateFormat="dd/MM/yyyy"
                 className="input-field form-animate"
-                showMonthDropdown showYearDropdown dropdownMode="select"
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode="select"
               />
             </div>
 
@@ -197,13 +235,24 @@ const AppointmentForm = ({
                 <option value="Female">Female</option>
               </select>
               <DatePicker
-                selected={form.appointment_date ? new Date(form.appointment_date) : null}
-                onChange={date => setForm(prev => ({ ...prev, appointment_date: date ? date.toISOString().split("T")[0] : "" }))}
+                selected={
+                  form.appointment_date ? new Date(form.appointment_date) : null
+                }
+                onChange={(date) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    appointment_date: date
+                      ? date.toISOString().split('T')[0]
+                      : '',
+                  }))
+                }
                 placeholderText="Appointment Date"
                 minDate={new Date()}
                 dateFormat="dd/MM/yyyy"
                 className="input-field form-animate"
-                showMonthDropdown showYearDropdown dropdownMode="select"
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode="select"
               />
             </div>
 
@@ -216,7 +265,9 @@ const AppointmentForm = ({
                 className="form-animate input-field select-dark"
               >
                 {departmentsArray.map((depart, index) => (
-                  <option value={depart} key={index}>{depart}</option>
+                  <option value={depart} key={index}>
+                    {depart}
+                  </option>
                 ))}
               </select>
               <select
@@ -227,7 +278,7 @@ const AppointmentForm = ({
               >
                 <option value="">Select Doctor</option>
                 {doctors
-                  .filter(doc => doc.doctorDepartment === form.department)
+                  .filter((doc) => doc.doctorDepartment === form.department)
                   .map((doc, idx) => (
                     <option
                       value={`${doc.firstName} ${doc.lastName}`}
@@ -251,7 +302,9 @@ const AppointmentForm = ({
 
             {/* Visited Before */}
             <div className="form-animate flex items-center space-x-3">
-              <label className="text-gray-700 dark:text-gray-200">Visited before?</label>
+              <label className="text-gray-700 dark:text-gray-200">
+                Visited before?
+              </label>
               <input
                 name="hasVisited"
                 type="checkbox"
@@ -263,23 +316,22 @@ const AppointmentForm = ({
 
             {/* Submit Button */}
             <div className="form-animate text-center flex flex-col md:flex-row md:justify-center md:space-x-4">
-                  <button
-                    type="submit"
-                className={`px-8 py-3 ${isEdit ? "w-1/2 bg-yellow-500 hover:bg-yellow-600" : "w-full bg-blue-600 hover:bg-blue-700"} text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition border-2 border-white`}
-                  >
-                    {submitText}
-                  </button>
+              <button
+                type="submit"
+                className={`px-8 py-3 ${isEdit ? 'w-1/2 bg-yellow-500 hover:bg-yellow-600' : 'w-full bg-blue-600 hover:bg-blue-700'} text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition border-2 border-white`}
+              >
+                {submitText}
+              </button>
               {isEdit && (
-                  <button
-                    type="button"
+                <button
+                  type="button"
                   className="w-1/2 px-8 py-3 mt-4 md:mt-0 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition border-2 border-white"
-                    onClick={onCancel}
-                  >
-                    Cancel
+                  onClick={onCancel}
+                >
+                  Cancel
                 </button>
               )}
             </div>
-
           </form>
         </div>
 

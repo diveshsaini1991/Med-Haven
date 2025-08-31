@@ -44,7 +44,6 @@ _Built with the tools and technologies:_
 - [Code of Conduct](#code-of-conduct)
 - [License](#license)
 
-
 ---
 
 ## Overview
@@ -79,9 +78,9 @@ To get started, clone the repo and follow the instructions for either Dockerized
 - **Deployment:** Vercel, Render
 - **Testing:** APIs tested using Postman
 
-## API Endpoints 
+## API Endpoints
 
-#### User 
+#### User
 
 ```http
   POST /api/v1/user/patient/register            # Patient registration
@@ -119,7 +118,9 @@ To get started, clone the repo and follow the instructions for either Dockerized
   PUT /api/v1/appointment/patient/update/:id        # Update patient appointment details (Patient only)
 
 ```
+
 #### Chat
+
 ```http
   POST /api/v1/chat/createRoom                      # Create a chat room (Patient only)
   POST /api/v1/chat/send                            # Send a message (Patient or Doctor)
@@ -143,14 +144,12 @@ To get started, clone the repo and follow the instructions for either Dockerized
 
 ```
 
-
-
-
 ## Dockerized Setup
 
 MedHaven is fully containerized using Docker and Docker Compose, enabling consistent development and deployment environments.
 
 ### Prerequisites
+
 - Docker installed
 - Docker Compose installed
 
@@ -159,7 +158,6 @@ MedHaven is fully containerized using Docker and Docker Compose, enabling consis
 ### Running the Project with Docker
 
 **Clone the repository:**
-
 
 ```bash
 git clone https://github.com/diveshsaini1991/Med-Haven.git
@@ -171,6 +169,7 @@ cd Med-Haven
 ```bash
 docker-compose up --build
 ```
+
 This command builds and runs:
 
 - MongoDB
@@ -197,13 +196,11 @@ This command builds and runs:
 
 - Volumes are used to persist MongoDB data and sync local code for development.
 
-
 **🛑 Stopping All Services**
 
 ```bash
 docker-compose down
 ```
-
 
 ## Run Locally without docker
 
@@ -213,6 +210,7 @@ Clone the project
 git clone https://github.com/diveshsaini1991/Med-Haven.git
 cd Med-Haven
 ```
+
 Go to the backend directory
 
 ```bash
@@ -225,7 +223,7 @@ Install dependencies
 npm install
 ```
 
-create **config.env file** in a folder named "config" using **```config.env.example```**
+create **config.env file** in a folder named "config" using **`config.env.example`**
 
 Go to the frontend directory
 
@@ -239,7 +237,7 @@ Install dependencies
 npm install
 ```
 
-create **.env file** using **```.env.example```**
+create **.env file** using **`.env.example`**
 
 Go to the Dashboard directory
 
@@ -253,7 +251,7 @@ Install dependencies
 npm install
 ```
 
-create **.env file** using **```.env.example```**
+create **.env file** using **`.env.example`**
 
 Go to the Doc-Dashboard directory
 
@@ -267,7 +265,7 @@ Install dependencies
 npm install
 ```
 
-create **.env file** using **```.env.example```**
+create **.env file** using **`.env.example`**
 
 Go to the Root directory
 
@@ -287,11 +285,9 @@ Run the project
 npm run dev
 ```
 
-
 ## Demo
 
 frontend link - https://med-haven-frontend.vercel.app
-
 
 docter dashBoard link - https://med-haven-doc-dashboad.vercel.app
 
@@ -299,19 +295,15 @@ email to use as docter - meera@gmail.com
 
 password - 123456
 
-
 admin dashBoard link - https://med-haven-admin-dashboard.vercel.app
 
 email to use as admin - admin@gmail.com
 
 password - 123456
 
-
-
 ## Contributing
 
 Please read our [Contributing Guidelines](CONTRIBUTING.md) to get started with contributing to MedHaven.
-
 
 ---
 
@@ -326,4 +318,3 @@ This project follows a [Code of Conduct](CODE_OF_CONDUCT.md) to maintain a welco
 MedHaven is licensed under the [MIT License](LICENSE). See the LICENSE file for details.
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg) ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)
-

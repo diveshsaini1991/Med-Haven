@@ -1,15 +1,15 @@
-import React, { useContext, useState } from "react";
-import { TiHome } from "react-icons/ti";
-import { RiLogoutBoxFill } from "react-icons/ri";
-import { AiFillMessage } from "react-icons/ai";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { FaUserDoctor } from "react-icons/fa6";
-import { MdAddModerator } from "react-icons/md";
-import { IoPersonAddSharp } from "react-icons/io5";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { Context } from "../main";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useState } from 'react';
+import { TiHome } from 'react-icons/ti';
+import { RiLogoutBoxFill } from 'react-icons/ri';
+import { AiFillMessage } from 'react-icons/ai';
+import { GiHamburgerMenu } from 'react-icons/gi';
+import { FaUserDoctor } from 'react-icons/fa6';
+import { MdAddModerator } from 'react-icons/md';
+import { IoPersonAddSharp } from 'react-icons/io5';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { Context } from '../main';
+import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
   const [show, setShow] = useState(false);
@@ -34,31 +34,31 @@ const Sidebar = () => {
   const navigateTo = useNavigate();
 
   const gotoHomePage = () => {
-    navigateTo("/");
+    navigateTo('/');
     setShow(!show);
   };
   const gotoDoctorsPage = () => {
-    navigateTo("/doctors");
+    navigateTo('/doctors');
     setShow(!show);
   };
   const gotoMessagesPage = () => {
-    navigateTo("/messages");
+    navigateTo('/messages');
     setShow(!show);
   };
   const gotoAddNewDoctor = () => {
-    navigateTo("/doctor/addnew");
+    navigateTo('/doctor/addnew');
     setShow(!show);
   };
   const gotoAddNewAdmin = () => {
-    navigateTo("/admin/addnew");
+    navigateTo('/admin/addnew');
     setShow(!show);
   };
 
   return (
     <>
       <nav
-        style={!isAuthenticated ? { display: "none" } : { display: "flex" }}
-        className={show ? "show sidebar" : "sidebar"}
+        style={!isAuthenticated ? { display: 'none' } : { display: 'flex' }}
+        className={show ? 'show sidebar' : 'sidebar'}
       >
         <div className="links">
           <TiHome onClick={gotoHomePage} />
@@ -71,7 +71,7 @@ const Sidebar = () => {
       </nav>
       <div
         className="wrapper"
-        style={!isAuthenticated ? { display: "none" } : { display: "flex" }}
+        style={!isAuthenticated ? { display: 'none' } : { display: 'flex' }}
       >
         <GiHamburgerMenu className="hamburger" onClick={() => setShow(!show)} />
       </div>

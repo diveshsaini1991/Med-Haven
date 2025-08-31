@@ -1,38 +1,38 @@
-import React, { useContext, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { Context } from "../main";
-import axios from "axios";
+import React, { useContext, useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Context } from '../main';
+import axios from 'axios';
 
 const AddNewDoctor = () => {
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [aadhaar, setaadhaar] = useState("");
-  const [dob, setDob] = useState("");
-  const [gender, setGender] = useState("");
-  const [password, setPassword] = useState("");
-  const [doctorDepartment, setDoctorDepartment] = useState("");
-  const [docAvatar, setDocAvatar] = useState("");
-  const [docAvatarPreview, setDocAvatarPreview] = useState("");
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [aadhaar, setaadhaar] = useState('');
+  const [dob, setDob] = useState('');
+  const [gender, setGender] = useState('');
+  const [password, setPassword] = useState('');
+  const [doctorDepartment, setDoctorDepartment] = useState('');
+  const [docAvatar, setDocAvatar] = useState('');
+  const [docAvatarPreview, setDocAvatarPreview] = useState('');
 
   const navigateTo = useNavigate();
 
   const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   const departmentsArray = [
-    "Pediatrics",
-    "Orthopedics",
-    "Cardiology",
-    "Neurology",
-    "Oncology",
-    "Radiology",
-    "Physical Therapy",
-    "Dermatology",
-    "ENT",
+    'Pediatrics',
+    'Orthopedics',
+    'Cardiology',
+    'Neurology',
+    'Oncology',
+    'Radiology',
+    'Physical Therapy',
+    'Dermatology',
+    'ENT',
   ];
 
   const handleAvatar = (e) => {
@@ -49,33 +49,33 @@ const AddNewDoctor = () => {
     e.preventDefault();
     try {
       const formData = new FormData();
-      formData.append("firstName", firstName);
-      formData.append("lastName", lastName);
-      formData.append("email", email);
-      formData.append("phone", phone);
-      formData.append("password", password);
-      formData.append("aadhaar", aadhaar);
-      formData.append("dob", dob);
-      formData.append("gender", gender);
-      formData.append("doctorDepartment", doctorDepartment);
-      formData.append("docAvatar", docAvatar);
+      formData.append('firstName', firstName);
+      formData.append('lastName', lastName);
+      formData.append('email', email);
+      formData.append('phone', phone);
+      formData.append('password', password);
+      formData.append('aadhaar', aadhaar);
+      formData.append('dob', dob);
+      formData.append('gender', gender);
+      formData.append('doctorDepartment', doctorDepartment);
+      formData.append('docAvatar', docAvatar);
       await axios
         .post(`${VITE_BACKEND_URL}/api/v1/user/doctor/addnew`, formData, {
           withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { 'Content-Type': 'multipart/form-data' },
         })
         .then((res) => {
           toast.success(res.data.message);
           setIsAuthenticated(true);
-          navigateTo("/");
-          setFirstName("");
-          setLastName("");
-          setEmail("");
-          setPhone("");
-          setaadhaar("");
-          setDob("");
-          setGender("");
-          setPassword("");
+          navigateTo('/');
+          setFirstName('');
+          setLastName('');
+          setEmail('');
+          setPhone('');
+          setaadhaar('');
+          setDob('');
+          setGender('');
+          setPassword('');
         });
     } catch (error) {
       toast.error(error.response.data.message);
@@ -83,19 +83,19 @@ const AddNewDoctor = () => {
   };
 
   if (!isAuthenticated) {
-    return <Navigate to={"/login"} />;
+    return <Navigate to={'/login'} />;
   }
   return (
     <section className="page">
       <section className="container add-doctor-form">
-        <img src="/logo.png" alt="logo" className="logo"/>
+        <img src="/logo.png" alt="logo" className="logo" />
         <h1 className="form-title">REGISTER A NEW DOCTOR</h1>
         <form onSubmit={handleAddNewDoctor}>
           <div className="first-wrapper">
             <div>
               <img
                 src={
-                  docAvatarPreview ? `${docAvatarPreview}` : "/docHolder.jpg"
+                  docAvatarPreview ? `${docAvatarPreview}` : '/docHolder.jpg'
                 }
                 alt="Doctor Avatar"
               />
@@ -133,7 +133,7 @@ const AddNewDoctor = () => {
                 onChange={(e) => setaadhaar(e.target.value)}
               />
               <input
-                type={"date"}
+                type={'date'}
                 placeholder="Date of Birth"
                 value={dob}
                 onChange={(e) => setDob(e.target.value)}

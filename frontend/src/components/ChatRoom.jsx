@@ -1,7 +1,7 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { HiOutlinePhotograph } from "react-icons/hi";
-import { getLowResCloudinaryUrl } from "../utils/cloudinaryHelpers";
+import React, { useLayoutEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { HiOutlinePhotograph } from 'react-icons/hi';
+import { getLowResCloudinaryUrl } from '../utils/cloudinaryHelpers';
 
 const ChatRoom = ({
   selectedChat,
@@ -34,14 +34,14 @@ const ChatRoom = ({
       gsap.fromTo(
         lastMessageRef.current,
         { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+        { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
       );
       newMessageAddedRef.current = false;
     }
   }, [messages, newMessageAddedRef, lastMessageRef]);
 
   useLayoutEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, messagesEndRef]);
 
   const onImageIconClick = () => {
@@ -54,7 +54,7 @@ const ChatRoom = ({
     const files = e.target.files;
     if (files && files.length > 0) {
       handleMultipleImageUpload(files);
-      e.target.value = null; 
+      e.target.value = null;
     }
   };
 
@@ -72,12 +72,12 @@ const ChatRoom = ({
       scale: 0.8,
       opacity: 0,
       duration: 0.3,
-      ease: "power3.in",
+      ease: 'power3.in',
     });
     gsap.to(overlayRef.current, {
       opacity: 0,
       duration: 0.3,
-      ease: "power1.in",
+      ease: 'power1.in',
       onComplete: () => {
         setShowImageOverlay(false);
         setOverlayImageUrl(null);
@@ -90,12 +90,12 @@ const ChatRoom = ({
       gsap.fromTo(
         overlayRef.current,
         { opacity: 0 },
-        { opacity: 1, duration: 0.3, ease: "power1.out" }
+        { opacity: 1, duration: 0.3, ease: 'power1.out' }
       );
       gsap.fromTo(
         imageRef.current,
         { scale: 0.8, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.4, ease: "power3.out" }
+        { scale: 1, opacity: 1, duration: 0.4, ease: 'power3.out' }
       );
     }
   }, [showImageOverlay]);
@@ -104,7 +104,7 @@ const ChatRoom = ({
     <div
       ref={containerRef}
       className="flex-1 flex flex-col bg-gray-100 dark:bg-gray-950 p-4 overflow-hidden"
-      style={{ paddingBottom: "50px" }}
+      style={{ paddingBottom: '50px' }}
     >
       {selectedChat ? (
         <>
@@ -131,21 +131,23 @@ const ChatRoom = ({
           {/* Messages */}
           <div className="flex-1 overflow-y-auto mb-4 pr-2 custom-scroll">
             {messages.length === 0 && (
-              <div className="text-gray-500 text-center mt-8">No messages yet</div>
+              <div className="text-gray-500 text-center mt-8">
+                No messages yet
+              </div>
             )}
             {messages.map((msg, idx) => (
               <div
                 key={idx}
                 className={`mb-2 flex ${
-                  msg.senderId === user._id ? "justify-end" : "justify-start"
+                  msg.senderId === user._id ? 'justify-end' : 'justify-start'
                 }`}
                 ref={idx === messages.length - 1 ? lastMessageRef : null}
               >
                 <div
                   className={`px-4 py-2 rounded-lg max-w-xs ${
                     msg.senderId === user._id
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-300 dark:bg-gray-700 text-black dark:text-white"
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-300 dark:bg-gray-700 text-black dark:text-white'
                   }`}
                 >
                   <div>{msg.text}</div>
@@ -210,7 +212,7 @@ const ChatRoom = ({
                 className="flex-1 px-4 py-2 rounded-l-lg border bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
                 placeholder="Type your message"
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") handleSend();
+                  if (e.key === 'Enter') handleSend();
                 }}
                 disabled={sendingDisabled}
               />
@@ -225,7 +227,9 @@ const ChatRoom = ({
                 onClick={handleSend}
                 disabled={sendingDisabled}
                 className={`px-4 py-2 rounded-r-lg font-semibold text-white ${
-                  sendingDisabled ? "bg-blue-300 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+                  sendingDisabled
+                    ? 'bg-blue-300 cursor-not-allowed'
+                    : 'bg-blue-600 hover:bg-blue-700'
                 }`}
               >
                 Send
@@ -267,7 +271,6 @@ const ChatRoom = ({
       )}
     </div>
   );
-
 };
 
 export default ChatRoom;

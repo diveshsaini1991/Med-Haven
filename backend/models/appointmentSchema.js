@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
-import { Mongoose } from "mongoose";
-import validator from "validator";
+import mongoose from 'mongoose';
+import { Mongoose } from 'mongoose';
+import validator from 'validator';
 
 const appointmentSchema = new mongoose.Schema({
   firstName: {
@@ -26,7 +26,7 @@ const appointmentSchema = new mongoose.Schema({
   },
   aadhaar: {
     type: String,
-    required: false, // aadhaar is optional
+    required: false,
     minLength: [12, 'Aadhaar Must Contain Only 12 Digits!'],
     maxLength: [12, 'Aadhaar Must Contain Only 12 Digits!'],
   },
@@ -79,6 +79,6 @@ const appointmentSchema = new mongoose.Schema({
     enum: ['Pending', 'Accepted', 'Rejected', 'Updated'],
     default: 'Pending',
   },
-})
+});
 
-export const Appointment = mongoose.model("Appointment", appointmentSchema);
+export const Appointment = mongoose.model('Appointment', appointmentSchema);

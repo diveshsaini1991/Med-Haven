@@ -1,39 +1,39 @@
-import React, { useRef, useEffect } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import React, { useRef, useEffect } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Departments = () => {
   const departmentsArray = [
-    { name: "Pediatrics", imageUrl: "/departments/pedia.jpg" },
-    { name: "Orthopedics", imageUrl: "/departments/ortho.jpg" },
-    { name: "Cardiology", imageUrl: "/departments/cardio.jpg" },
-    { name: "Neurology", imageUrl: "/departments/neuro.jpg" },
-    { name: "Oncology", imageUrl: "/departments/onco.jpg" },
-    { name: "Radiology", imageUrl: "/departments/radio.jpg" },
-    { name: "Physical Therapy", imageUrl: "/departments/therapy.jpg" },
-    { name: "Dermatology", imageUrl: "/departments/derma.jpg" },
-    { name: "ENT", imageUrl: "/departments/ent.jpg" },
+    { name: 'Pediatrics', imageUrl: '/departments/pedia.jpg' },
+    { name: 'Orthopedics', imageUrl: '/departments/ortho.jpg' },
+    { name: 'Cardiology', imageUrl: '/departments/cardio.jpg' },
+    { name: 'Neurology', imageUrl: '/departments/neuro.jpg' },
+    { name: 'Oncology', imageUrl: '/departments/onco.jpg' },
+    { name: 'Radiology', imageUrl: '/departments/radio.jpg' },
+    { name: 'Physical Therapy', imageUrl: '/departments/therapy.jpg' },
+    { name: 'Dermatology', imageUrl: '/departments/derma.jpg' },
+    { name: 'ENT', imageUrl: '/departments/ent.jpg' },
   ];
 
   const wrapperRef = useRef(null);
 
   useEffect(() => {
-    const baseSpeed = 100; 
+    const baseSpeed = 100;
     let scrollVelocity = 0;
     let lastScrollY = window.scrollY;
-    let direction = 1; 
+    let direction = 1;
 
     const wrapper = wrapperRef.current;
-    const deptCards = wrapper.querySelectorAll(".dept-card");
+    const deptCards = wrapper.querySelectorAll('.dept-card');
 
     deptCards.forEach((card) => {
       wrapper.appendChild(card.cloneNode(true));
     });
 
     let totalWidth = 0;
-    wrapper.querySelectorAll(".dept-card").forEach((card) => {
+    wrapper.querySelectorAll('.dept-card').forEach((card) => {
       totalWidth += card.offsetWidth;
     });
 
@@ -69,18 +69,18 @@ const Departments = () => {
       lastScrollY = window.scrollY;
 
       if (scrollDiff > 0) {
-        direction = 1; 
+        direction = 1;
       } else if (scrollDiff < 0) {
-        direction = -1; 
+        direction = -1;
       }
 
-      scrollVelocity = Math.min(Math.abs(scrollDiff) * 5, 150); 
+      scrollVelocity = Math.min(Math.abs(scrollDiff) * 5, 150);
     };
 
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener('scroll', onScroll);
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener('scroll', onScroll);
     };
   }, []);
 
@@ -91,7 +91,6 @@ const Departments = () => {
           Departments
         </h2>
 
-        
         <div className="overflow-hidden">
           <div ref={wrapperRef} className="flex">
             {departmentsArray.map((depart, index) => (

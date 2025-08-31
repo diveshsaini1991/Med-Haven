@@ -1,11 +1,11 @@
-import React, { useContext, useState, useRef, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { GiHamburgerMenu } from "react-icons/gi";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { Context } from "../main";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
+import React, { useContext, useState, useRef, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { GiHamburgerMenu } from 'react-icons/gi';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { Context } from '../main';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
 
 const Navbar = () => {
   const [show, setShow] = useState(false);
@@ -15,16 +15,16 @@ const Navbar = () => {
   const navbarRef = useRef();
 
   const NAV_LINKS = [
-    { label: "Home", to: "/" },
-    { label: "Book Appointment", to: "/appointment" },
-    { label: "My Appointments", to: "/myappointments", requiresAuth: true },
-    { label: "Text", to: "/chat", requiresAuth: true },
-    { label: "About Us", to: "/about" }
+    { label: 'Home', to: '/' },
+    { label: 'Book Appointment', to: '/appointment' },
+    { label: 'My Appointments', to: '/myappointments', requiresAuth: true },
+    { label: 'Text', to: '/chat', requiresAuth: true },
+    { label: 'About Us', to: '/about' },
   ];
 
   // Optionally, remove the filter if all authenticated routes
   const visibleLinks = NAV_LINKS.filter(
-    link => !link.requiresAuth || isAuthenticated
+    (link) => !link.requiresAuth || isAuthenticated
   );
 
   useGSAP(
@@ -33,7 +33,7 @@ const Navbar = () => {
         y: -40,
         opacity: 0,
         duration: 0.9,
-        ease: "power3.out"
+        ease: 'power3.out',
       });
     },
     { scope: navbarRef }
@@ -49,12 +49,12 @@ const Navbar = () => {
       setIsAuthenticated(false);
       toast.success(res.data.message);
     } catch (err) {
-      toast.error(err.response?.data?.message || "Logout failed");
+      toast.error(err.response?.data?.message || 'Logout failed');
     }
   };
 
   const goToLogin = () => {
-    navigateTo("/login");
+    navigateTo('/login');
   };
 
   // Always auto-close mobile drawer on route change
@@ -63,7 +63,7 @@ const Navbar = () => {
   }, [location]);
 
   // Hide navbar on /chat route
-  if (location.pathname === "/chat") return null;
+  if (location.pathname === '/chat') return null;
 
   return (
     <nav
@@ -84,8 +84,8 @@ const Navbar = () => {
                 to={link.to}
                 className={`font-medium px-3 py-2 rounded-md transition text-base ${
                   location.pathname === link.to
-                    ? "text-blue-700 underline underline-offset-4"
-                    : "text-gray-700 dark:text-gray-200 hover:text-blue-700"
+                    ? 'text-blue-700 underline underline-offset-4'
+                    : 'text-gray-700 dark:text-gray-200 hover:text-blue-700'
                 }`}
               >
                 {link.label}
@@ -129,8 +129,8 @@ const Navbar = () => {
               onClick={() => setShow(false)}
               className={`block font-semibold text-lg px-2 py-2 rounded ${
                 location.pathname === link.to
-                  ? "text-blue-700 underline underline-offset-4"
-                  : "text-gray-700 dark:text-gray-200 hover:text-blue-700"
+                  ? 'text-blue-700 underline underline-offset-4'
+                  : 'text-gray-700 dark:text-gray-200 hover:text-blue-700'
               }`}
             >
               {link.label}
