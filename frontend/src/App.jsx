@@ -20,6 +20,7 @@ import Login from './Pages/Login';
 import MyAppointments from './Pages/MyAppointments';
 import EditAppointment from './Pages/EditAppointment';
 import Chat from './Pages/Chat';
+import Profile from './Pages/Profile';
 
 const AppContent = () => {
   const { isAuthenticated, setIsAuthenticated, setUser } = useContext(Context);
@@ -54,6 +55,7 @@ const AppContent = () => {
         <Route path="/myappointments" element={<MyAppointments />} />
         <Route path="/appointment/edit/:id" element={<EditAppointment />} />
         <Route path="/about" element={<AboutUs />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
       </Routes>
