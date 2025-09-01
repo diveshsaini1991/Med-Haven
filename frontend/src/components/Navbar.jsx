@@ -1,6 +1,7 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { GiHamburgerMenu } from 'react-icons/gi';
+import { FaUserCircle } from 'react-icons/fa';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Context } from '../main';
@@ -22,7 +23,7 @@ const Navbar = () => {
     { label: 'About Us', to: '/about' },
   ];
 
-  // Optionally, remove the filter if all authenticated routes
+  // Filter links according to auth status
   const visibleLinks = NAV_LINKS.filter(
     (link) => !link.requiresAuth || isAuthenticated
   );
@@ -57,7 +58,7 @@ const Navbar = () => {
     navigateTo('/login');
   };
 
-  // Always auto-close mobile drawer on route change
+  // Auto-close mobile drawer on route change
   useEffect(() => {
     setShow(false);
   }, [location]);
@@ -73,7 +74,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-4">
           <Link to="/" className="flex items-center gap-3">
-            <span className="font-bold text-blue-700 text-xl tracking-tight hidden sm:block">
+            <span className="font-bold text-blue-700 text-xl tracking-tight block">
               MedHaven
             </span>
           </Link>
@@ -95,12 +96,9 @@ const Navbar = () => {
 
           <div className="hidden md:flex">
             {isAuthenticated ? (
-              <button
-                onClick={handleLogout}
-                className="px-5 py-2 rounded-xl bg-blue-700 text-white hover:bg-blue-800 transition font-semibold shadow"
-              >
-                LOGOUT
-              </button>
+              <Link to="/profile" className="flex items-center justify-center">
+                <FaUserCircle className="text-blue-700 dark:text-blue-300 text-3xl hover:text-blue-500 transition" />
+              </Link>
             ) : (
               <button
                 onClick={goToLogin}
@@ -110,6 +108,7 @@ const Navbar = () => {
               </button>
             )}
           </div>
+
           {/* Hamburger */}
           <button
             className="md:hidden text-blue-700 dark:text-blue-300 text-3xl rounded-md focus:outline-none transition"
@@ -137,15 +136,13 @@ const Navbar = () => {
             </Link>
           ))}
           {isAuthenticated ? (
-            <button
-              onClick={() => {
-                handleLogout();
-                setShow(false);
-              }}
-              className="w-full px-5 py-2 rounded-xl bg-blue-700 text-white hover:bg-blue-800 transition font-semibold shadow"
+            <Link
+              to="/profile"
+              onClick={() => setShow(false)}
+              className="flex w-full items-center justify-center py-2"
             >
-              LOGOUT
-            </button>
+              <FaUserCircle className="text-blue-700 dark:text-blue-300 text-3xl hover:text-blue-500 transition" />
+            </Link>
           ) : (
             <button
               onClick={() => {
