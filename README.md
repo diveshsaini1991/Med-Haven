@@ -4,7 +4,7 @@
 
 Transforming Healthcare, Empowering Lives Daily
 
-![last commit](https://img.shields.io/badge/last_commit-august-blue)
+![last commit](https://img.shields.io/badge/last_commit-september-blue)
 ![javascript](https://img.shields.io/badge/javascript-93.7%25-yellow)
 ![languages](https://img.shields.io/badge/languages-3-blue)
 
