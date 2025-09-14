@@ -7,7 +7,6 @@ import axios from 'axios';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
 
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
 
@@ -17,30 +16,27 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await axios
-        .post(
-          `${VITE_BACKEND_URL}/api/v1/user/login`,
-          { email, password, confirmPassword, role: 'Doctor' },
-          {
-            withCredentials: true,
-            headers: { 'Content-Type': 'application/json' },
-          }
-        )
-        .then((res) => {
-          toast.success(res.data.message);
-          setIsAuthenticated(true);
-          setEmail('');
-          setPassword('');
-          setConfirmPassword('');
-          navigateTo('/');
-        });
+      const res = await axios.post(
+        `${VITE_BACKEND_URL}/api/v1/user/login`,
+        { email, password, role: 'Doctor' },
+        {
+          withCredentials: true,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+
+      toast.success(res.data.message);
+      setIsAuthenticated(true);
+      setEmail('');
+      setPassword('');
+      navigateTo('/');
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data?.message || 'Login failed');
     }
   };
 
   if (isAuthenticated) {
-    return <Navigate to={'/'} />;
+    return <Navigate to="/" />;
   }
 
   return (
@@ -73,13 +69,6 @@ const Login = () => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="text-2xl p-4 pl-10 rounded-lg border border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
-          <input
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
             className="text-2xl p-4 pl-10 rounded-lg border border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
           <div className="flex justify-center">
