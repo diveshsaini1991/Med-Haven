@@ -173,7 +173,7 @@ const MessageForm = () => {
                     setDoctorFirstName('');
                     setDoctorLastName('');
                   }}
-                  className="form-animate input-field select-dark"
+                  className="form-animate input-field select-dark hover:cursor-pointer"
                 >
                   <option value="">Select Department</option>
                   {departmentsArray.map((depart, index) => (
@@ -189,7 +189,7 @@ const MessageForm = () => {
                     setDoctorFirstName(firstName);
                     setDoctorLastName(lastName || '');
                   }}
-                  className="form-animate input-field select-dark"
+                  className="form-animate input-field select-dark hover:cursor-pointer"
                   disabled={!department}
                 >
                   <option value="">Select Doctor</option>
@@ -220,7 +220,7 @@ const MessageForm = () => {
             <div className="text-center form-animate">
               <button
                 type="submit"
-                className=" px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition w-full border-2 border-white"
+                className=" px-8 py-3 bg-blue-600 hover:bg-blue-700 cursor-pointer text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition w-full border-2 border-white"
               >
                 Send Message
               </button>

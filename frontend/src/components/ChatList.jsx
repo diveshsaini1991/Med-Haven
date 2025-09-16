@@ -18,7 +18,7 @@ const ChatList = ({
     } bg-white dark:bg-gray-800 flex flex-col p-4 overflow-hidden custom-scroll`}
   >
     <button
-      className="mb-4 px-4 py-2 rounded bg-blue-600 text-white font-bold self-start"
+      className="mb-4 px-4 py-2 rounded bg-blue-600 hover:cursor-pointer text-white font-bold self-start"
       onClick={() => navigate('/')}
     >
       ← Back

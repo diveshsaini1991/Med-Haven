@@ -218,7 +218,7 @@ const ChatRoom = ({
               />
               <button
                 onClick={onImageIconClick}
-                className="p-2 rounded-r-lg bg-blue-600 hover:bg-blue-700 text-white"
+                className="p-2 rounded-r-lg bg-blue-600 hover:bg-blue-700 cursor-pointer text-white"
                 title="Upload Image"
               >
                 <HiOutlinePhotograph size={24} />
@@ -226,7 +226,7 @@ const ChatRoom = ({
               <button
                 onClick={handleSend}
                 disabled={sendingDisabled}
-                className={`px-4 py-2 rounded-r-lg font-semibold text-white ${
+                className={`px-4 py-2 rounded-r-lg font-semibold hover:cursor-pointer text-white ${
                   sendingDisabled
                     ? 'bg-blue-300 cursor-not-allowed'
                     : 'bg-blue-600 hover:bg-blue-700'

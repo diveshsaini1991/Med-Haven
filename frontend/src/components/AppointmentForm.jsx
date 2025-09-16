@@ -228,7 +228,7 @@ const AppointmentForm = ({
                 name="gender"
                 value={form.gender}
                 onChange={handleChange}
-                className="form-animate input-field select-dark"
+                className="form-animate input-field select-dark hover:cursor-pointer"
               >
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
@@ -262,7 +262,7 @@ const AppointmentForm = ({
                 name="department"
                 value={form.department}
                 onChange={handleChange}
-                className="form-animate input-field select-dark"
+                className="form-animate input-field select-dark hover:cursor-pointer"
               >
                 {departmentsArray.map((depart, index) => (
                   <option value={depart} key={index}>
@@ -273,7 +273,7 @@ const AppointmentForm = ({
               <select
                 value={`${form.doctor_firstName} ${form.doctor_lastName}`}
                 onChange={handleDoctorChange}
-                className="form-animate input-field select-dark"
+                className="form-animate input-field select-dark hover:cursor-pointer"
                 disabled={!form.department}
               >
                 <option value="">Select Doctor</option>
@@ -318,14 +318,14 @@ const AppointmentForm = ({
             <div className="form-animate text-center flex flex-col md:flex-row md:justify-center md:space-x-4">
               <button
                 type="submit"
-                className={`px-8 py-3 ${isEdit ? 'w-1/2 bg-yellow-500 hover:bg-yellow-600' : 'w-full bg-blue-600 hover:bg-blue-700'} text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition border-2 border-white`}
+                className={`px-8 py-3 ${isEdit ? 'w-1/2 bg-yellow-500 hover:bg-yellow-600' : 'w-full bg-blue-600 hover:bg-blue-700'} text-white font-semibold rounded-full shadow-lg transform hover:scale-105 cursor-pointer transition border-2 border-white`}
               >
                 {submitText}
               </button>
               {isEdit && (
                 <button
                   type="button"
-                  className="w-1/2 px-8 py-3 mt-4 md:mt-0 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition border-2 border-white"
+                  className="w-1/2 px-8 py-3 mt-4 md:mt-0 bg-gray-500 hover:bg-gray-600 cursor-pointer text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition border-2 border-white"
                   onClick={onCancel}
                 >
                   Cancel

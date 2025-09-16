@@ -84,7 +84,7 @@ const Profile = () => {
         {/* Pencil Icon edit button */}
         <div className="absolute top-4 right-4 sm:top-3 sm:right-3">
           <button
-            className="text-blue-400 hover:text-blue-300 transition-colors duration-200"
+            className="text-blue-400 hover:text-blue-300 cursor-pointer transition-colors duration-200"
             title="Edit (disabled)"
           >
             <FaPencilAlt size={20} />
@@ -117,7 +117,7 @@ const Profile = () => {
         {/* Logout Button, right bottom */}
         <div className="absolute right-4 bottom-4">
           <button
-            className="flex items-center gap-2 text-red-500 hover:text-red-600 font-semibold py-2 px-2 transition"
+            className="flex items-center gap-2 text-red-500 hover:text-red-600 cursor-pointer font-semibold py-2 px-2 transition"
             onClick={() => setShowLogoutModal(true)}
           >
             <FaSignOutAlt size={16} />
