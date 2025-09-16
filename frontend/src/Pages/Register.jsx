@@ -14,7 +14,6 @@ const Register = () => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [aadhaar, setaadhaar] = useState('');
   const [dob, setDob] = useState(null);
   const [gender, setGender] = useState('');
   const [password, setPassword] = useState('');
@@ -80,7 +79,6 @@ const Register = () => {
           lastName,
           email,
           phone,
-          aadhaar,
           dob: dobIsoString,
           gender,
           password,
@@ -97,7 +95,6 @@ const Register = () => {
         lastName,
         email,
         phone,
-        aadhaar,
         dob: dobIsoString,
         gender,
         password,
@@ -136,7 +133,6 @@ const Register = () => {
       setLastName('');
       setEmail('');
       setPhone('');
-      setaadhaar('');
       setDob(null);
       setGender('');
       setPassword('');
@@ -225,15 +221,8 @@ const Register = () => {
                 />
               </div>
 
-              {/* Aadhaar and Date of Birth */}
+              {/* Date of Birth & Gender */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <input
-                  type="number"
-                  placeholder="Aadhaar Number"
-                  value={aadhaar}
-                  onChange={(e) => setaadhaar(e.target.value)}
-                  className="register-animate input-field"
-                />
                 <div className="register-animate overflow-visible relative react-datepicker-popper">
                   <DatePicker
                     selected={dob}
@@ -247,10 +236,6 @@ const Register = () => {
                     dropdownMode="select"
                   />
                 </div>
-              </div>
-
-              {/* Gender & Password */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <select
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
@@ -260,6 +245,10 @@ const Register = () => {
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                 </select>
+              </div>
+
+              {/*Password */}
+              <div className="grid grid-cols-1 md:grid-cols-2">
                 <input
                   type="password"
                   placeholder="Create Password"
