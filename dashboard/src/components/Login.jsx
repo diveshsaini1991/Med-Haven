@@ -7,7 +7,6 @@ import axios from 'axios';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
 
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
 
@@ -20,7 +19,7 @@ const Login = () => {
       await axios
         .post(
           `${VITE_BACKEND_URL}/api/v1/user/login`,
-          { email, password, confirmPassword, role: 'Admin' },
+          { email, password, role: 'Admin' },
           {
             withCredentials: true,
             headers: { 'Content-Type': 'application/json' },
@@ -32,10 +31,9 @@ const Login = () => {
           navigateTo('/');
           setEmail('');
           setPassword('');
-          setConfirmPassword('');
         });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || 'Login failed');
     }
   };
 
@@ -61,12 +59,6 @@ const Login = () => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <div style={{ justifyContent: 'center', alignItems: 'center' }}>
             <button type="submit">Login</button>
