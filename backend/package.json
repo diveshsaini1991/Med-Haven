@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "Medhaven's Backend",
+  "description": "MedHaven backend server with Express, Socket.IO, and MongoDB",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/diveshsaini1991/hospital-management-system.git"
+    "url": "git+https://github.com/diveshsaini1991/Med-Haven.git"
   },
-  "author": "Divesh Saini",
-  "license": "ISC",
+  "author": "Divesh Saini diveshsaini1991@gmail.com",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/diveshsaini1991/hospital-management-system/issues"
+    "url": "https://github.com/diveshsaini1991/Med-Haven/issues"
   },
-  "homepage": "https://github.com/diveshsaini1991/hospital-management-system#readme",
+  "homepage": "https://github.com/diveshsaini1991/Med-Haven#readme",
   "dependencies": {
     "@upstash/ratelimit": "^2.0.6",
     "@upstash/redis": "^1.35.3",
@@ -33,5 +33,11 @@
     "nodemailer": "^7.0.5",
     "socket.io": "^4.8.1",
     "validator": "^13.12.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }
