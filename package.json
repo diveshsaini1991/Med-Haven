@@ -1,6 +1,8 @@
 {
   "name": "med-haven",
   "version": "2.0.2",
+  "description": "MedHaven: An open source medical platform for doctors and users",
+  "main": "backend/app.js",
   "scripts": {
     "dev:frontend": "cd frontend && npm run dev",
     "dev:dashboard": "cd dashboard && npm run dev",
@@ -13,10 +15,15 @@
     "url": "git+https://github.com/diveshsaini1991/Med-Haven.git"
   },
   "keywords": [
-    "med-haven"
+    "med-haven",
+    "medical",
+    "healthcare",
+    "open-source",
+    "react",
+    "nodejs"
   ],
-  "author": "diveshsaini1991",
-  "license": "ISC",
+  "author": "Divesh Saini diveshsaini1991@gmail.com",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/diveshsaini1991/Med-Haven/issues"
   },
@@ -24,5 +31,8 @@
   "devDependencies": {
     "concurrently": "^9.1.2",
     "prettier": "^3.6.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }

@@ -2,6 +2,7 @@
   "name": "docdashboard",
   "private": true,
   "version": "0.0.0",
+  "description": "MedHaven doctor dashboard frontend with React and TailwindCSS",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -31,5 +32,10 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "vite": "^5.1.4"
+  },
+  "author": "Divesh Saini diveshsaini1991@gmail.com",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
   }
 }
