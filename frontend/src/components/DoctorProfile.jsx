@@ -71,7 +71,7 @@ const DoctorProfile = ({ doctor, onBack }) => {
         {/* Back Button */}
         <button
           onClick={onBack}
-          className="mb-4 px-4 py-2 rounded bg-blue-600 text-white font-bold self-start"
+          className="mb-4 px-4 py-2 rounded bg-blue-600 hover:cursor-pointer text-white font-bold self-start"
         >
           ← Back
         </button>
@@ -136,7 +136,7 @@ const DoctorProfile = ({ doctor, onBack }) => {
           {/* Close button fixed top-right */}
           <button
             onClick={closeOverlay}
-            className="fixed top-4 right-4 text-white text-4xl font-bold  bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center hover:bg-opacity-75 focus:outline-none z-60"
+            className="fixed top-4 right-4 text-white text-4xl font-bold  bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center hover:bg-opacity-75 cursor-pointer focus:outline-none z-60"
             aria-label="Close image"
           >
             &times;
