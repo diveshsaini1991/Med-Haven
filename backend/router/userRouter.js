@@ -2,6 +2,7 @@ import express from 'express';
 import {
   addNewAdmin,
   addNewDoctor,
+  changePatientPassword,
   getAllDoctors,
   getUserDetails,
   login,
@@ -33,5 +34,6 @@ router.get('/doctor/logout', isDoctorAuthanticated, logoutDoctor);
 router.post('/doctor/addnew', isAdminAuthanticated, addNewDoctor);
 router.post('/patient/verify-otp', verifyPatientOtp);
 router.post('/patient/resend-otp', resendOtp);
+router.post('/patient/change-password', isPatientAuthanticated, changePatientPassword);
 
 export default router;
