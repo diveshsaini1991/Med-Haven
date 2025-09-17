@@ -331,7 +331,6 @@ export const changePatientPassword = catchAsyncErrors(async (req, res, next) => 
     return next(new ErrorHandler('Old password is incorrect.', 401));
   }
 
-  // Password strength validation
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
   if (!passwordRegex.test(newPassword)) {
     return next(
