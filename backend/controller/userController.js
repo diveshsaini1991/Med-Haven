@@ -312,3 +312,31 @@ export const addNewDoctor = catchAsyncErrors(async (req, res, next) => {
     doctor,
   });
 });
+
+export const changePatientPassword = catchAsyncErrors(async (req, res, next) => {
+  const { oldPassword, newPassword } = req.body;
+  if (!oldPassword || !newPassword) {
+    return next(new ErrorHandler('Old and new password are required.', 400));
+  }
+
+  // Fetch patient from DB (req.user is set by auth middleware)
+  const user = await User.findById(req.user._id).select('+password');
+  if (!user) {
+    return next(new ErrorHandler('User not found.', 404));
+  }
+
+  // Verify old password
+  const isMatch = await user.comparepassword(oldPassword);
+  if (!isMatch) {
+    return next(new ErrorHandler('Old password is incorrect.', 401));
+  }
+
+  // Assign new password (hashing/validation handled in schema)
+  user.password = newPassword;
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: 'Password changed successfully.',
+  });
+});
