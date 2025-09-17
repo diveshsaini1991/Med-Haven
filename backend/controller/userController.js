@@ -326,25 +326,13 @@ export const changePatientPassword = catchAsyncErrors(async (req, res, next) => 
   }
 
   // Verify old password
-  const isMatch = await bcrypt.compare(oldPassword, user.password);
+  const isMatch = await user.comparepassword(oldPassword);
   if (!isMatch) {
     return next(new ErrorHandler('Old password is incorrect.', 401));
   }
 
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
-  if (!passwordRegex.test(newPassword)) {
-    return next(
-      new ErrorHandler(
-        'New password must be at least 8 characters and include uppercase, lowercase, number, and special character.',
-        400
-      )
-    );
-  }
-
-  // Hash new password
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(newPassword, salt);
-  user.password = hashedPassword;
+  // Assign new password (hashing/validation handled in schema)
+  user.password = newPassword;
   await user.save();
 
   res.status(200).json({
