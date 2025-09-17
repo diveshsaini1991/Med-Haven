@@ -312,3 +312,44 @@ export const addNewDoctor = catchAsyncErrors(async (req, res, next) => {
     doctor,
   });
 });
+
+export const changePatientPassword = catchAsyncErrors(async (req, res, next) => {
+  const { oldPassword, newPassword } = req.body;
+  if (!oldPassword || !newPassword) {
+    return next(new ErrorHandler('Old and new password are required.', 400));
+  }
+
+  // Fetch patient from DB (req.user is set by auth middleware)
+  const user = await User.findById(req.user._id).select('+password');
+  if (!user) {
+    return next(new ErrorHandler('User not found.', 404));
+  }
+
+  // Verify old password
+  const isMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isMatch) {
+    return next(new ErrorHandler('Old password is incorrect.', 401));
+  }
+
+  // Password strength validation
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
+  if (!passwordRegex.test(newPassword)) {
+    return next(
+      new ErrorHandler(
+        'New password must be at least 8 characters and include uppercase, lowercase, number, and special character.',
+        400
+      )
+    );
+  }
+
+  // Hash new password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(newPassword, salt);
+  user.password = hashedPassword;
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: 'Password changed successfully.',
+  });
+});
