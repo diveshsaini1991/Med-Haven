@@ -1,12 +1,12 @@
 import axios from 'axios';
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { io } from 'socket.io-client';
-import { Context } from '../main';
 import { toast } from 'react-toastify';
+import { io } from 'socket.io-client';
 import ChatList from '../components/ChatList';
 import ChatRoom from '../components/ChatRoom';
 import DoctorProfile from '../components/DoctorProfile';
+import { Context } from '../main';
 
 const socket = io(import.meta.env.VITE_BACKEND_URL, {
   transports: ['websocket'],
@@ -121,6 +121,7 @@ const Chat = () => {
 
   const handleImageUpload = async (file) => {
     if (!file) return;
+    toast.info('Uploading image...');
 
     const allowedFormats = [
       'image/png',
