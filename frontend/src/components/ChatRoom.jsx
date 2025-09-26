@@ -1,5 +1,5 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { HiOutlinePhotograph } from 'react-icons/hi';
 import { getLowResCloudinaryUrl } from '../utils/cloudinaryHelpers';
 
@@ -209,7 +209,7 @@ const ChatRoom = ({
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                className="flex-1 px-4 py-2 rounded-l-lg border bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="flex-1 px-4 py-2 rounded-lg border bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
                 placeholder="Type your message"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') handleSend();
@@ -218,7 +218,7 @@ const ChatRoom = ({
               />
               <button
                 onClick={onImageIconClick}
-                className="p-2 rounded-r-lg bg-blue-600 hover:bg-blue-700 cursor-pointer text-white"
+                className="p-2 rounded-lg bg-blue-600 hover:bg-blue-700 cursor-pointer text-white"
                 title="Upload Image"
               >
                 <HiOutlinePhotograph size={24} />
@@ -226,7 +226,7 @@ const ChatRoom = ({
               <button
                 onClick={handleSend}
                 disabled={sendingDisabled}
-                className={`px-4 py-2 rounded-r-lg font-semibold hover:cursor-pointer text-white ${
+                className={`px-4 py-2 rounded-lg font-semibold hover:cursor-pointer text-white ${
                   sendingDisabled
                     ? 'bg-blue-300 cursor-not-allowed'
                     : 'bg-blue-600 hover:bg-blue-700'
