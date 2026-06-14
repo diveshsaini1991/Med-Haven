@@ -34,9 +34,16 @@ jobs:
       - run: npm test
         working-directory: backend
 
-  skip:
-    needs: check-changes
-    if: needs.check-changes.outputs.backend_changed != 'true'
+  # This is the only job you set as "required" in branch protection.
+  # It always runs and always passes (as long as tests pass when they run).
+  ci-result:
     runs-on: ubuntu-latest
+    needs: [check-changes, test]
+    if: always()
     steps:
-      - run: echo "No backend changes — skipping tests"
+      - run: |
+          if [ "${{ needs.test.result }}" = "failure" ]; then
+            echo "Backend tests failed"
+            exit 1
+          fi
+          echo "CI passed (tests ${{ needs.test.result }})"
