@@ -37,7 +37,7 @@
     "validator": "^13.12.0"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0 <25.0.0"
   },
   "devDependencies": {
     "mongodb-memory-server": "^11.2.0",
