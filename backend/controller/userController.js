@@ -4,7 +4,7 @@ import ErrorHandler from '../middlewares/errorMiddleware.js';
 import { User } from '../models/userSchema.js';
 import { generateToken } from '../utils/jwtToken.js';
 import cloudinary from 'cloudinary';
-import transporter from '../utils/mailer.js';
+import { sendEmail } from '../utils/mailer.js';
 import { getOtpEmailHtml } from '../service/otpEmail.js';
 
 export const patientRegister = catchAsyncErrors(async (req, res, next) => {
@@ -29,7 +29,7 @@ export const patientRegister = catchAsyncErrors(async (req, res, next) => {
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
   await redis.set(`otp:${email}`, otp, { ex: 300 });
 
-  await transporter.sendMail({
+  await sendEmail({
     to: email,
     subject: 'Your MedHaven Registration OTP',
     html: getOtpEmailHtml(otp, firstName),
@@ -106,7 +106,7 @@ export const resendOtp = catchAsyncErrors(async (req, res, next) => {
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
   await redis.set(`otp:${email}`, otp, { ex: 300 });
 
-  await transporter.sendMail({
+  await sendEmail({
     to: email,
     subject: 'Your Registration OTP - Resend',
     html: getOtpEmailHtml(otp),
