@@ -21,6 +21,7 @@ import MyAppointments from './Pages/MyAppointments';
 import EditAppointment from './Pages/EditAppointment';
 import Chat from './Pages/Chat';
 import Profile from './Pages/Profile';
+import ForgotPassword from './Pages/ForgotPassword';
 
 const AppContent = () => {
   const { isAuthenticated, setIsAuthenticated, setUser } = useContext(Context);
@@ -58,6 +59,7 @@ const AppContent = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
       {location.pathname !== '/chat' && <Footer />}
       <ToastContainer position="top-center" />
