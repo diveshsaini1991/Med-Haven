@@ -1,0 +1,42 @@
+name: Backend Tests
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      backend_changed: ${{ steps.filter.outputs.backend }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+
+  test:
+    needs: check-changes
+    if: needs.check-changes.outputs.backend_changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+        working-directory: backend
+      - run: npm test
+        working-directory: backend
+
+  skip:
+    needs: check-changes
+    if: needs.check-changes.outputs.backend_changed != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "No backend changes — skipping tests"
