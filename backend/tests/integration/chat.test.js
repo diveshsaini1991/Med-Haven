@@ -104,6 +104,17 @@ describe('Chat Routes', () => {
       expect(res.status).toBe(403);
       expect(res.body.success).toBe(false);
     });
+
+    it('should return 404 when editing a non-existent message', async () => {
+      const fakeId = new mongoose.Types.ObjectId();
+      const res = await request(app)
+        .put(`/api/v1/chat/edit/${fakeId}`)
+        .set('Cookie', [patientCookie])
+        .send({ text: 'No such message' });
+
+      expect(res.status).toBe(404);
+      expect(res.body.success).toBe(false);
+    });
   });
 
   describe('DELETE /api/v1/chat/delete/:id', () => {
