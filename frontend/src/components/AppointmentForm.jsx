@@ -22,7 +22,6 @@ const defaultValues = {
   lastName: '',
   email: '',
   phone: '',
-  aadhaar: '',
   dob: '',
   gender: '',
   appointment_date: '',
@@ -194,16 +193,8 @@ const AppointmentForm = ({
               />
             </div>
 
-            {/* Aadhaar / Date of Birth */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <input
-                name="aadhaar"
-                type="number"
-                placeholder="Aadhaar"
-                value={form.aadhaar}
-                onChange={handleChange}
-                className="form-animate input-field"
-              />
+            {/* Date of Birth */}
+            <div className="grid grid-cols-1 gap-6">
               <DatePicker
                 selected={form.dob ? new Date(form.dob) : null}
                 onChange={(date) =>
