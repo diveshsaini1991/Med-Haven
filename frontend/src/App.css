@@ -1,13 +1,277 @@
 @import 'tailwindcss';
 
+/* Class-based dark mode: toggled by adding `.dark` to <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+  /* Calm Clinical Teal */
+  --color-teal-50: #eafbf8;
+  --color-teal-100: #cff4ee;
+  --color-teal-200: #9fe7dd;
+  --color-teal-300: #66d4c7;
+  --color-teal-400: #2fbdb2;
+  --color-teal-500: #0e9c92;
+  --color-teal-600: #0b7e76;
+  --color-teal-700: #0b5d5a;
+  --color-teal-800: #0f3f3d;
+  --color-teal-900: #0b2a29;
+
+  /* Warm sand accent */
+  --color-sand-300: #f8dda6;
+  --color-sand-400: #f2c078;
+  --color-sand-500: #e8a84f;
+
+  /* Dark surfaces */
+  --color-ink-900: #07201e;
+  --color-ink-800: #0e2c2a;
+  --color-ink-700: #14403c;
+  --color-ink-600: #1e5450;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  color: #0b2a29;
+  background: #f4fbfa;
+}
+
+.dark body {
+  color: #eafbf8;
+  background: #07201e;
+}
+
+/* ---- Ambient background ---- */
+.app-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  transition: background 0.4s ease;
+  background:
+    radial-gradient(60rem 40rem at 12% -10%, rgba(102, 212, 199, 0.35), transparent 60%),
+    radial-gradient(50rem 40rem at 100% 10%, rgba(242, 192, 120, 0.3), transparent 55%),
+    radial-gradient(50rem 50rem at 50% 120%, rgba(14, 156, 146, 0.18), transparent 60%),
+    linear-gradient(180deg, #f4fbfa 0%, #eaf6f4 100%);
+}
+
+.dark .app-ambient {
+  background:
+    radial-gradient(55rem 38rem at 10% -10%, rgba(47, 189, 178, 0.22), transparent 60%),
+    radial-gradient(48rem 40rem at 100% 5%, rgba(11, 93, 90, 0.45), transparent 55%),
+    radial-gradient(55rem 55rem at 50% 120%, rgba(14, 156, 146, 0.16), transparent 60%),
+    linear-gradient(180deg, #07201e 0%, #051917 100%);
+}
+
+.grid-bg {
+  background-image: radial-gradient(rgba(14, 156, 146, 0.1) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.dark .grid-bg {
+  background-image: radial-gradient(rgba(47, 189, 178, 0.1) 1px, transparent 1px);
+}
+
+.blob {
+  filter: blur(46px);
+  opacity: 0.55;
+}
+
+/* ---- Card depth ---- */
+.surface-card {
+  background: #fff;
+  border: 1px solid #cff4ee;
+  box-shadow: 0 10px 30px -14px rgba(11, 93, 90, 0.3);
+}
+
+.dark .surface-card {
+  background: linear-gradient(180deg, #103633 0%, #0c2a28 100%);
+  border-color: #1e5450;
+  box-shadow:
+    0 1px 0 0 rgba(159, 231, 221, 0.06) inset,
+    0 24px 50px -22px rgba(0, 0, 0, 0.7);
+}
+
+/* ---- Inputs ---- */
+.field {
+  width: 100%;
+  border-radius: 0.9rem;
+  border: 2px solid #cff4ee;
+  background: #fff;
+  padding: 0.7rem 0.95rem;
+  color: #0b2a29;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.field::placeholder {
+  color: #66d4c7;
+}
+
+.field:focus {
+  border-color: #0e9c92;
+  box-shadow: 0 0 0 4px rgba(14, 156, 146, 0.15);
+}
+
+.dark .field {
+  background: #0c2a28;
+  border-color: #1e5450;
+  color: #eafbf8;
+}
+
+.dark .field::placeholder {
+  color: #2fbdb2;
+}
+
+.dark .field:focus {
+  border-color: #2fbdb2;
+  box-shadow: 0 0 0 4px rgba(47, 189, 178, 0.18);
+}
+
+/* ---- Native select option contrast in dark ---- */
+.dark .field option {
+  background-color: #0c2a28;
+  color: #eafbf8;
+}
+
+/* ================= ANIMATIONS (pure CSS) ================= */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-16px);
+  }
+}
+@keyframes pulseSoft {
+  0% {
+    box-shadow: 0 0 0 0 rgba(14, 156, 146, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 16px rgba(14, 156, 146, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(14, 156, 146, 0);
+  }
+}
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes beat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.18);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes glow {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+@keyframes spinSlow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.reveal {
+  opacity: 0;
+}
+.reveal.in {
+  animation: fadeUp 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+.anim-floaty {
+  animation: floaty 6s ease-in-out infinite;
+}
+.anim-pulse {
+  animation: pulseSoft 2.2s ease-out infinite;
+}
+.anim-beat {
+  animation: beat 1.6s ease-in-out infinite;
+}
+.anim-glow {
+  animation: glow 5s ease-in-out infinite;
+}
+.anim-spin {
+  animation: spinSlow 26s linear infinite;
+}
+.marquee {
+  animation: marquee 32s linear infinite;
+}
+.marquee:hover {
+  animation-play-state: paused;
+}
+.ekg path {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: dash 2.4s ease-out forwards 0.2s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-floaty,
+  .anim-pulse,
+  .anim-beat,
+  .anim-glow,
+  .anim-spin,
+  .marquee {
+    animation: none !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 .custom-scroll::-webkit-scrollbar {
   width: 6px;
   background: transparent;
 }
 
 .custom-scroll::-webkit-scrollbar-thumb {
-  background-color: #e0e5ec;
+  background-color: #9fe7dd;
   border-radius: 4px;
+}
+
+.dark .custom-scroll::-webkit-scrollbar-thumb {
+  background-color: #1e5450;
 }
 
 .custom-scroll::-webkit-scrollbar-track {
@@ -16,5 +280,5 @@
 
 .custom-scroll {
   scrollbar-width: thin;
-  scrollbar-color: #e0e5ec transparent;
+  scrollbar-color: #9fe7dd transparent;
 }
