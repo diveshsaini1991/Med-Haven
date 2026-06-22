@@ -135,7 +135,7 @@ const ChatRoom = ({
   return (
     <div
       ref={containerRef}
-      className="flex-1 flex flex-col bg-gray-100 dark:bg-gray-950 p-4 overflow-hidden"
+      className="flex-1 flex flex-col bg-teal-50/40 dark:bg-ink-900 text-teal-900 dark:text-teal-50 p-4 overflow-hidden"
       style={{ paddingBottom: '50px' }}
     >
       {selectedChat ? (
@@ -155,7 +155,7 @@ const ChatRoom = ({
               <div className="w-12 h-12 bg-gray-400 rounded-full" />
             )}
             <h3 className="text-xl font-semibold">{selectedChat.name}</h3>
-            <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded dark:bg-blue-900 dark:text-blue-200">
+            <span className="rounded-full bg-teal-100 px-2 py-1 text-xs font-medium text-teal-800 dark:bg-teal-900/50 dark:text-teal-200">
               {selectedChat.department}
             </span>
           </div>
@@ -163,7 +163,7 @@ const ChatRoom = ({
           {/* Messages */}
           <div className="flex-1 overflow-y-auto mb-4 pr-2 custom-scroll">
             {messages.length === 0 && (
-              <div className="text-gray-500 text-center mt-8">
+              <div className="mt-8 text-center text-teal-700/60 dark:text-teal-200/50">
                 No messages yet
               </div>
             )}
@@ -185,7 +185,7 @@ const ChatRoom = ({
                         onClick={() => startEditing(msg)}
                         title="Edit message"
                         aria-label="Edit message"
-                        className="text-gray-400 hover:text-blue-500 cursor-pointer"
+                        className="cursor-pointer text-teal-400 hover:text-teal-600"
                       >
                         <FaPencilAlt size={13} />
                       </button>
@@ -193,19 +193,19 @@ const ChatRoom = ({
                         onClick={() => onDeleteClick(msg)}
                         title="Delete message"
                         aria-label="Delete message"
-                        className="text-gray-400 hover:text-red-500 cursor-pointer"
+                        className="cursor-pointer text-teal-400 hover:text-rose-500"
                       >
                         <FaTrash size={13} />
                       </button>
                     </div>
                   )}
                   <div
-                    className={`px-4 py-2 rounded-lg max-w-xs ${
+                    className={`max-w-xs rounded-2xl px-4 py-2 ${
                       msg.isDeleted
-                        ? 'bg-gray-200 dark:bg-gray-800 text-gray-500 italic'
+                        ? 'bg-teal-100/70 italic text-teal-600 dark:bg-ink-600/40 dark:text-teal-200/60'
                         : isOwn
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-300 dark:bg-gray-700 text-black dark:text-white'
+                          ? 'bg-teal-500 text-white shadow-md shadow-teal-500/20'
+                          : 'bg-white text-teal-900 shadow-sm dark:bg-ink-600 dark:text-teal-50'
                     }`}
                   >
                     {msg.isDeleted ? (
@@ -221,7 +221,7 @@ const ChatRoom = ({
                             if (e.key === 'Escape') cancelEditing();
                           }}
                           autoFocus
-                          className="px-2 py-1 rounded text-black dark:text-white bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:outline-none"
+                          className="rounded-lg border border-teal-200 bg-white px-2 py-1 text-teal-900 focus:outline-none dark:border-ink-600 dark:bg-ink-900 dark:text-teal-50"
                         />
                         <div className="flex gap-2 justify-end text-xs">
                           <button
@@ -267,7 +267,7 @@ const ChatRoom = ({
 
           {/* Uploaded images preview above input controls */}
           {uploadedImageUrls.length > 0 && (
-            <div className="flex space-x-2 overflow-x-auto p-2 bg-gray-200 dark:bg-gray-800 rounded-t-lg mb-2">
+            <div className="mb-2 flex space-x-2 overflow-x-auto rounded-t-2xl bg-teal-100/70 p-2 dark:bg-ink-600/50">
               {uploadedImageUrls.map((url, idx) => (
                 <div key={idx} className="relative">
                   <img
@@ -301,13 +301,13 @@ const ChatRoom = ({
           />
 
           {/* Input controls fixed at bottom */}
-          <div className="fixed bottom-0 right-0 bg-gray-100 dark:bg-gray-950 w-full md:w-2/3 p-2 shadow-inner z-40 rounded-t-lg">
+          <div className="fixed bottom-0 right-0 z-40 w-full rounded-t-2xl bg-teal-50/90 p-2 shadow-inner backdrop-blur dark:bg-ink-900/90 md:w-2/3">
             <div className="flex items-center gap-2">
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                className="flex-1 px-4 py-2 rounded-lg border bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="flex-1 rounded-xl border-2 border-teal-200 bg-white px-4 py-2 text-teal-900 focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/40 dark:border-ink-600 dark:bg-ink-900 dark:text-teal-50"
                 placeholder="Type your message"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') handleSend();
@@ -316,7 +316,7 @@ const ChatRoom = ({
               />
               <button
                 onClick={onImageIconClick}
-                className="p-2 rounded-lg bg-blue-600 hover:bg-blue-700 cursor-pointer text-white"
+                className="cursor-pointer rounded-xl bg-teal-500 p-2 text-white shadow-lg shadow-teal-500/30 transition hover:-translate-y-0.5 hover:bg-teal-600"
                 title="Upload Image"
               >
                 <HiOutlinePhotograph size={24} />
@@ -324,10 +324,10 @@ const ChatRoom = ({
               <button
                 onClick={handleSend}
                 disabled={sendingDisabled}
-                className={`px-4 py-2 rounded-lg font-semibold hover:cursor-pointer text-white ${
+                className={`rounded-xl px-4 py-2 font-semibold text-white transition hover:cursor-pointer ${
                   sendingDisabled
-                    ? 'bg-blue-300 cursor-not-allowed'
-                    : 'bg-blue-600 hover:bg-blue-700'
+                    ? 'cursor-not-allowed bg-teal-300'
+                    : 'bg-teal-500 shadow-lg shadow-teal-500/30 hover:-translate-y-0.5 hover:bg-teal-600'
                 }`}
               >
                 Send
@@ -339,7 +339,7 @@ const ChatRoom = ({
           {showImageOverlay && (
             <div
               ref={overlayRef}
-              className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm bg-opacity-70"
+              className="fixed inset-0 z-50 flex items-center justify-center bg-teal-950/50 backdrop-blur-sm dark:bg-black/70"
               onClick={closeOverlay}
             >
               {/* Close button */}
