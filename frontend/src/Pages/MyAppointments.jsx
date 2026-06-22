@@ -109,31 +109,33 @@ const MyAppointments = () => {
   };
 
   const getStatusClass = (status) => {
-    if (!status) return 'text-blue-600';
+    if (!status) return 'text-teal-600 font-semibold';
     switch (status.toLowerCase()) {
       case 'accepted':
-        return 'text-green-600 font-semibold';
+        return 'text-emerald-500 font-semibold';
       case 'rejected':
-        return 'text-red-600 font-semibold';
+        return 'text-rose-500 font-semibold';
       case 'updated':
-        return 'text-yellow-500 font-semibold';
+        return 'text-amber-500 font-semibold';
       case 'pending':
       default:
-        return 'text-blue-600 font-semibold';
+        return 'text-teal-600 dark:text-teal-300 font-semibold';
     }
   };
 
   return (
-    <div className="bg-gray-800 pt-3 text-gray-300">
-      <section className="max-w-5xl mx-auto p-4 min-h-96 bg-gray-800">
-        <h1 className="text-3xl font-bold text-center my-16 text-blue-700 dark:text-blue-400">
+    <div className="min-h-screen pt-20 text-teal-900 dark:text-teal-50">
+      <section className="mx-auto min-h-96 max-w-5xl p-4">
+        <h1 className="my-12 text-center text-3xl font-extrabold tracking-tight text-teal-900 dark:text-teal-50">
           My Appointments
         </h1>
 
         {loading ? (
-          <p className="text-center">Loading appointments...</p>
+          <p className="text-center text-teal-700/80 dark:text-teal-100/70">
+            Loading appointments...
+          </p>
         ) : appointments.length === 0 ? (
-          <p className="text-center text-gray-600 dark:text-gray-400">
+          <p className="text-center text-teal-700/70 dark:text-teal-200/60">
             No appointments found.
           </p>
         ) : (
@@ -141,35 +143,49 @@ const MyAppointments = () => {
             {appointments.map((appt) => (
               <div
                 key={appt._id}
-                className="appointment-card p-4 rounded-lg shadow-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0"
+                className="appointment-card surface-card flex flex-col items-start justify-between space-y-4 rounded-3xl p-6 md:flex-row md:items-center md:space-y-0"
               >
-                <div className="flex-1">
+                <div className="flex-1 space-y-1 text-teal-800 dark:text-teal-100">
                   <p>
-                    <span className="font-semibold">Patient:</span>{' '}
+                    <span className="font-semibold text-teal-900 dark:text-teal-50">
+                      Patient:
+                    </span>{' '}
                     {appt.firstName} {appt.lastName}
                   </p>
                   <p>
-                    <span className="font-semibold">Appointment Date:</span>{' '}
+                    <span className="font-semibold text-teal-900 dark:text-teal-50">
+                      Appointment Date:
+                    </span>{' '}
                     {new Date(appt.appointment_date).toLocaleDateString()}
                   </p>
                   <p>
-                    <span className="font-semibold">Doctor:</span>{' '}
+                    <span className="font-semibold text-teal-900 dark:text-teal-50">
+                      Doctor:
+                    </span>{' '}
                     {appt.doctor.firstName} {appt.doctor.lastName}
                   </p>
                   <p>
-                    <span className="font-semibold">Department:</span>{' '}
+                    <span className="font-semibold text-teal-900 dark:text-teal-50">
+                      Department:
+                    </span>{' '}
                     {appt.department}
                   </p>
                   <p>
-                    <span className="font-semibold">Address:</span>{' '}
+                    <span className="font-semibold text-teal-900 dark:text-teal-50">
+                      Address:
+                    </span>{' '}
                     {appt.address}
                   </p>
                   <p>
-                    <span className="font-semibold">Visited Before:</span>{' '}
+                    <span className="font-semibold text-teal-900 dark:text-teal-50">
+                      Visited Before:
+                    </span>{' '}
                     {appt.hasVisited ? 'Yes' : 'No'}
                   </p>
                   <p>
-                    <span className="font-semibold">Status:</span>{' '}
+                    <span className="font-semibold text-teal-900 dark:text-teal-50">
+                      Status:
+                    </span>{' '}
                     <span className={getStatusClass(appt.status)}>
                       {appt.status || 'Pending'}
                     </span>
@@ -182,10 +198,10 @@ const MyAppointments = () => {
                     disabled={
                       !canDeleteOrEditAppointment(appt.appointment_date)
                     }
-                    className={`px-4 py-2 rounded-lg text-white font-semibold shadow-lg transition ${
+                    className={`rounded-xl px-5 py-2 font-bold text-white shadow-lg transition hover:-translate-y-0.5 ${
                       canDeleteOrEditAppointment(appt.appointment_date)
-                        ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
-                        : 'bg-gray-500 cursor-not-allowed'
+                        ? 'cursor-pointer bg-teal-500 shadow-teal-500/30 hover:bg-teal-600'
+                        : 'cursor-not-allowed bg-teal-900/30 dark:bg-ink-600'
                     }`}
                     aria-label="Edit Appointment"
                     title={
@@ -204,10 +220,10 @@ const MyAppointments = () => {
                     disabled={
                       !canDeleteOrEditAppointment(appt.appointment_date)
                     }
-                    className={`px-4 py-2 rounded-lg text-white font-semibold shadow-lg transition ${
+                    className={`rounded-xl px-5 py-2 font-bold text-white shadow-lg transition hover:-translate-y-0.5 ${
                       canDeleteOrEditAppointment(appt.appointment_date)
-                        ? 'bg-red-600 hover:bg-red-700 cursor-pointer'
-                        : 'bg-gray-500 cursor-not-allowed'
+                        ? 'cursor-pointer bg-rose-500 shadow-rose-500/30 hover:bg-rose-600'
+                        : 'cursor-not-allowed bg-teal-900/30 dark:bg-ink-600'
                     }`}
                     aria-label="Delete Appointment"
                     title={

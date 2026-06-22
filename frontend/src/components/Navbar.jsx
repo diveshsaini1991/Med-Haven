@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { Context } from '../main';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import ThemeToggle from './ui/ThemeToggle';
 
 const Navbar = () => {
   const [show, setShow] = useState(false);
@@ -66,70 +67,81 @@ const Navbar = () => {
   // Hide navbar on /chat route
   if (location.pathname === '/chat') return null;
 
+  const linkClass = (to) =>
+    `rounded-lg px-3 py-2 text-sm font-semibold transition ${
+      location.pathname === to
+        ? 'bg-teal-100 text-teal-700 dark:bg-ink-700 dark:text-teal-200'
+        : 'text-teal-700 hover:bg-teal-50 dark:text-teal-100 dark:hover:bg-ink-700'
+    }`;
+
   return (
     <nav
       ref={navbarRef}
-      className="backdrop-blur bg-white/80 dark:bg-gray-900/80 border-b border-blue-50 dark:border-gray-800 fixed w-full z-50 shadow-lg"
+      className="fixed z-50 w-full border-b border-teal-100/80 bg-white/75 backdrop-blur dark:border-ink-700 dark:bg-ink-900/75"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between py-4">
-          <Link to="/" className="flex items-center gap-3">
-            <span className="font-bold text-blue-700 text-xl tracking-tight block">
-              MedHaven
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between py-3.5">
+          <Link to="/" className="flex items-center gap-2.5">
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-teal-500 text-white shadow-lg shadow-teal-500/30">
+              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
+                <path d="M11 2h2v9h9v2h-9v9h-2v-9H2v-2h9z" />
+              </svg>
+            </span>
+            <span className="text-xl font-extrabold tracking-tight text-teal-900 dark:text-teal-50">
+              Med<span className="text-teal-500">Haven</span>
             </span>
           </Link>
-          <div className="hidden md:flex items-center space-x-8">
+
+          <div className="hidden items-center gap-1 md:flex">
             {visibleLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className={`font-medium px-3 py-2 rounded-md transition text-base ${
-                  location.pathname === link.to
-                    ? 'text-blue-700 underline underline-offset-4'
-                    : 'text-gray-700 dark:text-gray-200 hover:text-blue-700'
-                }`}
-              >
+              <Link key={link.to} to={link.to} className={linkClass(link.to)}>
                 {link.label}
               </Link>
             ))}
           </div>
 
-          <div className="hidden md:flex">
+          <div className="hidden items-center gap-3 md:flex">
+            <ThemeToggle />
             {isAuthenticated ? (
               <Link to="/profile" className="flex items-center justify-center">
-                <FaUserCircle className="text-blue-700 dark:text-blue-300 text-3xl hover:text-blue-500 transition" />
+                <FaUserCircle className="text-3xl text-teal-600 transition hover:text-teal-500 dark:text-teal-300" />
               </Link>
             ) : (
               <button
                 onClick={goToLogin}
-                className="px-5 py-2 rounded-xl bg-cyan-500 text-white hover:bg-cyan-600 transition font-semibold shadow"
+                className="rounded-xl bg-teal-500 px-5 py-2 text-sm font-bold text-white shadow-lg shadow-teal-500/30 transition hover:bg-teal-600"
               >
-                LOGIN
+                Login
               </button>
             )}
           </div>
 
           {/* Hamburger */}
-          <button
-            className="md:hidden text-blue-700 dark:text-blue-300 text-3xl rounded-md focus:outline-none transition"
-            onClick={() => setShow((prev) => !prev)}
-          >
-            <GiHamburgerMenu />
-          </button>
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle />
+            <button
+              className="rounded-lg p-2 text-3xl text-teal-600 transition dark:text-teal-300"
+              onClick={() => setShow((prev) => !prev)}
+              aria-label="Toggle menu"
+            >
+              <GiHamburgerMenu />
+            </button>
+          </div>
         </div>
       </div>
+
       {/* Mobile Drawer */}
       {show && (
-        <div className="md:hidden bg-white dark:bg-gray-900 border-t shadow-lg px-6 py-6 space-y-5">
+        <div className="space-y-4 border-t border-teal-100 bg-white px-6 py-6 dark:border-ink-700 dark:bg-ink-900 md:hidden">
           {visibleLinks.map((link) => (
             <Link
               key={link.to}
               to={link.to}
               onClick={() => setShow(false)}
-              className={`block font-semibold text-lg px-2 py-2 rounded ${
+              className={`block rounded-lg px-2 py-2 text-lg font-semibold ${
                 location.pathname === link.to
-                  ? 'text-blue-700 underline underline-offset-4'
-                  : 'text-gray-700 dark:text-gray-200 hover:text-blue-700'
+                  ? 'bg-teal-100 text-teal-700 dark:bg-ink-700 dark:text-teal-200'
+                  : 'text-teal-700 hover:bg-teal-50 dark:text-teal-100 dark:hover:bg-ink-700'
               }`}
             >
               {link.label}
@@ -141,7 +153,7 @@ const Navbar = () => {
               onClick={() => setShow(false)}
               className="flex w-full items-center justify-center py-2"
             >
-              <FaUserCircle className="text-blue-700 dark:text-blue-300 text-3xl hover:text-blue-500 transition" />
+              <FaUserCircle className="text-3xl text-teal-600 transition hover:text-teal-500 dark:text-teal-300" />
             </Link>
           ) : (
             <button
@@ -149,9 +161,9 @@ const Navbar = () => {
                 goToLogin();
                 setShow(false);
               }}
-              className="w-full px-5 py-2 rounded-xl bg-cyan-500 text-white hover:bg-cyan-600 transition font-semibold shadow"
+              className="w-full rounded-xl bg-teal-500 px-5 py-2 font-bold text-white shadow-lg shadow-teal-500/30 transition hover:bg-teal-600"
             >
-              LOGIN
+              Login
             </button>
           )}
         </div>

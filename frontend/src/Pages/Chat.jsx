@@ -6,6 +6,7 @@ import { io } from 'socket.io-client';
 import ChatList from '../components/ChatList';
 import ChatRoom from '../components/ChatRoom';
 import DoctorProfile from '../components/DoctorProfile';
+import ThemeToggle from '../components/ui/ThemeToggle';
 import { Context } from '../main';
 
 const socket = io(import.meta.env.VITE_BACKEND_URL, {
@@ -320,7 +321,12 @@ const Chat = () => {
   };
 
   return (
-    <div className="fixed inset-0 min-h-screen w-screen bg-gray-900 flex text-white">
+    <div className="fixed inset-0 flex min-h-screen w-screen bg-teal-50/60 text-teal-900 dark:bg-ink-900 dark:text-teal-50">
+      {/* Floating theme toggle (navbar is hidden on /chat) */}
+      <div className="absolute right-4 top-4 z-50">
+        <ThemeToggle className="bg-white/80 backdrop-blur dark:bg-ink-900/70" />
+      </div>
+
       {/* ChatList */}
       {(!isMobile || mobileViewMode === 'list') && (
         <ChatList
@@ -345,7 +351,7 @@ const Chat = () => {
               {isMobile && (
                 <button
                   onClick={onBackFromChatRoom}
-                  className="mb-2 px-4 py-2 rounded bg-blue-600 text-white font-bold self-start"
+                  className="mb-2 self-start rounded-xl bg-teal-500 px-4 py-2 font-bold text-white shadow-lg shadow-teal-500/30 transition hover:-translate-y-0.5 hover:bg-teal-600"
                 >
                   ← Back
                 </button>
