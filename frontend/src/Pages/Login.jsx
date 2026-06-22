@@ -69,18 +69,24 @@ const Login = () => {
   }
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-950 px-4">
+    <section className="grid-bg flex min-h-screen items-center justify-center px-4 py-24">
       <div
         ref={formRef}
-        className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 max-w-md w-full p-8"
+        className="surface-card w-full max-w-md rounded-3xl p-8"
       >
-        <h2 className="login-animate text-3xl font-bold text-center text-blue-700 dark:text-blue-400 mb-4">
-          Sign In
+        <div className="login-animate mb-4 flex justify-center">
+          <span className="grid h-14 w-14 place-items-center rounded-2xl bg-teal-500 text-white shadow-lg shadow-teal-500/30">
+            <svg viewBox="0 0 24 24" className="h-7 w-7" fill="currentColor">
+              <path d="M11 2h2v9h9v2h-9v9h-2v-9H2v-2h9z" />
+            </svg>
+          </span>
+        </div>
+        <h2 className="login-animate mb-2 text-center text-3xl font-extrabold tracking-tight text-teal-900 dark:text-teal-50">
+          Welcome back
         </h2>
-        <p className="login-animate text-center text-gray-600 dark:text-gray-300 mb-6">
-          Welcome back to <span className="font-semibold">MedHaven</span>.
-          Please enter your details to log in to your account and manage your
-          appointments.
+        <p className="login-animate mb-6 text-center text-teal-700/80 dark:text-teal-100/70">
+          Sign in to <span className="font-semibold">MedHaven</span> to manage
+          your appointments and connect with your care team.
         </p>
 
         <form onSubmit={handleLogin} className="space-y-5">
@@ -89,32 +95,32 @@ const Login = () => {
             placeholder="Email Address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="login-animate w-full px-4 py-3 border-2 border-white text-gray-900 dark:text-white bg-white dark:bg-gray-800 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 dark:placeholder-gray-300"
+            className="login-animate field"
           />
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="login-animate w-full px-4 py-3 border-2 border-white text-gray-900 dark:text-white bg-white dark:bg-gray-800 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 dark:placeholder-gray-300"
+            className="login-animate field"
           />
 
           <div className="login-animate text-right text-sm">
             <Link
               to="/forgot-password"
-              className="text-blue-600 dark:text-blue-400 hover:underline"
+              className="font-semibold text-teal-600 hover:underline dark:text-teal-300"
             >
               Forgot Password?
             </Link>
           </div>
 
-          <div className="login-animate flex items-center justify-center text-sm gap-2">
-            <span className="text-gray-700 dark:text-gray-200">
+          <div className="login-animate flex items-center justify-center gap-2 text-sm">
+            <span className="text-teal-700/80 dark:text-teal-100/70">
               Not Registered?
             </span>
             <Link
               to="/register"
-              className="text-blue-600 dark:text-blue-400 hover:underline"
+              className="font-semibold text-teal-600 hover:underline dark:text-teal-300"
             >
               Register Now
             </Link>
@@ -122,7 +128,7 @@ const Login = () => {
           <div className="login-animate">
             <button
               type="submit"
-              className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition  border-2 border-white"
+              className="anim-pulse w-full rounded-2xl bg-teal-500 px-6 py-3.5 font-bold text-white shadow-lg shadow-teal-500/30 transition hover:-translate-y-0.5 hover:bg-teal-600"
             >
               Login
             </button>

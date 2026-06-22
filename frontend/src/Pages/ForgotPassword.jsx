@@ -121,18 +121,18 @@ const ForgotPassword = () => {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-950 px-4">
+    <section className="grid-bg flex min-h-screen items-center justify-center px-4 py-24">
       <div
         ref={formRef}
-        className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 max-w-md w-full p-8"
+        className="surface-card w-full max-w-md rounded-3xl p-8"
       >
-        <h2 className="forgot-animate text-3xl font-bold text-center text-blue-700 dark:text-blue-400 mb-4">
+        <h2 className="forgot-animate mb-4 text-center text-3xl font-extrabold tracking-tight text-teal-900 dark:text-teal-50">
           Forgot Password
         </h2>
 
         {step === 1 && (
           <form onSubmit={requestOtp} className="space-y-5">
-            <p className="forgot-animate text-center text-gray-600 dark:text-gray-300 mb-2">
+            <p className="forgot-animate mb-2 text-center text-teal-700/80 dark:text-teal-100/70">
               Enter your registered email and we'll send you a one-time
               password to reset it.
             </p>
@@ -141,12 +141,12 @@ const ForgotPassword = () => {
               placeholder="Registered Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="forgot-animate w-full px-4 py-3 border-2 border-white text-gray-900 dark:text-white bg-white dark:bg-gray-800 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 dark:placeholder-gray-300"
+              className="forgot-animate field"
             />
             <button
               type="submit"
               disabled={loading}
-              className="forgot-animate w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition border-2 border-white disabled:opacity-50"
+              className="forgot-animate w-full rounded-2xl bg-teal-500 px-6 py-3.5 font-bold text-white shadow-lg shadow-teal-500/30 transition hover:-translate-y-0.5 hover:bg-teal-600 disabled:opacity-50"
             >
               {loading ? 'Sending...' : 'Send OTP'}
             </button>
@@ -155,7 +155,7 @@ const ForgotPassword = () => {
 
         {step === 2 && (
           <form onSubmit={continueToReset} className="space-y-5">
-            <p className="text-center text-gray-600 dark:text-gray-300 mb-2">
+            <p className="mb-2 text-center text-teal-700/80 dark:text-teal-100/70">
               Enter the OTP sent to <strong>{email}</strong>
             </p>
             <input
@@ -163,12 +163,12 @@ const ForgotPassword = () => {
               placeholder="Enter OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              className="w-full px-4 py-3 text-gray-900 dark:text-white rounded-lg bg-white dark:bg-gray-800 border-2 border-white focus:ring-2 focus:ring-blue-500 outline-none transition placeholder-gray-500 dark:placeholder-gray-300"
+              className="field"
             />
             <div className="flex justify-between gap-3">
               <button
                 type="submit"
-                className="w-[48%] px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition"
+                className="w-[48%] rounded-2xl bg-teal-500 px-6 py-3 font-bold text-white shadow-lg shadow-teal-500/30 transition hover:-translate-y-0.5 hover:bg-teal-600"
               >
                 Continue
               </button>
@@ -176,10 +176,10 @@ const ForgotPassword = () => {
                 type="button"
                 onClick={handleResendOtp}
                 disabled={resendCooldown > 0 || loading}
-                className={`w-[48%] px-6 py-3 rounded-full shadow-lg transform hover:scale-105 transition ${
+                className={`w-[48%] rounded-2xl px-6 py-3 font-bold transition hover:-translate-y-0.5 ${
                   resendCooldown > 0
-                    ? 'bg-gray-400 cursor-not-allowed text-white'
-                    : 'border border-blue-600 text-blue-600 hover:bg-blue-50'
+                    ? 'cursor-not-allowed border-2 border-teal-100 text-teal-400 dark:border-ink-600 dark:text-teal-200/50'
+                    : 'border-2 border-teal-200 text-teal-700 hover:border-teal-400 dark:border-ink-600 dark:text-teal-100'
                 }`}
               >
                 {resendCooldown > 0
@@ -192,7 +192,7 @@ const ForgotPassword = () => {
 
         {step === 3 && (
           <form onSubmit={resetPassword} className="space-y-5">
-            <p className="text-center text-gray-600 dark:text-gray-300 mb-2">
+            <p className="mb-2 text-center text-teal-700/80 dark:text-teal-100/70">
               Set a new password for <strong>{email}</strong>
             </p>
             <input
@@ -201,7 +201,7 @@ const ForgotPassword = () => {
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               autoComplete="new-password"
-              className="w-full px-4 py-3 text-gray-900 dark:text-white rounded-lg bg-white dark:bg-gray-800 border-2 border-white focus:ring-2 focus:ring-blue-500 outline-none transition placeholder-gray-500 dark:placeholder-gray-300"
+              className="field"
             />
             <input
               type="password"
@@ -209,25 +209,25 @@ const ForgotPassword = () => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               autoComplete="new-password"
-              className="w-full px-4 py-3 text-gray-900 dark:text-white rounded-lg bg-white dark:bg-gray-800 border-2 border-white focus:ring-2 focus:ring-blue-500 outline-none transition placeholder-gray-500 dark:placeholder-gray-300"
+              className="field"
             />
             <button
               type="submit"
               disabled={loading}
-              className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition border-2 border-white disabled:opacity-50"
+              className="w-full rounded-2xl bg-teal-500 px-6 py-3.5 font-bold text-white shadow-lg shadow-teal-500/30 transition hover:-translate-y-0.5 hover:bg-teal-600 disabled:opacity-50"
             >
               {loading ? 'Resetting...' : 'Reset Password'}
             </button>
           </form>
         )}
 
-        <div className="flex items-center justify-center text-sm gap-2 mt-6">
-          <span className="text-gray-700 dark:text-gray-200">
+        <div className="mt-6 flex items-center justify-center gap-2 text-sm">
+          <span className="text-teal-700/80 dark:text-teal-100/70">
             Remembered your password?
           </span>
           <Link
             to="/login"
-            className="text-blue-600 dark:text-blue-400 hover:underline"
+            className="font-semibold text-teal-600 hover:underline dark:text-teal-300"
           >
             Back to Login
           </Link>
