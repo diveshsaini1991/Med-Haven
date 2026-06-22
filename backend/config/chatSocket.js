@@ -35,6 +35,10 @@ export const setupChatSocket = (httpServer) => {
       socket.to(chatRoomId).emit('messageEdited', { messageId, text });
     });
 
+    socket.on('deleteMessage', ({ chatRoomId, messageId }) => {
+      socket.to(chatRoomId).emit('messageDeleted', { messageId });
+    });
+
     socket.on('typing', ({ chatRoomId, userId }) => {
       socket.to(chatRoomId).emit('showTyping', { userId });
     });

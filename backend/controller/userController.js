@@ -1,11 +1,13 @@
-import redis from '../config/redis.js';
 import { catchAsyncErrors } from '../middlewares/catchAsyncErrors.js';
 import ErrorHandler from '../middlewares/errorMiddleware.js';
 import { User } from '../models/userSchema.js';
 import { generateToken } from '../utils/jwtToken.js';
 import cloudinary from 'cloudinary';
-import { sendEmail } from '../utils/mailer.js';
-import { getOtpEmailHtml } from '../service/otpEmail.js';
+import {
+  sendOtp,
+  verifyOtp,
+  invalidateOtp,
+} from '../service/otpService.js';
 
 export const patientRegister = catchAsyncErrors(async (req, res, next) => {
   const { firstName, lastName, email, phone, password, gender, dob, role } =
@@ -26,13 +28,10 @@ export const patientRegister = catchAsyncErrors(async (req, res, next) => {
   if (user) {
     return next(new ErrorHandler('User Already Registered !', 400));
   }
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  await redis.set(`otp:${email}`, otp, { ex: 300 });
-
-  await sendEmail({
-    to: email,
+  await sendOtp({
+    email,
+    name: firstName,
     subject: 'Your MedHaven Registration OTP',
-    html: getOtpEmailHtml(otp, firstName),
   });
 
   res.status(200).json({
@@ -67,9 +66,8 @@ export const verifyPatientOtp = catchAsyncErrors(async (req, res, next) => {
   ) {
     return next(new ErrorHandler('All Fields Are Required!', 400));
   }
-  const savedOtp = await redis.get(`otp:${email}`);
-
-  if (!savedOtp || savedOtp != otp) {
+  const isOtpValid = await verifyOtp(email, otp);
+  if (!isOtpValid) {
     return next(new ErrorHandler('Invalid or expired OTP!', 400));
   }
   let user = await User.findOne({ email });
@@ -86,7 +84,7 @@ export const verifyPatientOtp = catchAsyncErrors(async (req, res, next) => {
     dob,
     role,
   });
-  await redis.del(`otp:${email}`);
+  await invalidateOtp(email);
   generateToken(user, 'User Registered!', 200, res);
 });
 
@@ -103,13 +101,9 @@ export const resendOtp = catchAsyncErrors(async (req, res, next) => {
     );
   }
 
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  await redis.set(`otp:${email}`, otp, { ex: 300 });
-
-  await sendEmail({
-    to: email,
+  await sendOtp({
+    email,
     subject: 'Your Registration OTP - Resend',
-    html: getOtpEmailHtml(otp),
   });
 
   res.status(200).json({
@@ -340,3 +334,66 @@ export const changePatientPassword = catchAsyncErrors(async (req, res, next) => 
     message: 'Password changed successfully.',
   });
 });
+
+export const forgotPatientPassword = catchAsyncErrors(
+  async (req, res, next) => {
+    const { email } = req.body;
+    if (!email) {
+      return next(new ErrorHandler('Email is required.', 400));
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return next(
+        new ErrorHandler('No account found with this email.', 404)
+      );
+    }
+
+    await sendOtp({
+      email,
+      name: user.firstName,
+      subject: 'Your MedHaven Password Reset OTP',
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'OTP sent to your email for password reset.',
+      email,
+    });
+  }
+);
+
+export const resetPatientPassword = catchAsyncErrors(
+  async (req, res, next) => {
+    const { email, otp, newPassword } = req.body;
+    if (!email || !otp || !newPassword) {
+      return next(
+        new ErrorHandler('Email, OTP and new password are required.', 400)
+      );
+    }
+    if (newPassword.length < 6) {
+      return next(
+        new ErrorHandler('Password Must Contain At Least 6 Characters!', 400)
+      );
+    }
+
+    const user = await User.findOne({ email }).select('+password');
+    if (!user) {
+      return next(new ErrorHandler('No account found with this email.', 404));
+    }
+
+    const isOtpValid = await verifyOtp(email, otp);
+    if (!isOtpValid) {
+      return next(new ErrorHandler('Invalid or expired OTP!', 400));
+    }
+
+    user.password = newPassword;
+    await user.save();
+    await invalidateOtp(email);
+
+    res.status(200).json({
+      success: true,
+      message: 'Password reset successfully. Please log in.',
+    });
+  }
+);

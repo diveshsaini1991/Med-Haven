@@ -117,6 +117,59 @@ describe('Chat Routes', () => {
     });
   });
 
+  describe('DELETE /api/v1/chat/delete/:id', () => {
+    it('should allow sender to soft-delete their message', async () => {
+      const chat = await Chat.create({
+        chatRoomId,
+        senderId: patient._id,
+        receiverId: doctor._id,
+        text: 'Delete me',
+      });
+
+      const res = await request(app)
+        .delete(`/api/v1/chat/delete/${chat._id}`)
+        .set('Cookie', [patientCookie]);
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.chatId).toBe(chat._id.toString());
+
+      const updated = await Chat.findById(chat._id);
+      expect(updated.isDeleted).toBe(true);
+      expect(updated.text).toBe('');
+      expect(updated.deletedAt).toBeDefined();
+    });
+
+    it('should not allow non-sender to delete', async () => {
+      const chat = await Chat.create({
+        chatRoomId,
+        senderId: patient._id,
+        receiverId: doctor._id,
+        text: 'Patient message',
+      });
+
+      const res = await request(app)
+        .delete(`/api/v1/chat/delete/${chat._id}`)
+        .set('Cookie', [doctorCookie]);
+
+      expect(res.status).toBe(403);
+      expect(res.body.success).toBe(false);
+
+      const updated = await Chat.findById(chat._id);
+      expect(updated.isDeleted).toBe(false);
+    });
+
+    it('should return 404 for a non-existent message', async () => {
+      const fakeId = new mongoose.Types.ObjectId();
+      const res = await request(app)
+        .delete(`/api/v1/chat/delete/${fakeId}`)
+        .set('Cookie', [patientCookie]);
+
+      expect(res.status).toBe(404);
+      expect(res.body.success).toBe(false);
+    });
+  });
+
   describe('PUT /api/v1/chat/read/:id', () => {
     it('should mark chat as read', async () => {
       const chat = await Chat.create({
