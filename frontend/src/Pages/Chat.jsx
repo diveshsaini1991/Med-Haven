@@ -135,6 +135,20 @@ const Chat = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const onMessageEdited = ({ messageId, text }) => {
+      setMessages((prev) =>
+        prev.map((m) =>
+          m._id === messageId ? { ...m, text, isEdited: true } : m
+        )
+      );
+    };
+    socket.on('messageEdited', onMessageEdited);
+    return () => {
+      socket.off('messageEdited', onMessageEdited);
+    };
+  }, []);
+
   const handleImageUpload = async (file) => {
     if (!file) return;
     toast.info('Uploading image...');
@@ -250,6 +264,28 @@ const Chat = () => {
     }
   };
 
+  const handleEditMessage = async (msg, newText) => {
+    const trimmed = (newText || '').trim();
+    if (!msg?._id || !selectedChat || !user?._id || !trimmed) return;
+    const chatRoomId = generateChatRoomId(user._id, selectedChat.id);
+    try {
+      await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/chat/edit/${msg._id}`,
+        { text: trimmed },
+        { withCredentials: true }
+      );
+      socket.emit('editMessage', { chatRoomId, messageId: msg._id, text: trimmed });
+      setMessages((prev) =>
+        prev.map((m) =>
+          m._id === msg._id ? { ...m, text: trimmed, isEdited: true } : m
+        )
+      );
+      toast.success('Message edited');
+    } catch {
+      toast.error('Failed to edit message');
+    }
+  };
+
   const toggleDepartment = (dept) => {
     setDepartmentsOpen((prev) => ({
       ...prev,
@@ -333,6 +369,7 @@ const Chat = () => {
                 setUploadedImageUrls={setUploadedImageUrls}
                 handleMultipleImageUpload={handleMultipleImageUpload}
                 handleDeleteMessage={handleDeleteMessage}
+                handleEditMessage={handleEditMessage}
               />
             </div>
           )}

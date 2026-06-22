@@ -1,7 +1,7 @@
 import gsap from 'gsap';
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { HiOutlinePhotograph } from 'react-icons/hi';
-import { FaTrash } from 'react-icons/fa';
+import { FaTrash, FaPencilAlt } from 'react-icons/fa';
 import { getLowResCloudinaryUrl } from '../utils/cloudinaryHelpers';
 
 const ChatRoom = ({
@@ -22,11 +22,35 @@ const ChatRoom = ({
   setUploadedImageUrls,
   handleMultipleImageUpload,
   handleDeleteMessage,
+  handleEditMessage,
 }) => {
+  const [editingId, setEditingId] = useState(null);
+  const [editText, setEditText] = useState('');
+
   const onDeleteClick = (msg) => {
     if (window.confirm('Delete this message? This cannot be undone.')) {
       handleDeleteMessage(msg);
     }
+  };
+
+  const startEditing = (msg) => {
+    setEditingId(msg._id);
+    setEditText(msg.text || '');
+  };
+
+  const cancelEditing = () => {
+    setEditingId(null);
+    setEditText('');
+  };
+
+  const saveEditing = async (msg) => {
+    const trimmed = editText.trim();
+    if (!trimmed || trimmed === msg.text) {
+      cancelEditing();
+      return;
+    }
+    await handleEditMessage(msg, trimmed);
+    cancelEditing();
   };
 
   const [showImageOverlay, setShowImageOverlay] = useState(false);
@@ -145,7 +169,8 @@ const ChatRoom = ({
             )}
             {messages.map((msg, idx) => {
               const isOwn = msg.senderId === user._id;
-              const canDelete = isOwn && msg._id && !msg.isDeleted;
+              const canModify = isOwn && msg._id && !msg.isDeleted;
+              const isEditing = editingId === msg._id;
               return (
                 <div
                   key={msg._id || idx}
@@ -154,15 +179,25 @@ const ChatRoom = ({
                   }`}
                   ref={idx === messages.length - 1 ? lastMessageRef : null}
                 >
-                  {canDelete && (
-                    <button
-                      onClick={() => onDeleteClick(msg)}
-                      title="Delete message"
-                      aria-label="Delete message"
-                      className="opacity-0 group-hover:opacity-100 transition text-gray-400 hover:text-red-500 cursor-pointer"
-                    >
-                      <FaTrash size={14} />
-                    </button>
+                  {canModify && !isEditing && (
+                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
+                      <button
+                        onClick={() => startEditing(msg)}
+                        title="Edit message"
+                        aria-label="Edit message"
+                        className="text-gray-400 hover:text-blue-500 cursor-pointer"
+                      >
+                        <FaPencilAlt size={13} />
+                      </button>
+                      <button
+                        onClick={() => onDeleteClick(msg)}
+                        title="Delete message"
+                        aria-label="Delete message"
+                        className="text-gray-400 hover:text-red-500 cursor-pointer"
+                      >
+                        <FaTrash size={13} />
+                      </button>
+                    </div>
                   )}
                   <div
                     className={`px-4 py-2 rounded-lg max-w-xs ${
@@ -175,6 +210,34 @@ const ChatRoom = ({
                   >
                     {msg.isDeleted ? (
                       <div>This message was deleted</div>
+                    ) : isEditing ? (
+                      <div className="flex flex-col gap-2">
+                        <input
+                          type="text"
+                          value={editText}
+                          onChange={(e) => setEditText(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') saveEditing(msg);
+                            if (e.key === 'Escape') cancelEditing();
+                          }}
+                          autoFocus
+                          className="px-2 py-1 rounded text-black dark:text-white bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:outline-none"
+                        />
+                        <div className="flex gap-2 justify-end text-xs">
+                          <button
+                            onClick={() => saveEditing(msg)}
+                            className="px-2 py-1 rounded bg-white/20 hover:bg-white/30"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={cancelEditing}
+                            className="px-2 py-1 rounded bg-white/20 hover:bg-white/30"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
                     ) : (
                       <>
                         <div>{msg.text}</div>
@@ -188,6 +251,11 @@ const ChatRoom = ({
                               onClick={() => openImageOverlay(url)}
                             />
                           ))}
+                        {msg.isEdited && (
+                          <span className="block text-[10px] opacity-70 mt-1">
+                            (edited)
+                          </span>
+                        )}
                       </>
                     )}
                   </div>
