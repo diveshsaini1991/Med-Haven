@@ -15,32 +15,34 @@ const ChatList = ({
   <div
     className={`${
       isMobile && isActiveView ? 'w-full' : 'w-1/3'
-    } bg-white dark:bg-gray-800 flex flex-col p-4 overflow-hidden custom-scroll`}
+    } custom-scroll flex flex-col overflow-hidden border-r border-teal-100 bg-white p-4 text-teal-900 dark:border-ink-600 dark:bg-ink-900 dark:text-teal-50`}
   >
     <button
-      className="mb-4 px-4 py-2 rounded bg-blue-600 hover:cursor-pointer text-white font-bold self-start"
+      className="mb-4 self-start rounded-xl bg-teal-500 px-4 py-2 font-bold text-white shadow-lg shadow-teal-500/30 transition hover:-translate-y-0.5 hover:cursor-pointer hover:bg-teal-600"
       onClick={() => navigate('/')}
     >
       ← Back
     </button>
-    <h2 className="font-bold text-lg mb-2 text-blue-700 dark:text-blue-400">
+    <h2 className="mb-2 text-lg font-bold text-teal-700 dark:text-teal-300">
       Chats
     </h2>
-    <div className="flex-1 overflow-y-auto pr-2 custom-scroll">
+    <div className="custom-scroll flex-1 overflow-y-auto pr-2">
       {Object.keys(departments).length === 0 && (
-        <div className="text-gray-500 py-8">No doctors available for chat</div>
+        <div className="py-8 text-teal-700/60 dark:text-teal-200/50">
+          No doctors available for chat
+        </div>
       )}
       {Object.entries(departments).map(([dept, doctors]) => (
         <div key={dept}>
           {/* Folder header */}
           <div
             onClick={() => toggleDepartment(dept)}
-            className="flex items-center cursor-pointer px-2 py-2 rounded transition hover:bg-gray-100 dark:hover:bg-gray-900 select-none font-semibold text-base"
+            className="flex cursor-pointer select-none items-center rounded-xl px-2 py-2 text-base font-semibold transition hover:bg-teal-50 dark:hover:bg-ink-600/40"
           >
             {departmentsOpen[dept] ? (
-              <FaFolderMinus className="text-blue-600 mr-2" size={22} />
+              <FaFolderMinus className="mr-2 text-teal-500" size={22} />
             ) : (
-              <FaFolderPlus className="text-blue-600 mr-2" size={22} />
+              <FaFolderPlus className="mr-2 text-teal-500" size={22} />
             )}
             <span>{dept}</span>
           </div>
@@ -50,10 +52,10 @@ const ChatList = ({
               {doctors.map((doc) => (
                 <li
                   key={doc.id}
-                  className={`cursor-pointer flex items-center gap-2 px-2 py-2 mb-1 rounded transition ${
+                  className={`mb-1 flex cursor-pointer items-center gap-2 rounded-xl px-2 py-2 transition ${
                     selectedChat?.id === doc.id
-                      ? 'bg-blue-100 dark:bg-blue-900'
-                      : 'hover:bg-gray-100 dark:hover:bg-gray-900'
+                      ? 'bg-teal-100 dark:bg-teal-900/40'
+                      : 'hover:bg-teal-50 dark:hover:bg-ink-600/40'
                   }`}
                   onClick={() => setSelectedChat(doc)}
                 >
