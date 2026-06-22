@@ -99,6 +99,15 @@ const Login = () => {
             className="login-animate w-full px-4 py-3 border-2 border-white text-gray-900 dark:text-white bg-white dark:bg-gray-800 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 dark:placeholder-gray-300"
           />
 
+          <div className="login-animate text-right text-sm">
+            <Link
+              to="/forgot-password"
+              className="text-blue-600 dark:text-blue-400 hover:underline"
+            >
+              Forgot Password?
+            </Link>
+          </div>
+
           <div className="login-animate flex items-center justify-center text-sm gap-2">
             <span className="text-gray-700 dark:text-gray-200">
               Not Registered?

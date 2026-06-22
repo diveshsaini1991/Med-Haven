@@ -252,6 +252,119 @@ describe('User Routes', () => {
     });
   });
 
+  describe('POST /api/v1/user/patient/forgot-password', () => {
+    it('should send a reset OTP for a registered email', async () => {
+      redis.set.mockResolvedValue('OK');
+      await createTestUser({ email: 'forgot@test.com', role: 'Patient' });
+
+      const res = await request(app)
+        .post('/api/v1/user/patient/forgot-password')
+        .send({ email: 'forgot@test.com' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.email).toBe('forgot@test.com');
+    });
+
+    it('should fail for an unregistered email', async () => {
+      const res = await request(app)
+        .post('/api/v1/user/patient/forgot-password')
+        .send({ email: 'nobody@test.com' });
+
+      expect(res.status).toBe(404);
+      expect(res.body.success).toBe(false);
+    });
+
+    it('should fail when email is missing', async () => {
+      const res = await request(app)
+        .post('/api/v1/user/patient/forgot-password')
+        .send({});
+
+      expect(res.status).toBe(400);
+      expect(res.body.success).toBe(false);
+    });
+  });
+
+  describe('POST /api/v1/user/patient/reset-password', () => {
+    it('should reset password with a valid OTP', async () => {
+      redis.get.mockResolvedValue('123456');
+      redis.del.mockResolvedValue(1);
+      await createTestUser({
+        email: 'reset@test.com',
+        password: 'OldPass123',
+        role: 'Patient',
+      });
+
+      const res = await request(app)
+        .post('/api/v1/user/patient/reset-password')
+        .send({
+          email: 'reset@test.com',
+          otp: '123456',
+          newPassword: 'NewPass456',
+        });
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+
+      const login = await request(app)
+        .post('/api/v1/user/login')
+        .send({
+          email: 'reset@test.com',
+          password: 'NewPass456',
+          role: 'Patient',
+        });
+      expect(login.status).toBe(200);
+    });
+
+    it('should fail with an invalid OTP', async () => {
+      redis.get.mockResolvedValue('123456');
+      await createTestUser({ email: 'reset2@test.com', role: 'Patient' });
+
+      const res = await request(app)
+        .post('/api/v1/user/patient/reset-password')
+        .send({
+          email: 'reset2@test.com',
+          otp: '000000',
+          newPassword: 'NewPass456',
+        });
+
+      expect(res.status).toBe(400);
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toContain('OTP');
+    });
+
+    it('should fail with a weak new password', async () => {
+      redis.get.mockResolvedValue('123456');
+      await createTestUser({ email: 'reset3@test.com', role: 'Patient' });
+
+      const res = await request(app)
+        .post('/api/v1/user/patient/reset-password')
+        .send({
+          email: 'reset3@test.com',
+          otp: '123456',
+          newPassword: '123',
+        });
+
+      expect(res.status).toBe(400);
+      expect(res.body.success).toBe(false);
+    });
+
+    it('should fail for an unregistered email', async () => {
+      redis.get.mockResolvedValue('123456');
+
+      const res = await request(app)
+        .post('/api/v1/user/patient/reset-password')
+        .send({
+          email: 'ghost@test.com',
+          otp: '123456',
+          newPassword: 'NewPass456',
+        });
+
+      expect(res.status).toBe(404);
+      expect(res.body.success).toBe(false);
+    });
+  });
+
   describe('GET /api/v1/user/patient/logout', () => {
     it('should clear patient cookie', async () => {
       const patient = await createTestUser({ email: 'logout@test.com', role: 'Patient' });
