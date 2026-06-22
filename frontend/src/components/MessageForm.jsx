@@ -96,13 +96,13 @@ const MessageForm = () => {
   };
 
   return (
-    <section className="text-white relative py-20 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-950">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-20">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <div
           ref={formRef}
-          className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg p-8 md:p-12"
+          className="surface-card rounded-3xl p-8 md:p-12"
         >
-          <h2 className="form-animate text-3xl font-bold text-center text-blue-700 dark:text-blue-400 mb-10">
+          <h2 className="form-animate mb-10 text-center text-3xl font-bold text-teal-900 dark:text-teal-50">
             Send Us A Message
           </h2>
 
@@ -114,14 +114,14 @@ const MessageForm = () => {
                 placeholder="First Name"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className="form-animate input-field"
+                className="form-animate field"
               />
               <input
                 type="text"
                 placeholder="Last Name"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className="form-animate input-field"
+                className="form-animate field"
               />
             </div>
 
@@ -132,14 +132,14 @@ const MessageForm = () => {
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="form-animate input-field"
+                className="form-animate field"
               />
               <input
                 type="tel"
                 placeholder="Mobile Number"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="form-animate input-field"
+                className="form-animate field"
               />
             </div>
 
@@ -156,7 +156,7 @@ const MessageForm = () => {
                     setDepartment('');
                   }
                 }}
-                className="form-animate input-field select-dark"
+                className="form-animate field"
               >
                 <option value="Doctor">Doctor</option>
                 <option value="Admin">Admin</option>
@@ -173,7 +173,7 @@ const MessageForm = () => {
                     setDoctorFirstName('');
                     setDoctorLastName('');
                   }}
-                  className="form-animate input-field select-dark hover:cursor-pointer"
+                  className="form-animate field hover:cursor-pointer"
                 >
                   <option value="">Select Department</option>
                   {departmentsArray.map((depart, index) => (
@@ -189,7 +189,7 @@ const MessageForm = () => {
                     setDoctorFirstName(firstName);
                     setDoctorLastName(lastName || '');
                   }}
-                  className="form-animate input-field select-dark hover:cursor-pointer"
+                  className="form-animate field hover:cursor-pointer"
                   disabled={!department}
                 >
                   <option value="">Select Doctor</option>
@@ -213,14 +213,14 @@ const MessageForm = () => {
               placeholder="Write your message here..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="p-3 form-animate input-field resize-none w-full"
+              className="form-animate field resize-none"
             />
 
             {/* Submit */}
-            <div className="text-center form-animate">
+            <div className="form-animate text-center">
               <button
                 type="submit"
-                className=" px-8 py-3 bg-blue-600 hover:bg-blue-700 cursor-pointer text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition w-full border-2 border-white"
+                className="anim-pulse w-full rounded-2xl bg-teal-500 px-8 py-3.5 font-bold text-white shadow-lg shadow-teal-500/30 transition hover:-translate-y-0.5 hover:bg-teal-600"
               >
                 Send Message
               </button>
@@ -228,29 +228,6 @@ const MessageForm = () => {
           </form>
         </div>
       </div>
-
-      <style>{`
-        .input-field {
-          padding: 10px;
-          width: 100%;
-          }
-        .input-field::placeholder {
-          color: white !important;
-          opacity: 1;
-        }
-        .select-dark {
-          background-color: bg-gray-800;
-          color: white;
-        }
-        .select-dark.dark\\:bg-gray-700 {
-          background-color: #374151 !important;
-          color: white;
-        }
-        select option {
-          background-color: #1f2937;
-          color: white;
-        }
-      `}</style>
     </section>
   );
 };
