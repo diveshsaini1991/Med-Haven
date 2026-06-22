@@ -11,6 +11,7 @@ import { io } from 'socket.io-client';
 import { Context } from '../main';
 import { toast } from 'react-toastify';
 import gsap from 'gsap';
+import { FaTrash } from 'react-icons/fa';
 
 const socket = io(import.meta.env.VITE_BACKEND_URL, {
   transports: ['websocket'],
@@ -108,6 +109,22 @@ const Chat = () => {
   }, [selectedPatient, admin]);
 
   useEffect(() => {
+    const onMessageDeleted = ({ messageId }) => {
+      setMessages((prev) =>
+        prev.map((m) =>
+          m._id === messageId
+            ? { ...m, isDeleted: true, text: '', imageUrls: [] }
+            : m
+        )
+      );
+    };
+    socket.on('messageDeleted', onMessageDeleted);
+    return () => {
+      socket.off('messageDeleted', onMessageDeleted);
+    };
+  }, []);
+
+  useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
@@ -155,6 +172,29 @@ const Chat = () => {
     newMessageAddedRef.current = false;
     setMessages((prev) => [...prev, message]);
     setInput('');
+  };
+
+  const handleDeleteMessage = async (msg) => {
+    if (!msg?._id || !selectedPatient || !admin?._id) return;
+    if (!window.confirm('Delete this message? This cannot be undone.')) return;
+    const chatRoomId = generateChatRoomId(admin._id, selectedPatient.id);
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/chat/delete/${msg._id}`,
+        { withCredentials: true }
+      );
+      socket.emit('deleteMessage', { chatRoomId, messageId: msg._id });
+      setMessages((prev) =>
+        prev.map((m) =>
+          m._id === msg._id
+            ? { ...m, isDeleted: true, text: '', imageUrls: [] }
+            : m
+        )
+      );
+      toast.success('Message deleted');
+    } catch {
+      toast.error('Failed to delete message');
+    }
   };
 
   return (
@@ -220,23 +260,39 @@ const Chat = () => {
                     No messages yet
                   </div>
                 )}
-                {messages.map((msg, idx) => (
-                  <div
-                    key={idx}
-                    className={`mb-2 flex ${msg.senderId === admin._id ? 'justify-end' : 'justify-start'}`}
-                    ref={idx === messages.length - 1 ? lastMessageRef : null}
-                  >
+                {messages.map((msg, idx) => {
+                  const isOwn = msg.senderId === admin._id;
+                  const canDelete = isOwn && msg._id && !msg.isDeleted;
+                  return (
                     <div
-                      className={`px-4 py-2 rounded-lg max-w-xs ${
-                        msg.senderId === admin._id
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-300 dark:bg-gray-700 text-black dark:text-white'
-                      }`}
+                      key={msg._id || idx}
+                      className={`mb-2 flex items-center gap-2 group ${isOwn ? 'justify-end' : 'justify-start'}`}
+                      ref={idx === messages.length - 1 ? lastMessageRef : null}
                     >
-                      {msg.text}
+                      {canDelete && (
+                        <button
+                          onClick={() => handleDeleteMessage(msg)}
+                          title="Delete message"
+                          aria-label="Delete message"
+                          className="opacity-0 group-hover:opacity-100 transition text-gray-400 hover:text-red-500 cursor-pointer"
+                        >
+                          <FaTrash size={14} />
+                        </button>
+                      )}
+                      <div
+                        className={`px-4 py-2 rounded-lg max-w-xs ${
+                          msg.isDeleted
+                            ? 'bg-gray-200 dark:bg-gray-800 text-gray-500 italic'
+                            : isOwn
+                              ? 'bg-blue-600 text-white'
+                              : 'bg-gray-300 dark:bg-gray-700 text-black dark:text-white'
+                        }`}
+                      >
+                        {msg.isDeleted ? 'This message was deleted' : msg.text}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
                 <div ref={messagesEndRef} />
               </div>
               <div className="flex pb-2">

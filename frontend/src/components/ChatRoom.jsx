@@ -1,6 +1,7 @@
 import gsap from 'gsap';
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { HiOutlinePhotograph } from 'react-icons/hi';
+import { FaTrash } from 'react-icons/fa';
 import { getLowResCloudinaryUrl } from '../utils/cloudinaryHelpers';
 
 const ChatRoom = ({
@@ -20,7 +21,14 @@ const ChatRoom = ({
   uploadedImageUrls,
   setUploadedImageUrls,
   handleMultipleImageUpload,
+  handleDeleteMessage,
 }) => {
+  const onDeleteClick = (msg) => {
+    if (window.confirm('Delete this message? This cannot be undone.')) {
+      handleDeleteMessage(msg);
+    }
+  };
+
   const [showImageOverlay, setShowImageOverlay] = useState(false);
   const [overlayImageUrl, setOverlayImageUrl] = useState(null);
   const overlayRef = useRef(null);
@@ -135,35 +143,57 @@ const ChatRoom = ({
                 No messages yet
               </div>
             )}
-            {messages.map((msg, idx) => (
-              <div
-                key={idx}
-                className={`mb-2 flex ${
-                  msg.senderId === user._id ? 'justify-end' : 'justify-start'
-                }`}
-                ref={idx === messages.length - 1 ? lastMessageRef : null}
-              >
+            {messages.map((msg, idx) => {
+              const isOwn = msg.senderId === user._id;
+              const canDelete = isOwn && msg._id && !msg.isDeleted;
+              return (
                 <div
-                  className={`px-4 py-2 rounded-lg max-w-xs ${
-                    msg.senderId === user._id
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-300 dark:bg-gray-700 text-black dark:text-white'
+                  key={msg._id || idx}
+                  className={`mb-2 flex items-center gap-2 group ${
+                    isOwn ? 'justify-end' : 'justify-start'
                   }`}
+                  ref={idx === messages.length - 1 ? lastMessageRef : null}
                 >
-                  <div>{msg.text}</div>
-                  {msg.imageUrls &&
-                    msg.imageUrls.map((url, i) => (
-                      <img
-                        key={i}
-                        src={getLowResCloudinaryUrl(url, 400, 200)}
-                        alt={`chat-img-${i}`}
-                        className="mt-2 w-40 h-40 object-cover rounded cursor-pointer"
-                        onClick={() => openImageOverlay(url)}
-                      />
-                    ))}
+                  {canDelete && (
+                    <button
+                      onClick={() => onDeleteClick(msg)}
+                      title="Delete message"
+                      aria-label="Delete message"
+                      className="opacity-0 group-hover:opacity-100 transition text-gray-400 hover:text-red-500 cursor-pointer"
+                    >
+                      <FaTrash size={14} />
+                    </button>
+                  )}
+                  <div
+                    className={`px-4 py-2 rounded-lg max-w-xs ${
+                      msg.isDeleted
+                        ? 'bg-gray-200 dark:bg-gray-800 text-gray-500 italic'
+                        : isOwn
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-300 dark:bg-gray-700 text-black dark:text-white'
+                    }`}
+                  >
+                    {msg.isDeleted ? (
+                      <div>This message was deleted</div>
+                    ) : (
+                      <>
+                        <div>{msg.text}</div>
+                        {msg.imageUrls &&
+                          msg.imageUrls.map((url, i) => (
+                            <img
+                              key={i}
+                              src={getLowResCloudinaryUrl(url, 400, 200)}
+                              alt={`chat-img-${i}`}
+                              className="mt-2 w-40 h-40 object-cover rounded cursor-pointer"
+                              onClick={() => openImageOverlay(url)}
+                            />
+                          ))}
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
             <div ref={messagesEndRef} />
           </div>
 

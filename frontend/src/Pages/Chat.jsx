@@ -119,6 +119,22 @@ const Chat = () => {
     };
   }, [selectedChat, user]);
 
+  useEffect(() => {
+    const onMessageDeleted = ({ messageId }) => {
+      setMessages((prev) =>
+        prev.map((m) =>
+          m._id === messageId
+            ? { ...m, isDeleted: true, text: '', imageUrls: [] }
+            : m
+        )
+      );
+    };
+    socket.on('messageDeleted', onMessageDeleted);
+    return () => {
+      socket.off('messageDeleted', onMessageDeleted);
+    };
+  }, []);
+
   const handleImageUpload = async (file) => {
     if (!file) return;
     toast.info('Uploading image...');
@@ -212,6 +228,28 @@ const Chat = () => {
     setUploadedImageUrls([]);
   };
 
+  const handleDeleteMessage = async (msg) => {
+    if (!msg?._id || !selectedChat || !user?._id) return;
+    const chatRoomId = generateChatRoomId(user._id, selectedChat.id);
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/chat/delete/${msg._id}`,
+        { withCredentials: true }
+      );
+      socket.emit('deleteMessage', { chatRoomId, messageId: msg._id });
+      setMessages((prev) =>
+        prev.map((m) =>
+          m._id === msg._id
+            ? { ...m, isDeleted: true, text: '', imageUrls: [] }
+            : m
+        )
+      );
+      toast.success('Message deleted');
+    } catch {
+      toast.error('Failed to delete message');
+    }
+  };
+
   const toggleDepartment = (dept) => {
     setDepartmentsOpen((prev) => ({
       ...prev,
@@ -294,6 +332,7 @@ const Chat = () => {
                 uploadedImageUrls={uploadedImageUrls}
                 setUploadedImageUrls={setUploadedImageUrls}
                 handleMultipleImageUpload={handleMultipleImageUpload}
+                handleDeleteMessage={handleDeleteMessage}
               />
             </div>
           )}
