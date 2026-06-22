@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
-const Hero = ({ title, imageUrl }) => {
+const Hero = ({ title, imageUrl, illustration = false }) => {
   const heroRef = useRef();
 
   useGSAP(
@@ -81,7 +81,86 @@ const Hero = ({ title, imageUrl }) => {
         </div>
 
         <div className="relative flex items-center justify-center lg:col-span-5">
-          {imageUrl ? (
+          {illustration ? (
+            <svg
+              viewBox="0 0 480 480"
+              className="hero-image anim-floaty w-full max-w-md drop-shadow-2xl"
+              role="img"
+              aria-label="Calm clinical care illustration"
+            >
+              <defs>
+                <linearGradient id="heroCard" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stopColor="#2fbdb2" />
+                  <stop offset="1" stopColor="#0b5d5a" />
+                </linearGradient>
+                <linearGradient id="heroSand" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stopColor="#f7d49b" />
+                  <stop offset="1" stopColor="#e8a84f" />
+                </linearGradient>
+              </defs>
+
+              {/* Card */}
+              <rect x="44" y="44" width="392" height="392" rx="60" fill="url(#heroCard)" />
+              {/* Depth circles */}
+              <circle cx="402" cy="96" r="90" fill="#ffffff" opacity="0.08" />
+              <circle cx="92" cy="404" r="110" fill="#07201e" opacity="0.12" />
+
+              {/* Center badge with medical cross */}
+              <circle cx="240" cy="206" r="96" fill="#ffffff" opacity="0.95" />
+              <g fill="#0e9c92">
+                <rect x="222" y="150" width="36" height="112" rx="14" />
+                <rect x="184" y="188" width="112" height="36" rx="14" />
+              </g>
+
+              {/* EKG line */}
+              <path
+                d="M96 326 H188 l16 -34 22 64 18 -50 14 26 H392"
+                fill="none"
+                stroke="#ffffff"
+                strokeWidth="7"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                opacity="0.95"
+              />
+
+              {/* Floating card: heart rate */}
+              <g>
+                <rect x="60" y="120" width="118" height="60" rx="20" fill="#ffffff" />
+                <path
+                  d="M92 152c-7-5-14-9-14-17 0-5 4-8 8-8 3 0 5 2 6 4 1-2 3-4 6-4 4 0 8 3 8 8 0 8-7 12-14 17Z"
+                  fill="#0e9c92"
+                />
+                <rect x="116" y="138" width="50" height="9" rx="4.5" fill="#0e9c92" opacity="0.85" />
+                <rect x="116" y="154" width="34" height="9" rx="4.5" fill="#9fd9d2" />
+              </g>
+
+              {/* Floating card: appointment check */}
+              <g>
+                <rect x="300" y="312" width="120" height="86" rx="22" fill="#ffffff" />
+                <rect x="318" y="330" width="84" height="12" rx="6" fill="#cdeee9" />
+                <circle cx="334" cy="368" r="14" fill="url(#heroSand)" />
+                <path
+                  d="M328 368 l4 4 8 -9"
+                  fill="none"
+                  stroke="#ffffff"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <rect x="356" y="362" width="48" height="11" rx="5.5" fill="#0e9c92" opacity="0.85" />
+              </g>
+
+              {/* Plus motifs */}
+              <g fill="#f2c078">
+                <rect x="392" y="220" width="11" height="34" rx="5" />
+                <rect x="381" y="231" width="34" height="11" rx="5" />
+              </g>
+              <g fill="#ffffff" opacity="0.6">
+                <rect x="150" y="404" width="9" height="26" rx="4" />
+                <rect x="141.5" y="412.5" width="26" height="9" rx="4" />
+              </g>
+            </svg>
+          ) : imageUrl ? (
             <img
               src={imageUrl}
               alt="Hero"
