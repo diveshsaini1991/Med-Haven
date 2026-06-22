@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Context } from '../main';
-import { FaPencilAlt, FaSignOutAlt } from 'react-icons/fa';
+import { FaPencilAlt, FaSignOutAlt, FaLock } from 'react-icons/fa';
 import gsap from 'gsap';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -28,6 +28,61 @@ const Profile = () => {
   const navigate = useNavigate();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [passwordLoading, setPasswordLoading] = useState(false);
+  const [passwordForm, setPasswordForm] = useState({
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+
+  const resetPasswordForm = () => {
+    setPasswordForm({ oldPassword: '', newPassword: '', confirmPassword: '' });
+  };
+
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setPasswordForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const submitPasswordChange = async (e) => {
+    e.preventDefault();
+    const { oldPassword, newPassword, confirmPassword } = passwordForm;
+
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      toast.error('All fields are required.');
+      return;
+    }
+    if (newPassword.length < 6) {
+      toast.error('New password must be at least 6 characters.');
+      return;
+    }
+    if (newPassword === oldPassword) {
+      toast.error('New password must be different from the old password.');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast.error('New password and confirm password do not match.');
+      return;
+    }
+
+    setPasswordLoading(true);
+    try {
+      const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+      await axios.post(
+        `${VITE_BACKEND_URL}/api/v1/user/patient/change-password`,
+        { oldPassword, newPassword },
+        { withCredentials: true }
+      );
+      toast.success('Password changed successfully.');
+      resetPasswordForm();
+      setShowPasswordModal(false);
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to change password.');
+    } finally {
+      setPasswordLoading(false);
+    }
+  };
 
   useEffect(() => {
     gsap.fromTo(
@@ -114,6 +169,19 @@ const Profile = () => {
             {'+91 ' + maskPhone(user?.phone)}
           </li>
         </ul>
+        {/* Change Password Button, left bottom */}
+        <div className="absolute left-4 bottom-4">
+          <button
+            className="flex items-center gap-2 text-blue-400 hover:text-blue-300 cursor-pointer font-semibold py-2 px-2 transition"
+            onClick={() => {
+              resetPasswordForm();
+              setShowPasswordModal(true);
+            }}
+          >
+            <FaLock size={16} />
+            Change Password
+          </button>
+        </div>
         {/* Logout Button, right bottom */}
         <div className="absolute right-4 bottom-4">
           <button
@@ -125,6 +193,66 @@ const Profile = () => {
           </button>
         </div>
       </div>
+
+      {/* Change Password Modal */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div
+            className="absolute inset-0 bg-opacity-40 backdrop-blur-sm transition-all duration-300"
+            onClick={() => !passwordLoading && setShowPasswordModal(false)}
+          ></div>
+          <div className="relative bg-gray-800 rounded-2xl shadow-2xl px-6 py-8 w-[360px] max-w-sm z-60 border border-gray-700">
+            <FaLock className="mx-auto text-3xl text-blue-400 mb-3" />
+            <p className="text-lg font-bold mb-5 text-center">Change Password</p>
+            <form onSubmit={submitPasswordChange} className="flex flex-col gap-4">
+              <input
+                type="password"
+                name="oldPassword"
+                placeholder="Old Password"
+                value={passwordForm.oldPassword}
+                onChange={handlePasswordChange}
+                className="px-3 py-2 rounded bg-gray-700 border border-gray-600 text-white focus:outline-none focus:border-blue-400"
+                autoComplete="current-password"
+              />
+              <input
+                type="password"
+                name="newPassword"
+                placeholder="New Password"
+                value={passwordForm.newPassword}
+                onChange={handlePasswordChange}
+                className="px-3 py-2 rounded bg-gray-700 border border-gray-600 text-white focus:outline-none focus:border-blue-400"
+                autoComplete="new-password"
+              />
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm New Password"
+                value={passwordForm.confirmPassword}
+                onChange={handlePasswordChange}
+                className="px-3 py-2 rounded bg-gray-700 border border-gray-600 text-white focus:outline-none focus:border-blue-400"
+                autoComplete="new-password"
+              />
+              <div className="flex justify-center gap-4 mt-2">
+                <button
+                  type="button"
+                  className="px-4 py-2 rounded text-gray-300 border border-gray-500 font-semibold hover:bg-gray-600 transition"
+                  onClick={() => setShowPasswordModal(false)}
+                  disabled={passwordLoading}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded text-blue-400 border border-blue-400 font-semibold hover:bg-blue-500 hover:text-white transition disabled:opacity-50"
+                  disabled={passwordLoading}
+                >
+                  {passwordLoading ? 'Saving...' : 'Update'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Logout Confirmation Modal */}
       {showLogoutModal && (
