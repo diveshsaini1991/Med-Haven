@@ -15,7 +15,7 @@ const Home = () => {
         title={
           'Welcome to MedHaven Medical Institute | Your Trusted Healthcare Provider'
         }
-        imageUrl={'/hero.png'}
+        illustration
       />
       <Biography imageUrl={'/about.png'} />
       <Departments />
