@@ -41,44 +41,50 @@ const Footer = () => {
   return (
     <footer
       ref={footerRef}
-      className="bg-white dark:bg-gray-900 border-t border-blue-100 dark:border-gray-800  pt-32 pb-4"
+      className="border-t border-teal-100 bg-white/70 pb-4 pt-32 backdrop-blur dark:border-ink-700 dark:bg-ink-900/70"
     >
-      <div className="max-w-7xl mx-auto px-4 md:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-gray-700 dark:text-gray-200 mb-8">
+      <div className="mx-auto max-w-7xl px-4 md:px-8">
+        <div className="mb-8 grid grid-cols-1 gap-8 text-teal-800 dark:text-teal-100 sm:grid-cols-2 lg:grid-cols-4">
           <div className="footer-section flex flex-col items-start">
-            <img
-              src="/logo.png"
-              alt="MedHaven Logo"
-              className="h-12 object-contain mb-3 rounded-lg shadow-sm "
-            />
-            <span className="text-xl font-bold text-blue-600 dark:text-blue-400 tracking-tight">
-              MedHaven
+            <span className="mb-3 flex items-center gap-2.5">
+              <span className="grid h-9 w-9 place-items-center rounded-xl bg-teal-500 text-white shadow-lg shadow-teal-500/30">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-5 w-5"
+                  fill="currentColor"
+                >
+                  <path d="M11 2h2v9h9v2h-9v9h-2v-9H2v-2h9z" />
+                </svg>
+              </span>
+              <span className="text-xl font-extrabold tracking-tight text-teal-900 dark:text-teal-50">
+                Med<span className="text-teal-500">Haven</span>
+              </span>
             </span>
-            <span className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-              Modern Hospital Management
+            <span className="mt-2 text-sm text-teal-700/70 dark:text-teal-200/70">
+              Compassionate care, close to you.
             </span>
           </div>
 
           <div className="footer-section">
-            <h4 className="font-semibold text-blue-700 dark:text-blue-400 mb-4 text-lg">
+            <h4 className="mb-4 text-lg font-semibold text-teal-700 dark:text-teal-300">
               Quick Links
             </h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="hover:text-blue-600 transition">
+                <Link to="/" className="transition hover:text-teal-500">
                   Home
                 </Link>
               </li>
               <li>
                 <Link
                   to="/appointment"
-                  className="hover:text-blue-600 transition"
+                  className="transition hover:text-teal-500"
                 >
                   Appointment
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="hover:text-blue-600 transition">
+                <Link to="/about" className="transition hover:text-teal-500">
                   About
                 </Link>
               </li>
@@ -86,14 +92,14 @@ const Footer = () => {
           </div>
 
           <div className="footer-section">
-            <h4 className="font-semibold text-blue-700 dark:text-blue-400 mb-4 text-lg">
+            <h4 className="mb-4 text-lg font-semibold text-teal-700 dark:text-teal-300">
               Hours
             </h4>
             <ul className="space-y-2">
               {hours.map((element) => (
                 <li key={element.id} className="flex justify-between text-sm">
                   <span>{element.day}</span>
-                  <span className="text-gray-500 dark:text-gray-400">
+                  <span className="text-teal-700/60 dark:text-teal-200/60">
                     {element.time}
                   </span>
                 </li>
@@ -102,31 +108,31 @@ const Footer = () => {
           </div>
 
           <div className="footer-section">
-            <h4 className="font-semibold text-blue-700 dark:text-blue-400 mb-4 text-lg">
+            <h4 className="mb-4 text-lg font-semibold text-teal-700 dark:text-teal-300">
               Contact
             </h4>
-            <div className="flex items-center gap-3 mb-3">
-              <FaPhone className="text-blue-500" />
+            <div className="mb-3 flex items-center gap-3">
+              <FaPhone className="text-teal-500" />
               <span className="text-sm">+91 75899-77592</span>
             </div>
-            <div className="flex items-center gap-3 mb-3">
-              <MdEmail className="text-blue-500" />
+            <div className="mb-3 flex items-center gap-3">
+              <MdEmail className="text-teal-500" />
               <span className="text-sm">divesh.contact@gmail.com</span>
             </div>
             <div className="flex items-center gap-3">
-              <FaLocationArrow className="text-blue-500" />
+              <FaLocationArrow className="text-teal-500" />
               <span className="text-sm">Rajpura, Punjab, India</span>
             </div>
           </div>
         </div>
 
-        <hr className="border-blue-100 dark:border-gray-800 mb-6" />
-        <div className="flex flex-col md:flex-row items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+        <hr className="mb-6 border-teal-100 dark:border-ink-700" />
+        <div className="flex flex-col items-center justify-between text-sm text-teal-700/60 dark:text-teal-200/60 md:flex-row">
           <span>
             © {new Date().getFullYear()} MedHaven. All rights reserved.
           </span>
           <span>
-            Crafted with <span className="text-blue-500">❤️</span> by Divesh
+            Crafted with <span className="text-rose-400">❤</span> by Divesh
             Saini
           </span>
         </div>
