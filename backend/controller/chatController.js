@@ -54,6 +54,25 @@ export const editChat = catchAsyncErrors(async (req, res, next) => {
   res.json({ success: true, chat });
 });
 
+export const deleteChat = catchAsyncErrors(async (req, res, next) => {
+  const chat = await Chat.findById(req.params.id);
+  if (!chat)
+    return res.status(404).json({ success: false, message: 'Chat not found.' });
+
+  if (chat.senderId.toString() !== req.user._id.toString())
+    return res.status(403).json({ success: false, message: 'Not authorized.' });
+
+  chat.isDeleted = true;
+  chat.deletedAt = Date.now();
+  chat.text = '';
+  chat.imageUrls = [];
+  chat.fileUrls = [];
+
+  await chat.save();
+
+  res.json({ success: true, chatId: chat._id, chatRoomId: chat.chatRoomId });
+});
+
 export const getPatientList = catchAsyncErrors(async (req, res, next) => {
   const doctorId = req.user._id;
 

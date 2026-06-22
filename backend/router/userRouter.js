@@ -3,6 +3,7 @@ import {
   addNewAdmin,
   addNewDoctor,
   changePatientPassword,
+  forgotPatientPassword,
   getAllDoctors,
   getUserDetails,
   login,
@@ -11,6 +12,7 @@ import {
   logoutPatient,
   patientRegister,
   resendOtp,
+  resetPatientPassword,
   verifyPatientOtp,
 } from '../controller/userController.js';
 import {
@@ -35,5 +37,7 @@ router.post('/doctor/addnew', isAdminAuthanticated, addNewDoctor);
 router.post('/patient/verify-otp', verifyPatientOtp);
 router.post('/patient/resend-otp', resendOtp);
 router.post('/patient/change-password', isPatientAuthanticated, changePatientPassword);
+router.post('/patient/forgot-password', forgotPatientPassword);
+router.post('/patient/reset-password', resetPatientPassword);
 
 export default router;

@@ -3,6 +3,7 @@ import {
   createChatRoom,
   sendChat,
   editChat,
+  deleteChat,
   getChatRoomMessages,
   markChatRead,
   getUnreadChatsForUser,
@@ -16,6 +17,7 @@ const router = express.Router();
 router.post('/createRoom', isPatientOrDoctorAuthenticated, createChatRoom);
 router.post('/send', isPatientOrDoctorAuthenticated, sendChat);
 router.put('/edit/:id', isPatientOrDoctorAuthenticated, editChat);
+router.delete('/delete/:id', isPatientOrDoctorAuthenticated, deleteChat);
 router.get(
   '/room/:chatRoomId',
   isPatientOrDoctorAuthenticated,

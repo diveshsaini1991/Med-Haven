@@ -11,7 +11,7 @@ import { io } from 'socket.io-client';
 import { Context } from '../main';
 import { toast } from 'react-toastify';
 import gsap from 'gsap';
-import { FaTrash } from 'react-icons/fa';
+import { FaTrash, FaPencilAlt } from 'react-icons/fa';
 
 const socket = io(import.meta.env.VITE_BACKEND_URL, {
   transports: ['websocket'],
