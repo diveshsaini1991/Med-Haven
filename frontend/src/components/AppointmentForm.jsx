@@ -142,13 +142,10 @@ const AppointmentForm = ({
   };
 
   return (
-    <section className="text-white relative py-20 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-950">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div
-          ref={formRef}
-          className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg p-8 md:p-12"
-        >
-          <h2 className="form-animate text-3xl font-bold text-center text-blue-700 dark:text-blue-400 mb-10">
+    <section className="relative py-20">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div ref={formRef} className="surface-card rounded-3xl p-8 md:p-12">
+          <h2 className="form-animate mb-10 text-center text-3xl font-bold text-teal-900 dark:text-teal-50">
             {isEdit ? 'Edit Appointment' : 'Book Your Appointment'}
           </h2>
 
@@ -161,7 +158,7 @@ const AppointmentForm = ({
                 placeholder="First Name"
                 value={form.firstName}
                 onChange={handleChange}
-                className="form-animate input-field"
+                className="form-animate field"
               />
               <input
                 name="lastName"
@@ -169,7 +166,7 @@ const AppointmentForm = ({
                 placeholder="Last Name"
                 value={form.lastName}
                 onChange={handleChange}
-                className="form-animate input-field"
+                className="form-animate field"
               />
             </div>
 
@@ -181,7 +178,7 @@ const AppointmentForm = ({
                 placeholder="Email"
                 value={form.email}
                 onChange={handleChange}
-                className="form-animate input-field"
+                className="form-animate field"
               />
               <input
                 name="phone"
@@ -189,7 +186,7 @@ const AppointmentForm = ({
                 placeholder="Mobile Number"
                 value={form.phone}
                 onChange={handleChange}
-                className="form-animate input-field"
+                className="form-animate field"
               />
             </div>
 
@@ -206,7 +203,7 @@ const AppointmentForm = ({
                 placeholderText="Date of Birth"
                 maxDate={new Date()}
                 dateFormat="dd/MM/yyyy"
-                className="input-field form-animate"
+                className="field form-animate"
                 showMonthDropdown
                 showYearDropdown
                 dropdownMode="select"
@@ -219,7 +216,7 @@ const AppointmentForm = ({
                 name="gender"
                 value={form.gender}
                 onChange={handleChange}
-                className="form-animate input-field select-dark hover:cursor-pointer"
+                className="form-animate field hover:cursor-pointer"
               >
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
@@ -240,7 +237,7 @@ const AppointmentForm = ({
                 placeholderText="Appointment Date"
                 minDate={new Date()}
                 dateFormat="dd/MM/yyyy"
-                className="input-field form-animate"
+                className="field form-animate"
                 showMonthDropdown
                 showYearDropdown
                 dropdownMode="select"
@@ -253,7 +250,7 @@ const AppointmentForm = ({
                 name="department"
                 value={form.department}
                 onChange={handleChange}
-                className="form-animate input-field select-dark hover:cursor-pointer"
+                className="form-animate field hover:cursor-pointer"
               >
                 {departmentsArray.map((depart, index) => (
                   <option value={depart} key={index}>
@@ -264,7 +261,7 @@ const AppointmentForm = ({
               <select
                 value={`${form.doctor_firstName} ${form.doctor_lastName}`}
                 onChange={handleDoctorChange}
-                className="form-animate input-field select-dark hover:cursor-pointer"
+                className="form-animate field hover:cursor-pointer"
                 disabled={!form.department}
               >
                 <option value="">Select Doctor</option>
@@ -288,12 +285,12 @@ const AppointmentForm = ({
               placeholder="Address"
               value={form.address}
               onChange={handleChange}
-              className="form-animate input-field resize-none w-full"
+              className="form-animate field resize-none"
             />
 
             {/* Visited Before */}
             <div className="form-animate flex items-center space-x-3">
-              <label className="text-gray-700 dark:text-gray-200">
+              <label className="text-teal-700/80 dark:text-teal-100/70">
                 Visited before?
               </label>
               <input
@@ -301,22 +298,26 @@ const AppointmentForm = ({
                 type="checkbox"
                 checked={form.hasVisited}
                 onChange={handleChange}
-                className="w-5 h-5"
+                className="h-5 w-5 accent-teal-500"
               />
             </div>
 
             {/* Submit Button */}
-            <div className="form-animate text-center flex flex-col md:flex-row md:justify-center md:space-x-4">
+            <div className="form-animate flex flex-col text-center md:flex-row md:justify-center md:space-x-4">
               <button
                 type="submit"
-                className={`px-8 py-3 ${isEdit ? 'w-1/2 bg-yellow-500 hover:bg-yellow-600' : 'w-full bg-blue-600 hover:bg-blue-700'} text-white font-semibold rounded-full shadow-lg transform hover:scale-105 cursor-pointer transition border-2 border-white`}
+                className={`rounded-2xl px-8 py-3.5 font-bold text-white shadow-lg transition hover:-translate-y-0.5 ${
+                  isEdit
+                    ? 'w-full bg-sand-500 shadow-sand-500/30 hover:bg-sand-400 md:w-1/2'
+                    : 'anim-pulse w-full bg-teal-500 shadow-teal-500/30 hover:bg-teal-600'
+                }`}
               >
                 {submitText}
               </button>
               {isEdit && (
                 <button
                   type="button"
-                  className="w-1/2 px-8 py-3 mt-4 md:mt-0 bg-gray-500 hover:bg-gray-600 cursor-pointer text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition border-2 border-white"
+                  className="mt-4 w-full rounded-2xl border-2 border-teal-200 px-8 py-3.5 font-bold text-teal-700 transition hover:-translate-y-0.5 hover:border-teal-400 dark:border-ink-600 dark:text-teal-100 md:mt-0 md:w-1/2"
                   onClick={onCancel}
                 >
                   Cancel
@@ -325,21 +326,6 @@ const AppointmentForm = ({
             </div>
           </form>
         </div>
-
-        <style>{`
-          .input-field {
-            padding: 10px;
-            border-radius: 10px;
-          }
-          .input-field::placeholder {
-            color: white !important;
-            opacity: 1;
-          }
-          .select-dark option {
-            background-color: #1f2937;
-            color: white;
-          }
-        `}</style>
       </div>
     </section>
   );
