@@ -47,6 +47,7 @@ const AppContent = () => {
 
   return (
     <>
+      <div className="app-ambient" aria-hidden="true" />
       {location.pathname !== '/chat' && <Navbar />}
 
       <Routes>
