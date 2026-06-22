@@ -166,15 +166,15 @@ const Register = () => {
   };
 
   return (
-    <section className="text-white min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-950 px-4">
+    <section className="grid-bg flex min-h-screen items-center justify-center px-4 py-24">
       <div
         ref={formRef}
-        className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 max-w-2xl w-full p-8"
+        className="surface-card w-full max-w-2xl rounded-3xl p-8"
       >
-        <h2 className="register-animate text-3xl font-bold text-center text-blue-700 dark:text-blue-400 mb-4">
+        <h2 className="register-animate mb-2 text-center text-3xl font-extrabold tracking-tight text-teal-900 dark:text-teal-50">
           Create Your Account
         </h2>
-        <p className="register-animate text-center text-gray-600 dark:text-gray-300 mb-8">
+        <p className="register-animate mb-8 text-center text-teal-700/80 dark:text-teal-100/70">
           Join <span className="font-semibold">MedHaven</span> today. Book
           appointments, access health records, and connect with our medical
           team—securely and easily.
@@ -192,14 +192,14 @@ const Register = () => {
                   placeholder="First Name"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  className="register-animate input-field"
+                  className="register-animate field"
                 />
                 <input
                   type="text"
                   placeholder="Last Name"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
-                  className="register-animate input-field"
+                  className="register-animate field"
                 />
               </div>
 
@@ -210,14 +210,14 @@ const Register = () => {
                   placeholder="Email Address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="register-animate input-field"
+                  className="register-animate field"
                 />
                 <input
                   type="number"
                   placeholder="Mobile Number"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="register-animate input-field"
+                  className="register-animate field"
                 />
               </div>
 
@@ -230,7 +230,7 @@ const Register = () => {
                     placeholderText="Date of Birth"
                     maxDate={new Date()}
                     dateFormat="dd/MM/yyyy"
-                    className=" input-field w-full px-4 py-3 text-gray-900 dark:text-white rounded-lg  bg-white dark:bg-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-white outline-none transition placeholder-gray-500 dark:placeholder-gray-300"
+                    className="field"
                     showMonthDropdown
                     showYearDropdown
                     dropdownMode="select"
@@ -239,7 +239,7 @@ const Register = () => {
                 <select
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
-                  className="register-animate input-field select-dark"
+                  className="register-animate field"
                 >
                   <option value="">Select Gender</option>
                   <option value="Male">Male</option>
@@ -254,18 +254,18 @@ const Register = () => {
                   placeholder="Create Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="register-animate input-field"
+                  className="register-animate field"
                 />
               </div>
 
               {/* Already Registered */}
-              <div className="register-animate flex items-center justify-center text-sm gap-2">
-                <span className="text-gray-700 dark:text-gray-200">
+              <div className="register-animate flex items-center justify-center gap-2 text-sm">
+                <span className="text-teal-700/80 dark:text-teal-100/70">
                   Already Registered?
                 </span>
                 <Link
                   to="/login"
-                  className="text-blue-600 dark:text-blue-400 hover:underline"
+                  className="font-semibold text-teal-600 hover:underline dark:text-teal-300"
                 >
                   Login Now
                 </Link>
@@ -273,7 +273,7 @@ const Register = () => {
               <div className="register-animate text-center">
                 <button
                   type="submit"
-                  className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition  border-2 border-white"
+                  className="anim-pulse w-full rounded-2xl bg-teal-500 px-6 py-3.5 font-bold text-white shadow-lg shadow-teal-500/30 transition hover:-translate-y-0.5 hover:bg-teal-600"
                 >
                   Continue
                 </button>
@@ -283,7 +283,7 @@ const Register = () => {
 
           {step === 2 && (
             <>
-              <p className="text-center mb-4 text-gray-700 dark:text-gray-300">
+              <p className="mb-4 text-center text-teal-700/80 dark:text-teal-100/70">
                 Enter the OTP sent to <strong>{tempUserData?.email}</strong>
               </p>
               <input
@@ -291,12 +291,12 @@ const Register = () => {
                 placeholder="Enter OTP"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
-                className="input-field w-full px-4 py-3 text-gray-900 dark:text-white rounded-lg bg-white dark:bg-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-white outline-none transition placeholder-gray-500 dark:placeholder-gray-300"
+                className="field"
               />
-              <div className="flex justify-between mt-4">
+              <div className="mt-4 flex justify-between gap-3">
                 <button
                   type="submit"
-                  className="w-[48%] px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition"
+                  className="w-[48%] rounded-2xl bg-teal-500 px-6 py-3 font-bold text-white shadow-lg shadow-teal-500/30 transition hover:-translate-y-0.5 hover:bg-teal-600"
                 >
                   Verify OTP
                 </button>
@@ -304,8 +304,11 @@ const Register = () => {
                   type="button"
                   onClick={handleResendOtp}
                   disabled={resendCooldown > 0}
-                  className={`w-[48%] px-6 py-3 rounded-full shadow-lg transform hover:scale-105 transition 
-                    ${resendCooldown > 0 ? 'bg-gray-400 cursor-not-allowed' : 'border border-blue-600 text-blue-600 hover:bg-blue-50'}`}
+                  className={`w-[48%] rounded-2xl px-6 py-3 font-bold transition hover:-translate-y-0.5 ${
+                    resendCooldown > 0
+                      ? 'cursor-not-allowed border-2 border-teal-100 text-teal-400 dark:border-ink-600 dark:text-teal-200/50'
+                      : 'border-2 border-teal-200 text-teal-700 hover:border-teal-400 dark:border-ink-600 dark:text-teal-100'
+                  }`}
                 >
                   {resendCooldown > 0
                     ? `Resend OTP in ${resendCooldown}s`
@@ -316,20 +319,6 @@ const Register = () => {
           )}
         </form>
       </div>
-
-      <style>{`
-        .input-field {
-          border-radius: 10px; 
-          padding: 10px;
-        }
-        .select-dark option {
-          background-color: #1f2937;
-          color: white;
-        }
-        .react-datepicker-popper {
-          z-index: !important;
-        }
-      `}</style>
     </section>
   );
 };
