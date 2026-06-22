@@ -85,26 +85,31 @@ const Departments = () => {
   }, []);
 
   return (
-    <section className="py-16 bg-white dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <h2 className="text-4xl font-extrabold text-blue-700 dark:text-blue-400 mb-10 text-center">
-          Departments
-        </h2>
+    <section className="py-20">
+      <div className="mx-auto max-w-7xl overflow-hidden px-4 sm:px-6 lg:px-8">
+        <div className="mb-10 text-center">
+          <span className="inline-flex items-center gap-2 rounded-full bg-teal-100 px-4 py-1.5 text-sm font-semibold text-teal-700 dark:bg-ink-700 dark:text-teal-200">
+            Our Specialities
+          </span>
+          <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-teal-900 dark:text-teal-50 sm:text-4xl">
+            Departments
+          </h2>
+        </div>
 
         <div className="overflow-hidden">
           <div ref={wrapperRef} className="flex">
             {departmentsArray.map((depart, index) => (
               <div
                 key={index}
-                className="dept-card flex-shrink-0 w-64 bg-blue-50 dark:bg-gray-800 rounded-2xl shadow-md overflow-hidden mr-6"
+                className="dept-card surface-card mr-6 w-64 flex-shrink-0 overflow-hidden rounded-3xl transition hover:-translate-y-1"
               >
                 <img
                   src={depart.imageUrl}
                   alt={`${depart.name} Department`}
-                  className="w-full h-40 object-cover"
+                  className="h-40 w-full object-cover"
                 />
                 <div className="p-4">
-                  <h3 className="text-xl font-semibold text-blue-800 dark:text-blue-300 text-center">
+                  <h3 className="text-center text-xl font-semibold text-teal-800 dark:text-teal-200">
                     {depart.name}
                   </h3>
                 </div>
