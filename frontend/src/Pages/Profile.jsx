@@ -112,11 +112,11 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-gray-900 pt-20 sm:pt-30 text-white transition-colors duration-500">
+    <div className="flex min-h-screen flex-col items-center pt-24 text-teal-900 dark:text-teal-50 sm:pt-32">
       {/* Responsive Placeholder Avatar */}
-      <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-gray-700 flex justify-center items-center mb-4 sm:mb-6 shadow-md">
+      <div className="mb-4 flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-teal-400 to-teal-600 shadow-lg shadow-teal-500/30 sm:mb-6 sm:h-28 sm:w-28">
         <svg
-          className="w-14 h-14 sm:w-16 sm:h-16 text-gray-400"
+          className="h-14 w-14 text-white/90 sm:h-16 sm:w-16"
           fill="currentColor"
           viewBox="0 0 20 20"
         >
@@ -128,51 +128,62 @@ const Profile = () => {
         </svg>
       </div>
 
-      <hr className="w-9/12 max-w-md border-gray-600 mb-5 sm:mb-8" />
+      <hr className="mb-5 w-9/12 max-w-md border-teal-200/70 dark:border-ink-600 sm:mb-8" />
 
       {/* Personal Info Card: Responsive, scrollable on mobile */}
       <div
         ref={cardRef}
-        className="relative w-full max-w-md md:max-w-lg bg-gray-800 rounded-xl shadow-xl p-4 sm:p-6 pt-12 border border-gray-700 mx-2 sm:mx-0 flex flex-col"
+        className="surface-card relative mx-2 flex w-full max-w-md flex-col rounded-3xl p-4 pt-12 sm:p-6 md:max-w-lg sm:mx-0"
         style={{ minHeight: '375px' }}
       >
         {/* Pencil Icon edit button */}
-        <div className="absolute top-4 right-4 sm:top-3 sm:right-3">
+        <div className="absolute right-4 top-4 sm:right-3 sm:top-3">
           <button
-            className="text-blue-400 hover:text-blue-300 cursor-pointer transition-colors duration-200"
+            className="cursor-pointer text-teal-500 transition-colors duration-200 hover:text-teal-600 dark:text-teal-300 dark:hover:text-teal-200"
             title="Edit (disabled)"
           >
             <FaPencilAlt size={20} />
           </button>
         </div>
-        <h3 className="text-base sm:text-lg font-bold mb-4 sm:mb-5 text-center tracking-wide">
+        <h3 className="mb-4 text-center text-base font-bold tracking-wide text-teal-900 dark:text-teal-50 sm:mb-5 sm:text-lg">
           Personal information
         </h3>
-        <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base flex-1">
+        <ul className="flex-1 space-y-2 text-sm text-teal-800 dark:text-teal-100 sm:space-y-3 sm:text-base">
           <li>
-            <span className="font-semibold">Full Name:</span> {user?.firstName}{' '}
-            {user?.lastName}
+            <span className="font-semibold text-teal-900 dark:text-teal-50">
+              Full Name:
+            </span>{' '}
+            {user?.firstName} {user?.lastName}
           </li>
           <li>
-            <span className="font-semibold">Date of Birth:</span>{' '}
+            <span className="font-semibold text-teal-900 dark:text-teal-50">
+              Date of Birth:
+            </span>{' '}
             {user?.dob ? user.dob.split('T')[0] : ''}
           </li>
           <li>
-            <span className="font-semibold">Gender:</span> {user?.gender}
+            <span className="font-semibold text-teal-900 dark:text-teal-50">
+              Gender:
+            </span>{' '}
+            {user?.gender}
           </li>
           <li>
-            <span className="font-semibold">Email:</span>{' '}
+            <span className="font-semibold text-teal-900 dark:text-teal-50">
+              Email:
+            </span>{' '}
             {maskEmail(user?.email)}
           </li>
           <li>
-            <span className="font-semibold">Phone Number:</span>{' '}
+            <span className="font-semibold text-teal-900 dark:text-teal-50">
+              Phone Number:
+            </span>{' '}
             {'+91 ' + maskPhone(user?.phone)}
           </li>
         </ul>
         {/* Change Password Button, left bottom */}
-        <div className="absolute left-4 bottom-4">
+        <div className="absolute bottom-4 left-4">
           <button
-            className="flex items-center gap-2 text-blue-400 hover:text-blue-300 cursor-pointer font-semibold py-2 px-2 transition"
+            className="flex cursor-pointer items-center gap-2 px-2 py-2 font-semibold text-teal-600 transition hover:text-teal-700 dark:text-teal-300 dark:hover:text-teal-200"
             onClick={() => {
               resetPasswordForm();
               setShowPasswordModal(true);
@@ -183,9 +194,9 @@ const Profile = () => {
           </button>
         </div>
         {/* Logout Button, right bottom */}
-        <div className="absolute right-4 bottom-4">
+        <div className="absolute bottom-4 right-4">
           <button
-            className="flex items-center gap-2 text-red-500 hover:text-red-600 cursor-pointer font-semibold py-2 px-2 transition"
+            className="flex cursor-pointer items-center gap-2 px-2 py-2 font-semibold text-rose-500 transition hover:text-rose-600"
             onClick={() => setShowLogoutModal(true)}
           >
             <FaSignOutAlt size={16} />
@@ -196,14 +207,16 @@ const Profile = () => {
 
       {/* Change Password Modal */}
       {showPasswordModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div
-            className="absolute inset-0 bg-opacity-40 backdrop-blur-sm transition-all duration-300"
+            className="absolute inset-0 bg-teal-950/40 backdrop-blur-sm transition-all duration-300 dark:bg-black/50"
             onClick={() => !passwordLoading && setShowPasswordModal(false)}
           ></div>
-          <div className="relative bg-gray-800 rounded-2xl shadow-2xl px-6 py-8 w-[360px] max-w-sm z-60 border border-gray-700">
-            <FaLock className="mx-auto text-3xl text-blue-400 mb-3" />
-            <p className="text-lg font-bold mb-5 text-center">Change Password</p>
+          <div className="surface-card relative z-60 w-[360px] max-w-sm rounded-3xl px-6 py-8">
+            <FaLock className="mx-auto mb-3 text-3xl text-teal-500 dark:text-teal-300" />
+            <p className="mb-5 text-center text-lg font-bold text-teal-900 dark:text-teal-50">
+              Change Password
+            </p>
             <form onSubmit={submitPasswordChange} className="flex flex-col gap-4">
               <input
                 type="password"
@@ -211,7 +224,7 @@ const Profile = () => {
                 placeholder="Old Password"
                 value={passwordForm.oldPassword}
                 onChange={handlePasswordChange}
-                className="px-3 py-2 rounded bg-gray-700 border border-gray-600 text-white focus:outline-none focus:border-blue-400"
+                className="field"
                 autoComplete="current-password"
               />
               <input
@@ -220,7 +233,7 @@ const Profile = () => {
                 placeholder="New Password"
                 value={passwordForm.newPassword}
                 onChange={handlePasswordChange}
-                className="px-3 py-2 rounded bg-gray-700 border border-gray-600 text-white focus:outline-none focus:border-blue-400"
+                className="field"
                 autoComplete="new-password"
               />
               <input
@@ -229,13 +242,13 @@ const Profile = () => {
                 placeholder="Confirm New Password"
                 value={passwordForm.confirmPassword}
                 onChange={handlePasswordChange}
-                className="px-3 py-2 rounded bg-gray-700 border border-gray-600 text-white focus:outline-none focus:border-blue-400"
+                className="field"
                 autoComplete="new-password"
               />
-              <div className="flex justify-center gap-4 mt-2">
+              <div className="mt-2 flex justify-center gap-4">
                 <button
                   type="button"
-                  className="px-4 py-2 rounded text-gray-300 border border-gray-500 font-semibold hover:bg-gray-600 transition"
+                  className="rounded-xl border-2 border-teal-200 px-4 py-2 font-semibold text-teal-700 transition hover:border-teal-400 dark:border-ink-600 dark:text-teal-100"
                   onClick={() => setShowPasswordModal(false)}
                   disabled={passwordLoading}
                 >
@@ -243,7 +256,7 @@ const Profile = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded text-blue-400 border border-blue-400 font-semibold hover:bg-blue-500 hover:text-white transition disabled:opacity-50"
+                  className="rounded-xl bg-teal-500 px-4 py-2 font-semibold text-white shadow-lg shadow-teal-500/30 transition hover:-translate-y-0.5 hover:bg-teal-600 disabled:opacity-50"
                   disabled={passwordLoading}
                 >
                   {passwordLoading ? 'Saving...' : 'Update'}
@@ -256,27 +269,27 @@ const Profile = () => {
 
       {/* Logout Confirmation Modal */}
       {showLogoutModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
           {/* Blurred background */}
           <div
-            className="absolute inset-0 bg-opacity-40 backdrop-blur-sm transition-all duration-300"
+            className="absolute inset-0 bg-teal-950/40 backdrop-blur-sm transition-all duration-300 dark:bg-black/50"
             onClick={() => setShowLogoutModal(false)}
           ></div>
-          <div className="relative bg-gray-800 rounded-2xl shadow-2xl px-6 py-8 w-[320px] max-w-xs text-center z-60 border border-gray-700">
-            <FaSignOutAlt className="mx-auto text-3xl text-red-500 mb-3" />
-            <p className="text-lg font-bold mb-4">
+          <div className="surface-card relative z-60 w-[320px] max-w-xs rounded-3xl px-6 py-8 text-center">
+            <FaSignOutAlt className="mx-auto mb-3 text-3xl text-rose-500" />
+            <p className="mb-4 text-lg font-bold text-teal-900 dark:text-teal-50">
               Are you sure you want to logout?
             </p>
-            <div className="flex justify-center gap-4 mt-2">
+            <div className="mt-2 flex justify-center gap-4">
               <button
-                className="px-4 py-2 rounded text-blue-500 border border-blue-500 font-semibold hover:bg-blue-500 hover:text-white transition"
+                className="rounded-xl border-2 border-teal-200 px-4 py-2 font-semibold text-teal-700 transition hover:border-teal-400 dark:border-ink-600 dark:text-teal-100"
                 onClick={() => setShowLogoutModal(false)}
                 disabled={loading}
               >
                 No
               </button>
               <button
-                className="px-4 py-2 rounded text-red-500 border border-red-500 font-semibold hover:bg-red-500 hover:text-white transition"
+                className="rounded-xl bg-rose-500 px-4 py-2 font-semibold text-white shadow-lg shadow-rose-500/30 transition hover:-translate-y-0.5 hover:bg-rose-600"
                 onClick={doLogout}
                 disabled={loading}
               >
