@@ -64,7 +64,11 @@ const EditAppointment = () => {
   };
 
   if (loading || !appt)
-    return <div className="text-center py-24">Loading appointment info...</div>;
+    return (
+      <div className="py-32 text-center font-semibold text-teal-700 dark:text-teal-200">
+        Loading appointment info...
+      </div>
+    );
 
   return (
     <AppointmentForm
